@@ -4,6 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
 const dateFormat = require("date-format");
+require('dotenv').config()
+
 
 const config = require("./assets/json/config.json");
 const HOST = config.host;
@@ -102,8 +104,8 @@ console.log("\nLoading requests complete\n");
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("\nDatabase synced");
-    app.listen(2424, function() {
+      console.log("\nDatabase synced");
+      app.listen(2424, function() {
       console.log("\n\tPROJECT_A LOADING COMPLETE");
       console.log("\nServer running on port 2424");
     });
@@ -113,3 +115,5 @@ sequelize
   });
 
 //endregion
+
+module.exports = app;

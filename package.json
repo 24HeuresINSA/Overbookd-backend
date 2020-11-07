@@ -4,7 +4,7 @@
   "description": "Project A is the new Assomaker",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --exit",
     "create_database": "node init_database.js",
     "start": "node index.js",
     "populate": "node populate.js"
@@ -36,5 +36,9 @@
     "nodemon": "^1.19.3",
     "sequelize": "^5.19.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "chai-json": "^1.0.0"
+  }
 }
