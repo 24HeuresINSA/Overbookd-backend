@@ -34,10 +34,10 @@ jobs:
       uses: actions/setup-node@v2.1.2
 
     - name: install dependancies
-      run:  npm ci
+      run:  npm install
   
     - name: populate the database
-      run:  npm populate
+      run:  node populate.js
  
     - name: tests
       run: npm test
