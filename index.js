@@ -104,7 +104,6 @@ sequelize
   .then(() => {
     console.log("\nDatabase synced");
     app.listen(2424, function() {
-      //require("./populate")(sequelize, models);
       console.log("\n\tPROJECT_A LOADING COMPLETE");
       console.log("\nServer running on port 2424");
     });

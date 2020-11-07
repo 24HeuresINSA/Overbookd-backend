@@ -1,4 +1,12 @@
-module.exports = function(sequelize, models){
+/*
+* WARNING 🛑 DO NOT RUN THIS FILE TWICE OR IT WILL DUPLICATE DATA IN THE DATABASE
+*
+* this programme populate the database with dummy data
+* */
+require('dotenv').config()
+const Sequelize = require("sequelize");
+const sequelize = require("./sequelize")
+const models = require("./models/import")(sequelize, Sequelize); // we retrieve the different models in a json object we will pass to the requests
 
 models.Event.create({
     name: '24h de l\'INSA',
@@ -332,7 +340,7 @@ models.Notification.create({
     user_id: null,
     team_id: 1
 }).then(() => {
-
+    console.log("Database populated successfully 🥳")
 });
 });
 });
@@ -379,4 +387,3 @@ models.Notification.create({
 });
 });
 });
-};
