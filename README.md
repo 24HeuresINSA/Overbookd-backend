@@ -26,6 +26,11 @@ Il permet aussi de rendre le code plus facilement lisible, et donc plus facileme
 
 ### Installer et lancer le Projet A - Backend
 
+#### Docker 🐳
+La manière la plus simple pour lancer le backend est d'installer [docker](https://docs.docker.com/get-docker/) et remplir le fichier example.env avec vos propres varible d'environement.
+une fois example.env rempli, il faut le renomme en .env et puis lance la commande:
+`docker-compose up -d` 
+
 #### API
 Avant de lancer l'api il faut que vous  installiez sur votre machine :
 - Server MySQL 
