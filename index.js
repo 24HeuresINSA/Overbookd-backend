@@ -7,8 +7,8 @@ const dateFormat = require("date-format");
 
 const config = require("./assets/json/config.json");
 
-const host = config.host;
-const pwd_bd = require("./assets/json/pwd.json").pwd_project_a;
+const HOST = config.host;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 
 const app = express();
 
@@ -48,8 +48,9 @@ app.use("/files", express.static(global.appRoot + "/uploads"));
 
 //region DATABASE CONNECTION
 
-let sequelize = new Sequelize("project_a", "project_a", pwd_bd, {
-  host: "localhost",
+let sequelize = new Sequelize("project_a", "project_a", DATABASE_PASSWORD, {
+  host: process.env.DATABASE_HOST || "localhost" , //when running node in Docker container the host is the database container's name
+  port: process.env.DATABASE_PORT || 3307, // if run locally the port
   dialect: "mysql",
   logging: false
 });
@@ -80,7 +81,7 @@ app.use(function(req, res, next) {
     "] : " +
     req.method +
     " " +
-    host +
+    HOST +
     req.originalUrl +
     " FROM " +
     req.ip +
