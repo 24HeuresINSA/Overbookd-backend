@@ -1,0 +1,40 @@
+# This is a basic workflow that is manually triggered
+
+name: API CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+    - name: Start docker-compose 
+      env:
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+        KEYCLOAK_DATABASE_PASSWORD: ${{ secrets.KEYCLOAK_DATABASE_PASSWORD }}
+      uses: isbang/compose-action@v0.1.1
+      
+    - name: wait for docker to setup
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '60s'
+ 
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.1.2
+
+    - name: install dependancies
+      run:  npm ci
+       
+    - name: tests
+      run: npm test
