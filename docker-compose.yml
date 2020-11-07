@@ -30,7 +30,7 @@ services:
       MYSQL_USER: project_a
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     ports:
-      - 3307:3306
+      - 3307:3306 # for debug
 
 
   keycloak:
@@ -62,6 +62,8 @@ services:
     ports:
       - 2424:2424
     environment:
-      DATABASE_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: db_project_a
+      DATABASE_PORT: 3306
 
 
