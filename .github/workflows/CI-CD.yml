@@ -35,6 +35,9 @@ jobs:
 
     - name: install dependancies
       run:  npm ci
-       
+  
+    - name: populate the database
+      run:  npm populate
+ 
     - name: tests
       run: npm test
