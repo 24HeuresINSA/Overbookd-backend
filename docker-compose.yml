@@ -6,6 +6,11 @@ volumes:
   mysql_project_a_database:
     driver: local
 
+networks:
+  keycloak: {}
+  api:
+    driver: bridge
+
 services:
   db_keycloak:
     image: library/mysql
@@ -16,8 +21,10 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
-    ports:
-      - 3306:3306
+#    ports:
+#      - 3306:3306
+    networks:
+      - keycloak
 
   db_project_a:
     image: library/mysql
@@ -30,7 +37,9 @@ services:
       MYSQL_USER: project_a
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     ports:
-      - 3307:3306 # for debug
+      - 3306:3306 # for debug
+    networks:
+      - api
 
 
   keycloak:
@@ -38,7 +47,7 @@ services:
     volumes:
       - ./assets/json/realm-export.json:/tmp/realm-export.json
     command:
-      - "-b 0.0.0.0 -Dkeycloak.import=/tmp/realm-export.json"# -Djboss.socket.binding.port-offset=100"
+      - "-b 0.0.0.0 -Dkeycloak.import=/tmp/realm-export.json -Djboss.socket.binding.port-offset=100"
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: db_keycloak
@@ -51,16 +60,22 @@ services:
       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
       #JDBC_PARAMS: "connectTimeout=30000"
     ports:
-      - 8180:8080
+      - 8180:8180
     depends_on:
       - db_keycloak
+    networks:
+      - api
+      - keycloak
 
   api:
     build: .
     depends_on:
       - db_project_a
+      - keycloak
     ports:
       - 2424:2424
+    networks:
+      - api
     environment:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: db_project_a
