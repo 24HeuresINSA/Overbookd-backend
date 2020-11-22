@@ -7,7 +7,8 @@
     "test": "mocha --exit",
     "create_database": "node init_database.js",
     "start": "node index.js",
-    "populate": "node populate.js"
+    "populate": "node populate.js",
+    "setup": "sudo ./setup_dns.sh"
   },
   "repository": {
     "type": "git",

@@ -69,6 +69,7 @@ services:
 
   api:
     build: .
+    restart: unless-stopped
     depends_on:
       - db_project_a
       - keycloak
