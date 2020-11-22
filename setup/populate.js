@@ -5,8 +5,8 @@
 * */
 require('dotenv').config()
 const Sequelize = require("sequelize");
-const sequelize = require("./sequelize")
-const models = require("./models/import")(sequelize, Sequelize); // we retrieve the different models in a json object we will pass to the requests
+const sequelize = require("../sequelize")
+const models = require("../models/import")(sequelize, Sequelize); // we retrieve the different models in a json object we will pass to the requests
 sequelize
     .sync({force: false})
     .then(() => {
