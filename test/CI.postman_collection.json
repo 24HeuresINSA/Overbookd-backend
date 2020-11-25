@@ -1,0 +1,3728 @@
+{
+	"info": {
+		"_postman_id": "068942b2-f9a6-48d4-8a82-4ffb5153ca3b",
+		"name": "Project A CI",
+		"description": "La refonte d'Assomaker et autres dérivés est un projet dont on parle depuis quelques années. L'heure est enfin venue de le mettre à la retraite.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "user token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8491b005-1c00-4603-9a3d-8d6f5aec2002",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"access_token\", jsonData.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+									"pm.globals.set(\"access_token\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Access-Control-Allow-Origin",
+								"value": "localhost",
+								"type": "text"
+							},
+							{
+								"key": "User-Agent",
+								"value": "project_a_web",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user_admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user_admin",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "project_a_web",
+									"type": "text"
+								},
+								{
+									"key": "User-Agent",
+									"value": "project_a_web",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{host_auth}}/auth/realms/project_a/protocol/openid-connect/token",
+							"host": [
+								"{{host_auth}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"project_a",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "activity/all_locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/activity/all_locations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"all_locations"
+							]
+						},
+						"description": "This request qets all the locations for all the activities\n# arguments:\n+ none\n\n# returns:\n+ a json array of activities and corresponding locations"
+					},
+					"response": []
+				},
+				{
+					"name": "activity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity"
+							],
+							"query": [
+								{
+									"key": "supervisor_id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the activities in the database.\n\n# arguments :\n+ none\n\n# returns :\n+ an json array of activities"
+					},
+					"response": []
+				},
+				{
+					"name": "activity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"coder l'activité\",\n    \"description\": \"il faut coder l'activité\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity"
+							]
+						},
+						"description": "This requests creates a new activity with the name, description, starting and ending date, supervisor id and event id\n# arguments :\n+ name: the name of the activity\n+ description: a description of the activity\n+ start_date: the starting date and time of the activity\n+ end_date: the ending date and time of the activity\n+ supervisor_id: the user id of the supervisor of the activity\n+ event_id: the id of the event that the activity belongs to\n+ contractor_name: the name of the contractor\n+ contractor_phone: the phone number of the contractor\n+ contractor_mail: the mail of the contractor\n+ contractor_comment: a comment on the contractor\n+ contractor_present_on_event: if the contractor will be present on the event\n\n# returns :\n+ a json object containing the created activity"
+					},
+					"response": []
+				},
+				{
+					"name": "activity",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity"
+							]
+						},
+						"description": "This requests deletes an activity according to its id.\n# arguments :\n+ id : the id of the activity\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "activity",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 2,\n    \"name\": \"coder l'activité 2\",\n    \"description\": \"il faut coder l'activité 2\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity"
+							]
+						},
+						"description": "This requests updates an activity according to its id.\n# arguments :\n+ id: the id of the activity\n+ name: the name of the activity\n+ description: a description of the activity\n+ start_date: the starting date and time of the activity\n+ end_date: the ending date and time of the activity\n+ supervisor_id: the user id of the supervisor of the activity\n+ event_id: the id of the event that the activity belongs to\n+ contractor_name: the name of the contractor\n+ contractor_phone: the phone number of the contractor\n+ contractor_mail: the mail of the contractor\n+ contractor_comment: a comment on the contractor\n+ contractor_present_on_event: if the contractor will be present on the event\n\n# returns :\n+ a json object containing the updated activity"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Activity Location",
+			"item": [
+				{
+					"name": "activity/location/:id_activity",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"location_ids\": [3]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/activity/location/:id_activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"location",
+								":id_activity"
+							],
+							"variable": [
+								{
+									"key": "id_activity",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes locations from the specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be deleted\n\n# returns :\n+ a json array off all the added locations"
+					},
+					"response": []
+				},
+				{
+					"name": "activity/location/id/:id_activity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/activity/location/id/:id_activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"location",
+								"id",
+								":id_activity"
+							],
+							"variable": [
+								{
+									"key": "id_activity",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets an activity according location to the activity id.\n# arguments :\n+ activity_id : the id of the activity\n\n# returns :\n+ a json object"
+					},
+					"response": []
+				},
+				{
+					"name": "activity/location/:id_activity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"location_ids\": [1, 2]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/activity/location/:id_activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"location",
+								":id_activity"
+							],
+							"variable": [
+								{
+									"key": "id_activity",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This requests adds new locations to the specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be added\n\n# returns :\n+ a json array off all the added locations"
+					},
+					"response": []
+				},
+				{
+					"name": "activity/location/:id_activity",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"location_ids\": [2,3]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/activity/location/:id_activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"location",
+								":id_activity"
+							],
+							"variable": [
+								{
+									"key": "id_activity",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests updates the locations for a specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be set\n\n# returns :\n+ a json array off all the added locations"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Availability",
+			"item": [
+				{
+					"name": "availability/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/availability/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets an availability according to its id\n# arguments:\n+ id: the id of the availability\n\n# returns:\n+ a json array of availabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "availability/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/availability/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request deletes an availability according to its id\n# arguments:\n+ id: the id of the availability\n\n# returns:\n+ a result of 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/availability",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability"
+							]
+						},
+						"description": "This request gets all the availabilities in the database\n# arguments:\n+ none\n\n# returns:\n+ a json array of availabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "availability/shift/:id_shift",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/availability/shift/:id_shift",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability",
+								"shift",
+								":id_shift"
+							],
+							"variable": [
+								{
+									"key": "id_shift",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This request gets all the users available on a shift\n# arguments:\n+ shift_id: the id of the shift\n\n# returns:\n+ a json array of availabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "availability/user/:id_user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/availability/user/:id_user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability",
+								"user",
+								":id_user"
+							],
+							"variable": [
+								{
+									"key": "id_user",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets all the shifts a user is available on\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of availabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "availability/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"shift_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{host}}/availability/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This request updates an availability with a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the updated availability"
+					},
+					"response": []
+				},
+				{
+					"name": "availability",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"availabilities\": [\n        {\n            \"user_id\": 1,\n            \"shift_id\": 2\n        },\n        {\n            \"user_id\": 1,\n            \"shift_id\": 1\n        },\n        {\n            \"user_id\": 1,\n            \"shift_id\": 3\n        },\n        {\n            \"user_id\": 2,\n            \"shift_id\": 2\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/availability",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability"
+							]
+						},
+						"description": "This request creates multiple availabilities with an array of json objects containing a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the created availabilities"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "comment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/comment?user_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comment"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets all the comments in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of comments"
+					},
+					"response": []
+				},
+				{
+					"name": "comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"content\": \"nice code dude well commented and sht\",\n\t\"date\": \"2019/07/19 16:54\",\n\t\"user_id\": 1,\n\t\"activity_id\": null,\n\t\"task_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comment"
+							]
+						},
+						"description": "This requests creates a new comment with the content, date, user, activity and task.\n# arguments :\n+ content: the content of the comment\n+ date: the date and time of the comment\n+ user_id: the user id of the user that wrote the comment\n+ activity_id: the activity id of the activity on which the comment was written\n+ task_id: the task id of the task on which the comment was written\n\n# returns :\n+ a json object containing the created comment"
+					},
+					"response": []
+				},
+				{
+					"name": "comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comment"
+							]
+						},
+						"description": "This requests deletes a comment according to its id.\n# arguments :\n+ id : the id of the comment\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"content\": \"nice code dude well commented and sht, btw you look nice\",\n\t\"date\": \"2019/07/19 16:54\",\n\t\"user_id\": 1,\n\t\"activity_id\": null,\n\t\"task_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comment"
+							]
+						},
+						"description": "This requests updates a comment according to its id.\n# arguments :\n+ id : the id of the comment\n+ content: the content of the comment\n+ date: the date and time of the comment\n+ user_id: the user id of the user that wrote the comment\n+ activity_id: the activity id of the activity on which the comment was written\n+ task_id: the task id of the task on which the comment was written\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Equipment",
+			"item": [
+				{
+					"name": "equipment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the equipments in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of equipments"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"Balai\",\n\t\"description\": \"Un manche et une moustache\",\n\t\"quantity\": 7,\n\t\"equipment_type_id\": 2,\n\t\"pickup_location\": 1,\n\t\"drop_location\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment"
+							]
+						},
+						"description": "This requests updates an equipment with the name, description, quantity, equipment type id, pickup location and drop location according to its id.\n# arguments :\n+ id: the id of the equipment\n+ name: the name of the equipment\n+ description: a brief description of the equipment\n+ quantity: the quantity of equipment there is\n+ equipment_type_id: the id of the equipment type\n+ pickup_location: the id of the pickup location\n+ drop_location: the id of the drop location\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Balai\",\n\t\"description\": \"Un manche et une brosse\",\n\t\"quantity\": 7,\n\t\"equipment_type_id\": 2,\n\t\"pickup_location\": 1,\n\t\"drop_location\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment"
+							]
+						},
+						"description": "This requests creates a new equipment with the name, description, quantity, equipment type id, pickup location and drop location.\n# arguments :\n+ name: the name of the equipment\n+ description: a brief description of the equipment\n+ quantity: the quantity of equipment there is\n+ equipment_type_id: the id of the equipment type\n+ pickup_location: the id of the pickup location\n+ drop_location: the id of the drop location\n\n# returns :\n+ a json object containing the created equipment"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment"
+							]
+						},
+						"description": "This requests deletes an equipment according to its id.\n# arguments :\n+ id : the id of the equipment\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Equipment Requirement",
+			"item": [
+				{
+					"name": "equipment_requirement/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/equipment_requirement/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_requirement",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_requirement",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment_requirement",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_requirement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_requirement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"requirements\": [\n\t\t{\n\t\t\t\"task_id\": 1,\n\t\t\t\"equipment_id\": 1,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"task_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"activity_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t}\n\t\t]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/equipment_requirement",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_requirement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_requirement/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment_requirement/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_requirement",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_requirement/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"task_id\": 1,\n    \"equipment_id\": 1,\n    \"shift_id\": 2,\n    \"quantity\": 3\n}"
+						},
+						"url": {
+							"raw": "{{host}}/equipment_requirement/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_requirement",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Equipment Assignment",
+			"item": [
+				{
+					"name": "equipment_assignment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment_assignment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_assignment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_assignment/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment_assignment/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_assignment",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_assignment/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/equipment_assignment/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_assignment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_assignment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"assignments\": [\n        {\n            \"equipment_requirement_id\": 1,\n            \"quantity\": 2\n        },\n        {\n            \"equipment_requirement_id\": 2,\n            \"quantity\": 1\n        },\n        {\n            \"equipment_requirement_id\": 3,\n            \"quantity\": 1\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/equipment_assignment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_assignment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_assignment/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"equipment_requirement_id\": 1,\n    \"quantity\": 3\n}"
+						},
+						"url": {
+							"raw": "{{host}}/equipment_assignment/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_assignment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Equipment Type",
+			"item": [
+				{
+					"name": "equipment_type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/equipment_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_type"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the equipment types in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of equipment types"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Petit materiel\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_type"
+							]
+						},
+						"description": "This requests creates a new equipment type with the name.\n# arguments :\n+ name: the name of the equipment type\n\n# returns :\n+ a json object containing the created equipment type"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_type",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_type"
+							]
+						},
+						"description": "This requests deletes an equipment type according to its id.\n# arguments :\n+ id : the id of the equipment type\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment_type",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3,\n\t\"name\": \"Petit matos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_type"
+							]
+						},
+						"description": "This requests updates an equipment type according to its id.\n# arguments :\n+ id : the id of the equipment type\n+ name : the name of the equipment type\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3,\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\",\n\t\"logo_url\": \"logo_24_45.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						},
+						"description": "This request updates the event according to its id.\n# arguments :\n+ id : the id of the event\n+ name : the new name of the event\n+ description : the new description of the event\n+ start_date : the new starting date of the event\n+ end_date : the new end_date of the event\n+ logo_url : the url for the logo of the event\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the events in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of events"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						},
+						"description": "This request delete an event according to its id.\n# arguments :\n+ id : the id of the event\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						},
+						"description": "This request create a new event with the name, description and start and end dates.\n# arguments :\n+ name : a 255 characters maximum name for the event\n+ description : a text to describe quickly the event\n+ start_date : the starting date of the event\n+ end_date : the ending date of the event\n+ logo_url : the url for the logo of the event\n\n# returns :\n+ a json object containing the created event"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Friend",
+			"item": [
+				{
+					"name": "friendship/user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/friendship/user?user_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship",
+								"user"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendship",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/friendship",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendship",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 2,\n    \"user_id\": 2,\n    \"friend_id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/friendship",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendship",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/friendship",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "friendship",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"friendships\": [\n        {\n        \t\"user_id\": 1,\n        \t\"friend_id\": 2\n        },\n        {\n        \t\"user_id\": 2,\n        \t\"friend_id\": 3\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/friendship",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"location"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the locations in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of locations"
+					},
+					"response": []
+				},
+				{
+					"name": "location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"location"
+							]
+						},
+						"description": "This requests deletes a location according to its id.\n# arguments :\n+ id : the id of the location\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "location",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"QG Catering\",\n\t\"description\": \"là où l'on stocke les 98 tonnes de frometon\",\n\t\"gps_long\": 45.784156,\n\t\"gps_lat\": 4.874421\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"location"
+							]
+						},
+						"description": "This requests updates a location according to its id.\n# arguments :\n+ id : the id of the location\n+ name: the name of the location\n+ description: a brief description of the location\n+ gps_long: the longitude of the location\n+ gps_lat: the latitude of the location\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"QG Catering\",\n\t\"description\": \"là où l'on stocke le clackos (entre autre)\",\n\t\"gps_long\": 45.784156,\n\t\"gps_lat\": 4.874421\n}"
+						},
+						"url": {
+							"raw": "{{host}}/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"location"
+							]
+						},
+						"description": "This requests creates a new location with the name, description and gps coordinates.\n# arguments :\n+ name: the name of the location\n+ description: a brief description of the location\n+ gps_long: the longitude of the location\n+ gps_lat: the latitude of the location\n\n# returns :\n+ a json object containing the created location"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "notification",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/notification",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification"
+							]
+						},
+						"description": "This request gets all the notifications in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/unread/user/:user_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/unread/user/:user_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"unread",
+								"user",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "This request gets all the unread notifications for a given user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/notification/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets a notification according to its id.\n# arguments :\n+ id : the id of the notification\n\n# returns :\n+ a json object containing the notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/team/:team_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/team/:team_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"team",
+								":team_id"
+							],
+							"variable": [
+								{
+									"key": "team_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets all the notifications for a given team\n# arguments:\n+ team_id: the id of the team\n\n# returns:\n+ a json array of notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/notification/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes a notification according to its id.\n# arguments :\n+ id : the id of the notification\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/user/:user_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/user/:user_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"user",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "This request gets all the notifications for a given user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/unread/team/:team_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/unread/team/:team_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"unread",
+								"team",
+								":team_id"
+							],
+							"variable": [
+								{
+									"key": "team_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets all the unread notifications for a given team\n# arguments:\n+ team_id: the id of the team\n\n# returns:\n+ a json array of notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/unread/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/unread/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"unread",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests change the status of a notification to unread\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/read/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/read/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"read",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						},
+						"description": "This requests change the status of a notification to read\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"content\": \"vous avez un nouveau message\",\n\t\"user_id\": 3,\n\t\"team_id\": null\n}"
+						},
+						"url": {
+							"raw": "{{host}}/notification",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification"
+							]
+						},
+						"description": "This requests creates a new notification with the content, user and team.\n# arguments :\n+ content: the content of the notification\n+ user_id: the user id of the user targeted by the notification\n+ team_id: the team id of the team targeted by the notification\n\n# returns :\n+ a json object containing the created notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"content\": \"vous avez des fiches taches a faire\",\n\t\"user_id\": 1,\n\t\"team_id\": null\n}"
+						},
+						"url": {
+							"raw": "{{host}}/notification/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests updates a notification according to its id.\n# arguments :\n+ id : the id of the notification\n+ content: the content of the notification\n+ user_id: the user id of the user targeted by the notification\n+ team_id: the team id of the team targeted by the notification\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "search/task",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"le\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/task",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/equipment_type",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"petit\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/equipment_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"equipment_type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/equipment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"12m3\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/equipment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"equipment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/activity",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"on\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/activity",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/comment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"ouais\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/team",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"fromage\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/team",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"team"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/event",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"charism\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"le\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search/location",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search_term\": \"le\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/search/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search",
+								"location"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Shift",
+			"item": [
+				{
+					"name": "shift/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes a shift according to its id.\n# arguments :\n+ id : the id of the shift\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "shift",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift"
+							]
+						},
+						"description": "This request gets all the shifts in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of shifts"
+					},
+					"response": []
+				},
+				{
+					"name": "shift/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets a shift according to its id.\n# arguments :\n+ id : the id of the shift\n\n# returns :\n+ a json object containing the shift"
+					},
+					"response": []
+				},
+				{
+					"name": "shift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 15,\n\t\"shift_category_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/shift",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift"
+							]
+						},
+						"description": "This requests creates a new shift with the start date, end date, charisma and the shift category id.\n# arguments :\n+ start_date : the starting date and time of the shift\n+ end_date : the ending date and time of the shift\n+ charisma : the number of charisma points awarded for this shift\n+ shift_category_id : the id of the shift category it belongs to\n\n# returns :\n+ a json object containing the created shift"
+					},
+					"response": []
+				},
+				{
+					"name": "shift/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 18,\n\t\"shift_category_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/shift/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests updates a shift according to its id.\n# arguments :\n+ id : the id of the shift\n+ start_date : the starting date and time of the shift\n+ end_date : the ending date and time of the shift\n+ charisma : the number of charisma points awarded for this shift\n+ shift_category_id : the id of the shift category it belongs to\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "shift/window",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"start_date\": \"2019/09/19 15:00\",\n    \"end_date\": \"2019/09/19 20:00\",\n    \"charisma\": 15,\n    \"shift_category_id\": 1,\n    \"shift_length\": 60\n}"
+						},
+						"url": {
+							"raw": "{{host}}/shift/window",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift",
+								"window"
+							]
+						},
+						"description": "This request creates multiple shifts with a starting date, ending date, charisma, shift category id and shift length in minutes\n# arguments :\n+ start_date : the starting date and time of the shift window\n+ end_date : the ending date and time of the shift window\n+ charisma : the number of charisma points awarded for the shifts\n+ shift_category_id : the id of the shift category it belongs to\n+ shift_length : a single shift length defined in minutes\n\n# returns :\n+\ta json array containing the created shifts"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Shift Category",
+			"item": [
+				{
+					"name": "shift_category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift_category",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift_category"
+							]
+						},
+						"description": "This request gets all the shift categories in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of shift categories"
+					},
+					"response": []
+				},
+				{
+					"name": "shift_category/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift_category/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift_category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes a shift category according to its id.\n# arguments :\n+ id : the id of the shift category\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "shift_category/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift_category/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift_category",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets a shift category according to its id.\n# arguments :\n+ id : the id of the shift category\n\n# returns :\n+ a json object containing the shift category"
+					},
+					"response": []
+				},
+				{
+					"name": "shift_category/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Post-Manifestation\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/shift_category/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift_category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests updates a shift category according to its id.\n# arguments :\n+ id : the id of the shift category\n+ name : the name of the shift category\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "shift_category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Post-Manif\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/shift_category",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift_category"
+							]
+						},
+						"description": "This requests creates a new shift category with the name.\n# arguments :\n+ name: the name of the category\n\n# returns :\n+ a json object containing the created shift category"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Specialty",
+			"item": [
+				{
+					"name": "specialty",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/specialty",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"specialty"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the specialties in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of specialties"
+					},
+					"response": []
+				},
+				{
+					"name": "specialty",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"TC\",\n\t\"year\": 6\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/specialty",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"specialty"
+							]
+						},
+						"description": "This requests creates a new specialty with the name and year\n# arguments :\n+ name: the name of the specialty\n+ year: the year in the specialty\n\n# returns :\n+ a json object containing the created specialty"
+					},
+					"response": []
+				},
+				{
+					"name": "specialty",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 12,\n\t\"name\": \"TC\",\n\t\"year\": 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/specialty",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"specialty"
+							]
+						},
+						"description": "This requests updates a specialty according to its id.\n# arguments :\n+ id : the id of the specialty\n+ name: the name of the specialty\n+ year: the year in the specialty\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "specialty",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/specialty",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"specialty"
+							]
+						},
+						"description": "This requests deletes a specialty according to its id.\n# arguments :\n+ id : the id of the specialty\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/task",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task"
+							]
+						},
+						"description": "This request gets all the tasks in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of tasks"
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"changer tout les envois de paramètres en json\",\n\t\"description\": \"il faut tout changer je suis grave content\",\n\t\"start_date\": \"2019/09/27 18:20\",\n\t\"end_date\": \"2019/09/27 19:00\",\n\t\"supervisor_id\": 1,\n\t\"team_id\": 1,\n\t\"location_id\": 1,\n\t\"activity_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/task",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task"
+							]
+						},
+						"description": "This requests creates a new task with the name, description, starting and ending date, supervisor, team, location and activity\n# arguments :\n+ name: the name of the task\n+ description: a description of the task\n+ start_date: the starting date and time of the task\n+ end_date: the ending date and time of the task\n+ supervisor_id: the user id of the supervisor of the task\n+ team_id: the team id\n+ location_id: the location of the task\n+ activity_id: the activity id of the activity the task belongs to\n\n# returns :\n+ a json object containing the created task"
+					},
+					"response": []
+				},
+				{
+					"name": "task/require_team",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"teams\": [1, 2]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/task/require_team",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"require_team"
+							]
+						},
+						"description": "This request gets all the tasks that require one or multiple teams\n# arguments:\n+ teams: an array of team ids\n\n# returns:\n+ a json array of tasks"
+					},
+					"response": []
+				},
+				{
+					"name": "task/require_user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": 2\n}"
+						},
+						"url": {
+							"raw": "{{host}}/task/require_user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"require_user"
+							]
+						},
+						"description": "This request gets all the tasks that require one specific user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of tasks"
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"changer tout les envois de paramètres en json\",\n\t\"description\": \"il faut tout changer je suis grave content et je fais des updates\",\n\t\"start_date\": \"2019/09/27 18:20\",\n\t\"end_date\": \"2019/09/27 19:00\",\n\t\"supervisor_id\": 1,\n\t\"team_id\": 1,\n\t\"location_id\": 1,\n\t\"activity_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/task",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task"
+							]
+						},
+						"description": "This requests updates an task according to its id.\n# arguments :\n+ id : the id of the task\n+ name: the name of the task\n+ description: a description of the task\n+ start_date: the starting date and time of the task\n+ end_date: the ending date and time of the task\n+ supervisor_id: the user id of the supervisor of the task\n+ team_id: the team id\n+ location_id: the location of the task\n+ activity_id: the activity id of the activity the task belongs to\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/task",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task"
+							]
+						},
+						"description": "This requests deletes an task according to its id.\n# arguments :\n+ id : the id of the task\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Team",
+			"item": [
+				{
+					"name": "team/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/team/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "This requests deletes a team according to its id.\n# arguments :\n+ id : the id of the team\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "team/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/team/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "This request gets a team according to its id.\n# arguments :\n+ id : the id of the team\n\n# returns :\n+ a json object containing the team"
+					},
+					"response": []
+				},
+				{
+					"name": "team/members/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/team/members/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team",
+								"members",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This request gets the members of a team.\n# arguments :\n+ id_team: the id of the team\n\n# returns :\n+ an json array of users members of the team"
+					},
+					"response": []
+				},
+				{
+					"name": "team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/team",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team"
+							]
+						},
+						"description": "This request gets all the teams in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of teams"
+					},
+					"response": []
+				},
+				{
+					"name": "team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"new team\",\n\t\"supervisor_id\": 1,\n\t\"confidence_level\": 500,\n\t\"priority\": 10,\n\t\"color\": \"#758697\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/team",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team"
+							]
+						},
+						"description": "This requests creates a new team with its name.\n# arguments :\n+ name: the name of the team\n+ supervisor_id: the user id of the supervisor\n\n# returns :\n+ a json object containing the created team"
+					},
+					"response": []
+				},
+				{
+					"name": "team/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"new team\",\n\t\"supervisor_id\": 1,\n\t\"confidence_level\": 500,\n\t\"priority\": 10,\n\t\"color\": \"#758697\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/team/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						},
+						"description": "This requests updates a team according to its id.\n# arguments :\n+ id : the id of the team\n+ name: the name of the team\n+ supervisor_id: the user id of the supervisor\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CRUD REQUESTS",
+					"item": [
+						{
+							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b1862714-182b-43ef-9f18-9363615c3734",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"User 1 is Eric\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.users[0].first_name).to.eql(\"Eric\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "A",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{host}}/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user"
+									],
+									"query": [
+										{
+											"key": "keycloak_user_id",
+											"value": "585ef149-2167-4218-8be4-cadb952602fd",
+											"disabled": true
+										},
+										{
+											"key": "id",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								},
+								"description": "This request gets all the users in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of users"
+							},
+							"response": []
+						},
+						{
+							"name": "user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 7\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "This request deletes a user according to its id.\n# arguments :\n+ id : the id of the user\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+							},
+							"response": []
+						},
+						{
+							"name": "user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"first_name\": \"Thibaut\",\n    \"last_name\": \"Bellanger\",\n    \"surname\": \"Bigou\",\n    \"birthday\": \"1998-08-06\",\n    \"phone_number\": \"0645860897\",\n    \"email\": \"t.bellanger34@gmail.com\",\n    \"licence_date\": \"2018-04-09T22:00:00.000Z\",\n    \"licence_scan_url\": \"\",\n    \"profile_pic_url\": \"image/default_pic_url\",\n    \"tshirt_size\": \"XL\",\n    \"alcoholic_beverage_consumption\": \"15\",\n    \"food_and_beverage_consumption\": \"35\",\n    \"balance\": \"-45.0\",\n    \"comment\": \"je suis le petit copain d'aline, la trésorière\",\n    \"experience\": \"j'ai fait une manif\",\n    \"incapacity\": \"\",\n    \"specialtyId\": \"1\"\n}"
+								},
+								"url": {
+									"raw": "{{host}}/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "This requests creates a new user with the attributes of the user (too long for description)\n# arguments :\n+ first_name: the first name of the user\n+ last_name: the last name of the user\n+ surname: the surname of the user\n+ birthday: the birthday of the user\n+ phone_number: the phone number of the user\n+ email: the email address of the user\n+ licence_date: the date of obtention of the licence of the user\n+ licence_scan_url: the url for the scan of the licence\n+ profile_pic_url: the url for the profile picture of the user\n+ tshirt_size: the tshirt size of the user, between XS, S, M, L and XL\n+ alcoholic_beverage_consumption: the number of alcoholic consumption of the user\n+ food_and_beverage_consumption: the number of non-alcoholic consumption of the user\n+ balance: the balance of the account of the user\n+ comment: a comment the user has made about itself\n+ experience: the experience of the user in other events\n+ incapacity: the incapacity the user might have\n+ specialty_id: the specialty of the user\n\n# returns :\n+ a json object containing the created user"
+							},
+							"response": []
+						},
+						{
+							"name": "user",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 7,\n\t\"profile_pic_url\": \"profile_pic_2.jpg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "This requests updates a user according to its id.\n# arguments :\n+ id : the id of the user\n+ first_name: the first name of the user\n+ last_name: the last name of the user\n+ surname: the surname of the user\n+ birthday: the birthday of the user\n+ phone_number: the phone number of the user\n+ email: the email address of the user\n+ licence_date: the date of obtention of the licence of the user\n+ licence_scan_url: the url for the scan of the licence\n+ profile_pic_url: the url for the profile picture of the user\n+ tshirt_size: the tshirt size of the user, between XS, S, M, L and XL\n+ alcoholic_beverage_consumption: the number of alcoholic consumption of the user\n+ food_and_beverage_consumption: the number of non-alcoholic consumption of the user\n+ balance: the balance of the account of the user\n+ comment: a comment the user has made about itself\n+ experience: the experience of the user in other events\n+ incapacity: the incapacity the user might have\n+ specialty_id: the specialty of the user\n\n# returns :\n+ the updated object"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "VALIDATING USER",
+					"item": [
+						{
+							"name": "user/invalidate",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 6\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/invalidate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"invalidate"
+									]
+								},
+								"description": "This request invalidates a user\n# arguments:\n+ id: the id of the user\n\n# returns:\n+ a json object containing the updated user"
+							},
+							"response": []
+						},
+						{
+							"name": "user/validate",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 6\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/validate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"validate"
+									]
+								},
+								"description": "This request validates a user so it can use the calls for a validated user\n# arguments:\n+ id: the id of the user\n\n# returns:\n+ a json object containing the updated user"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "TEAM MANIPULATION",
+					"item": [
+						{
+							"name": "user/team",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/team?user_id=6",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"team"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "6"
+										}
+									]
+								},
+								"description": "This request gets the team(s) of a user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json object containing the relations"
+							},
+							"response": []
+						},
+						{
+							"name": "user/team",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user_id\": 6,\n\t\"team_id\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/team",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"team"
+									]
+								},
+								"description": "This request adds a team to a user\n# arguments:\n+ user_id: the id of the user\n+ team_id: the id of the team\n\n# returns:\n+ a json object containing the created relation"
+							},
+							"response": []
+						},
+						{
+							"name": "user/team",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user_id\": 6,\n\t\"team_id\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/team",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"team"
+									]
+								},
+								"description": "This request deletes a team from a user\n# arguments:\n+ user_id: the id of the user\n+ team_id: the id of the team\n\n# returns:\n+ a result being 1 if succeeded, 0 else"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "FILE UPLOADING",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User Assignment",
+			"item": [
+				{
+					"name": "user_assignment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user_assignment/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_assignment",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_assignment/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user_assignment/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_assignment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_assignment/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user_assignment/id/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_assignment",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_assignment/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"availability_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user_assignment/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_assignment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_assignment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user_assignments\": [\n\t\t{\n\t\t\t\"user_id\": 1,\n\t\t\t\"availability_id\": 1\n\t\t},\n\t\t{\n\t\t\t\"user_id\": 1,\n\t\t\t\"availability_id\": 2\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user_assignment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_assignment"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User Requirement",
+			"item": [
+				{
+					"name": "user_requirement",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user_requirement",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_requirement"
+							]
+						},
+						"description": "This request gets all the requirements in the database.\n# arguments :\n+ none\n\n# returns :\n+ a json array of requirements"
+					},
+					"response": []
+				},
+				{
+					"name": "user_requirement/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user_requirement/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_requirement",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This requests deletes a user_requirement according to its id.\n# arguments :\n+ id : the id of the user_requirement\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
+					"name": "user_requirement/users/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"start_date\": \"2019-05-19 08:00\",\n\t\"end_date\": \"2019-05-19 14:00\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user_requirement/users/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_requirement",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This request gets all the user meeting a requirement\n# arguments:\n+ id: the id of the requirement\n\n# returns:\n+ a json array of users"
+					},
+					"response": []
+				},
+				{
+					"name": "user_requirement/window",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"start_date\": \"2019-05-19 08:00\",\n\t\"end_date\": \"2019-05-19 14:00\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user_requirement/window",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_requirement",
+								"window"
+							]
+						},
+						"description": "This request gets all the requirement on a time window\n# arguments:\n+ start_date: the starting date and time of the time window\n+ end_date: the ending date and time of the time window\n\n# returns:\n+ a json array of requirements"
+					},
+					"response": []
+				},
+				{
+					"name": "user_requirement/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 1,\n    \"user_id\": 2,\n    \"team_id\": null,\n    \"task_id\": 1,\n    \"shift_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user_requirement/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user_requirement",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This requests updates a user_requirement according to its id.\n# arguments :\n+ id : the id of the shift\n+ quantity : the number of needed volunteer(s)\n+ user_id : the _id of the needed volunteer(s)\n+ team_id : the team of the needed volunteer(s)\n+ task_id : the _id of the task for which the user_requirement is created\n+ shift_id : the id of the shift on which the requirement is\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7a3027f7-44ba-4124-929c-306fa61b1314",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0246f15f-cdf6-4c49-ad6c-2b312bce27fd",
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function(){",
+					"   pm.response.to.have.status(200) ",
+					"});"
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

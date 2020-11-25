@@ -4,11 +4,12 @@
   "description": "Project A is the new Assomaker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "newman  test/run CI.postman_collection.json -g test/CI.postman_globals.json",
     "create_database": "node init_database.js",
     "start": "node index.js",
     "populate": "node setup/populate.js",
-    "setup": "sudo setup/setup_dns.sh"
+    "setup": "sudo setup/setup_dns.sh",
+    "create_admin": "setup/create_admin.sh"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "chai-json": "^1.0.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "newman": "^5.2.1"
   }
 }
