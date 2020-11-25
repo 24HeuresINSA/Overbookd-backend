@@ -39,7 +39,6 @@ id=$(curl --location --request GET 'http://localhost:8180/auth/admin/realms/proj
 --header 'Cookie: connect.sid=s%3A-WC6AQ-D-4gteZyHjIloR0078FahkVqI.7i3GbQW5QpzlvzzDYX3JAa4QU1b2MQoaCzPz%2BFSnR%2F8' | jq -r '.[0] .id')
 
 echo "ID : $id"
-echo "http://localhost:8180/auth/admin/realms/project_a/users/$id/role-mappings/realm"
 
 # Give roles
 curl --location --request POST "http://localhost:8180/auth/admin/realms/project_a/users/$id/role-mappings/realm" \
