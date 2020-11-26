@@ -3578,46 +3578,6 @@
 					"response": []
 				},
 				{
-					"name": "user_requirement/users/:id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"start_date\": \"2019-05-19 08:00\",\n\t\"end_date\": \"2019-05-19 14:00\"\n}"
-						},
-						"url": {
-							"raw": "{{host}}/user_requirement/users/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"user_requirement",
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets all the user meeting a requirement\n# arguments:\n+ id: the id of the requirement\n\n# returns:\n+ a json array of users"
-					},
-					"response": []
-				},
-				{
 					"name": "user_requirement/window",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
