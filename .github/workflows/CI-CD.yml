@@ -36,7 +36,7 @@ jobs:
           sudo npm run setup
           npm run create_admin
 
-      - name: Newman Action
+      - name: Postman runner
         uses: matt-ball/newman-action@v0.2.0
         with:
           collection: test/CI.postman_collection.json

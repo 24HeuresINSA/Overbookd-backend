@@ -8,6 +8,7 @@
     "create_database": "node init_database.js",
     "start": "node index.js",
     "populate": "node setup/populate.js",
+    "depopulate": "node setup/depopulate.js",
     "setup": "sudo setup/setup_dns.sh",
     "create_admin": "setup/create_admin.sh"
   },

@@ -12,7 +12,6 @@ sequelize
     .then(() => {
         console.log("\nDatabase synced");
 
-
         models.Event.create({
             name: '24h de l\'INSA',
             description: 'le festival le plus charismatique de France',
