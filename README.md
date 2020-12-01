@@ -26,6 +26,30 @@ Il permet aussi de rendre le code plus facilement lisible, et donc plus facileme
 
 ### Installer et lancer le Projet A - Backend
 
+#### Docker 🐳
+La manière la plus simple pour lancer le backend est d'installer [docker](https://docs.docker.com/get-docker/) et remplir le fichier example.env avec vos propres varible d'environement.
+une fois example.env rempli, il faut le renomme en .env.
+apres vous aurez bersoin de run la commande `sudo npm run setup` et puis lance la commande:
+`docker-compose up -d` pour lancer les conteneurs 
+
+### Script utile
+    >   npm run populate 
+peuple la base de donnée.
+
+    >   npm run depopulate 
+supprime tous les donnêes de la base de donnêe.
+
+    >   sudo npm run setup
+pour que le contenaire keycloak marche bien vous aurez besoin d'ajouter `127.0.0.1 keycloak` pour indique a votre machine 
+que le serveur keycloak se trouve en local
+
+    >   npm create_admin
+cree un utilisateur `user_admin` avec le mot de passe `user_admin` et les permissions d'admin.
+
+    >   npm test 
+lance une serie de test unitaire avec `newman` 
+
+
 #### API
 Avant de lancer l'api il faut que vous  installiez sur votre machine :
 - Server MySQL 

@@ -1,5 +1,3 @@
-# This is a basic workflow that is manually triggered
-
 name: API CI
 
 on:
@@ -14,30 +12,32 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
-        KEYCLOAK_DATABASE_PASSWORD: ${{ secrets.KEYCLOAK_DATABASE_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+      KEYCLOAK_DATABASE_PASSWORD: ${{ secrets.KEYCLOAK_DATABASE_PASSWORD }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
-    - name: Start docker-compose 
-      uses: isbang/compose-action@v0.1.1
-      
-    - name: wait for docker to setup
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '60s'
- 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.2
+      - uses: actions/checkout@v2
+      - name: Start docker-compose
+        uses: isbang/compose-action@v0.1.1
 
-    - name: install dependancies
-      run:  npm install
-  
-    - name: populate the database
-      run:  npm run populate
- 
-    - name: tests
-      run: npm test
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.2
+
+      - name: wait for keycloak to boot up
+        run: sleep 40s
+
+      - name: setup environment
+        run:  |
+          npm install
+          npm run populate
+          sudo npm run setup
+          npm run create_admin
+
+      - name: Postman runner
+        uses: matt-ball/newman-action@v0.2.0
+        with:
+          collection: test/CI.postman_collection.json
+          globals: test/CI.postman_globals.json

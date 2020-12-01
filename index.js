@@ -4,11 +4,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
 const dateFormat = require("date-format");
+require('dotenv').config()
+
 
 const config = require("./assets/json/config.json");
-
-const host = config.host;
-const pwd_bd = require("./assets/json/pwd.json").pwd_project_a;
+const HOST = config.host;
 
 const app = express();
 
@@ -46,27 +46,8 @@ app.use("/files", express.static(global.appRoot + "/uploads"));
 
 //endregion
 
-//region DATABASE CONNECTION
-
-let sequelize = new Sequelize("project_a", "project_a", pwd_bd, {
-  host: "localhost",
-  dialect: "mysql",
-  logging: false
-});
-
-/*
- *   Here we connect Sequelize to our database
- */
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("\nConnection successful with Sequelize\n");
-  })
-  .catch(err => {
-    console.log("\nThere was an error during connection : \n" + err);
-  });
-
-//endregion
+// import sequelize
+const sequelize = require("./sequelize")
 
 //region MIDDLEWARE
 
@@ -80,7 +61,7 @@ app.use(function(req, res, next) {
     "] : " +
     req.method +
     " " +
-    host +
+    HOST +
     req.originalUrl +
     " FROM " +
     req.ip +
@@ -123,9 +104,8 @@ console.log("\nLoading requests complete\n");
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("\nDatabase synced");
-    app.listen(2424, function() {
-      //require("./populate")(sequelize, models);
+      console.log("\nDatabase synced");
+      app.listen(2424, function() {
       console.log("\n\tPROJECT_A LOADING COMPLETE");
       console.log("\nServer running on port 2424");
     });
@@ -135,3 +115,5 @@ sequelize
   });
 
 //endregion
+
+module.exports = app;

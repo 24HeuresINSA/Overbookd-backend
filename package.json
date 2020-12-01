@@ -4,8 +4,13 @@
   "description": "Project A is the new Assomaker",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "create_database": "./create_database.sh"
+    "test": "newman  test/run CI.postman_collection.json -g test/CI.postman_globals.json",
+    "create_database": "node init_database.js",
+    "start": "node index.js",
+    "populate": "node setup/populate.js",
+    "depopulate": "node setup/depopulate.js",
+    "setup": "sudo setup/setup_dns.sh",
+    "create_admin": "setup/create_admin.sh"
   },
   "repository": {
     "type": "git",
@@ -23,6 +28,7 @@
   "homepage": "https://github.com/Debrej/project_a#readme",
   "dependencies": {
     "date-format": "^2.1.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "keycloak-connect": "^8.0.2",
@@ -33,5 +39,11 @@
     "nodemon": "^1.19.3",
     "sequelize": "^5.19.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "chai-json": "^1.0.0",
+    "mocha": "^8.2.1",
+    "newman": "^5.2.1"
+  }
 }
