@@ -1,5 +1,5 @@
 {
-  "host": "localhost:8080",
+  "host": "localhost:1234",
   "logging": false,
-  "CORS_origin": "http://localhost:8080"
+  "CORS_origin": "http://localhost:1234"
 }
