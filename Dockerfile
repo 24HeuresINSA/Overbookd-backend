@@ -1,4 +1,4 @@
-FROM node
+FROM node:15.3.0-alpine3.10
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -16,11 +16,5 @@ RUN npm ci
 COPY . .
 
 EXPOSE 2424
-
-ENV DATABASE_PASSWORD=${DATABASE_PASSWORD}
-
-ENV DATABASE_HOST=db_project_a
-
-ENV DATABASE_PORT=3306
 
 CMD [ "node", "index.js" ]
