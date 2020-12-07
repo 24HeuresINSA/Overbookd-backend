@@ -2,6 +2,8 @@
 # DO NOT RUN THIS SCRIPT ON PRODUCTION
 # Create a user with admin role in keycloak to make it easier to test, CI and quickstart the project
 
+export $(xargs < .env)
+
 # get admin access token
 access_token=$(curl --location --request POST 'http://localhost:8180/auth/realms/master/protocol/openid-connect/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
@@ -54,7 +56,6 @@ curl --location --request POST "http://localhost:8180/auth/admin/realms/project_
         "containerId": "project_a"
     }
 ]'
-
 
 # Feedback
 echo "user_admin created and granted admin role"
