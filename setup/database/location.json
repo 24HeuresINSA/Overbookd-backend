@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Bar AIP",
+        "description": "c\"est le bar à coté de l\"AIP",
+        "gps_lat": 45.783367,
+        "gps_long": 4.876851
+    },
+    {
+        "name": "QG catering",
+        "description": "là où on stocke les 80 kg de frometon",
+        "gps_lat": 45.784156,
+        "gps_long": 4.874421
+    },
+    {
+        "name": "QG orga",
+        "description": "une fois y\"as eu une chèvre",
+        "gps_lat": 45.783943,
+        "gps_long": 4.873784
+    }
+]

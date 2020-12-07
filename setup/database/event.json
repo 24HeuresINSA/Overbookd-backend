@@ -1,0 +1,14 @@
+[
+    {
+        "name": "24h de l\"INSA",
+        "description": "le festival le plus charismatique de France",
+        "start_date": "2019/05/17 20:00",
+        "end_date": "2019/05/19 23:30"
+    },
+    {
+        "name": "Open Air",
+        "description": "ça tourne mal",
+        "start_date": "2019/05/06 12:00",
+        "end_date": "2019/05/06 18:00"
+    }
+]
