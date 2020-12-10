@@ -36,8 +36,10 @@ services:
       MYSQL_DATABASE: project_a
       MYSQL_USER: project_a
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_TCP_PORT: ${DATABASE_PORT}
+
     ports:
-      - 3306:3306 # for debug
+      - ${DATABASE_PORT}:${DATABASE_PORT} # for debug
     networks:
       - api
 
@@ -80,6 +82,6 @@ services:
     environment:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: db_project_a
-      DATABASE_PORT: 3306
+      DATABASE_PORT: ${DATABASE_PORT}
 
 
