@@ -9,12 +9,12 @@ module.exports = (models, keycloak) => {
         .then(specialty => res.send(specialty))
         .catch(err => res.status(500).send(err));
     })
-    .post(keycloak.protect("realm:user"), (req, res) => {
+    .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Specialty.create(req.body)
         .then(specialty => res.send(specialty))
         .catch(err => res.status(500).send(err));
     })
-    .put(keycloak.protect("realm:user"), (req, res) => {
+    .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Specialty.update(req.body, {where: {id: req.body.id}})
         .then(() => {
             models.Specialty.findByPk(req.body.id)
@@ -23,7 +23,7 @@ module.exports = (models, keycloak) => {
         })
         .catch(err => res.status(500).send(err));
     })
-    .delete(keycloak.protect("realm:user"), (req, res) => {
+    .delete(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Specialty.destroy({where: {id: req.query.id}})
         .then(result => {
             if(result) res.sendStatus(204);

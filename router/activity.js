@@ -9,12 +9,12 @@ module.exports = (models, keycloak) => {
         .then(activity => res.send(activity))
         .catch(err => res.status(500).send(err));
     })
-    .post(keycloak.protect("realm:user"), (req, res) => {
+    .post(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Activity.create(req.body)
         .then(activity => res.send(activity))
         .catch(err => res.status(500).send(err));
     })
-    .put(keycloak.protect("realm:user"), (req, res) => {
+    .put(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Activity.update(req.body, {where: {id: req.body.id}})
         .then(() => {
             Activity.findByPk(req.body.id)
@@ -23,7 +23,7 @@ module.exports = (models, keycloak) => {
         })
         .catch(err => res.status(500).send(err));
     })
-    .delete(keycloak.protect("realm:user"), (req, res) => {
+    .delete(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Activity.destroy({where: {id: req.query.id}})
         .then(result => {
             if(result) res.sendStatus(204);

@@ -27,7 +27,7 @@ module.exports = (models, keycloak) => {
         })
         .catch(err => res.status(500).send(err));
     })
-    .delete(keycloak.protect("realm:user"), (req, res) => {
+    .delete(keycloak.protect("realm:user_admin"), (req, res) => {
         models.User.destroy({where: {id: req.query.id}})
         .then(result => {
             if(result) res.sendStatus(204);
@@ -59,14 +59,14 @@ module.exports = (models, keycloak) => {
         .catch(err => res.status(500).send(err));
     });
 
-    router.put("/:user/validate", keycloak.protect("realm:user_admin"), (req, res) => {
+    router.put("/:user/validate", keycloak.protect("realm:user_affect"), (req, res) => {
         req.user.validity_status = true;
         req.user.save()
         .then(user => res.send(user))
         .catch(err => res.status(500).send(err));
     });
 
-    router.put("/:user/invalidate", keycloak.protect("realm:user_admin"), (req, res) => {
+    router.put("/:user/invalidate", keycloak.protect("realm:user_affect"), (req, res) => {
         req.user.validity_status = false;
         req.user.save()
         .then(user => res.send(user))

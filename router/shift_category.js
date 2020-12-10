@@ -9,12 +9,12 @@ module.exports = (models, keycloak) => {
         .then(shift_category => res.send(shift_category))
         .catch(err => res.status(500).send(err));
     })
-    .post(keycloak.protect("realm:user"), (req, res) => {
+    .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Shift_category.create(req.body)
         .then(shift_category => res.send(shift_category))
         .catch(err => res.status(500).send(err));
     })
-    .put(keycloak.protect("realm:user"), (req, res) => {
+    .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Shift_category.update(req.body, {where: {id: req.body.id}})
         .then(() => {
             models.Shift_category.findByPk(req.body.id)
@@ -23,7 +23,7 @@ module.exports = (models, keycloak) => {
         })
         .catch(err => res.status(500).send(err));
     })
-    .delete(keycloak.protect("realm:user"), (req, res) => {
+    .delete(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Shift_category.destroy({where: {id: req.query.id}})
         .then(result => {
             if(result) res.sendStatus(204);

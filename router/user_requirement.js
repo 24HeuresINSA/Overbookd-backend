@@ -73,7 +73,7 @@ module.exports = (models, keycloak) => {
         })
         .then(shifts => {
             let shift_ids = [];
-            shift_ids.forEach(shift => shift_ids.push(shift.id));
+            shifts.forEach(shift => shift_ids.push(shift.id));
             models.User_Requirement.findAll({ where: {shift_id: shift_ids}})
             .then(requirements => res.send(requirements))
             .catch(err => res.status(500).send(err));
