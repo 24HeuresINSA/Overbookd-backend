@@ -25,6 +25,7 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
       KEYCLOAK_DATABASE_PASSWORD: ${{ secrets.KEYCLOAK_DATABASE_PASSWORD }}
+      DATABASE_PORT: 3307
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
