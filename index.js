@@ -84,7 +84,7 @@ let models = require("./models/import")(sequelize, Sequelize); // we retrieve th
 console.log("\nLoading models complete\n");
 
 console.log("Loading requests...\n");
-let router = require("./temp")(models, keycloak);
+let router = require("./router")(models, keycloak);
 console.log("\nLoading requests complete\n");
 
 /*
