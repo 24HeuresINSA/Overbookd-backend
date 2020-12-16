@@ -10,7 +10,8 @@
     "populate": "node setup/populate.js",
     "depopulate": "node setup/depopulate.js",
     "setup": "sudo setup/setup_dns.sh",
-    "create_admin": "setup/create_admin.sh"
+    "create_admin": "setup/create_admin.sh",
+    "repopulate": "npm run depopulate && npm run populate"
   },
   "repository": {
     "type": "git",
