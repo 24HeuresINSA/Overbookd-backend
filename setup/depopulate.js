@@ -1,28 +1,27 @@
 require('dotenv').config()
-const Sequelize = require("sequelize");
-const sequelize = require("../sequelize")
-const models = require("../models/import")(sequelize, Sequelize); // we retrieve the different models in a json object we will pass to the requests
+const MySQL = require("mysql2/promise")
+
+async function main() {
+    const connection = await MySQL.createConnection({
+        host: "localhost",
+        user: "root",
+        password: process.env.MYSQL_ROOT_PASSWORD,
+        port: process.env.DATABASE_PORT
+    });
+    console.log("Connected to the database 🎉...");
+
+    await connection.query("DROP DATABASE project_a;");
+    console.log("Dropped Database 😵...");
+
+    await connection.query("CREATE DATABASE project_a;");
+    console.log("created new Database 🥳...");
+
+    await connection.query("GRANT ALL PRIVILEGES ON project_a.* TO 'project_a'@'%';");
+    console.log("Access granted to the API! 🥳🥳\nRestart the API for the changes to take effect.");
+
+}
 
 
-const models_name = ["Activity", "User", "Team", "Notification", "Location", "Task", "Equipment_Type", "Equipment",
-    "Shift_Category" , "Shift" , "Availability", "Equipment_Requirement", "Friendship",
-    "User_Requirement", "CommentObject"]
-
-
-sequelize
-    .sync({force: false})
-    .then(() => {
-        models_name.forEach(
-            (model_name) => {
-                models[model_name].destroy({
-                        where: {},
-                    }
-                ).then(
-                    console.log(`Deleting ${model_name}`)
-                ).catch((err) => {
-                    console.error(err);
-                })
-            }
-        )
-    })
-
+main().then(()=>{
+    process.exit(0);
+});
