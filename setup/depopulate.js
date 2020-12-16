@@ -1,6 +1,12 @@
 require('dotenv').config()
 const MySQL = require("mysql2/promise")
 
+if (process.env.ENVIONMENT === "production") {
+    // IF YOU ARE DELETING THIS I HOPE YOU KNOW WHAT YOU ARE DOING
+    console.warn("This script can't be run un production 🛑")
+    process.exit(0);
+}
+
 async function main() {
     const connection = await MySQL.createConnection({
         host: "localhost",

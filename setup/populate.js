@@ -7,6 +7,13 @@ require('dotenv').config()
 const Sequelize = require("sequelize");
 const sequelize = require("../sequelize")
 const models = require("../models/import")(sequelize, Sequelize); // we retrieve the different models in a json object we will pass to the requests
+
+if (process.env.ENVIONMENT === "production") {
+    // IF YOU ARE DELETING THIS I HOPE YOU KNOW WHAT YOU ARE DOING
+    console.warn("This script can't be run un production 🛑")
+    process.exit(0);
+}
+
 sequelize
     .sync({force: false})
     .then(() => {
