@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Ramener le fromage à la maison",
+        "description": "on a acheté bcp bcp (bcp) de fromage et on doit le stocker dans le frigos",
+        "start_date": "2019/05/11 12:00:00",
+        "end_date": "2019/05/11 18:00:00",
+        "event_id": 1,
+        "supervisor_id": 2
+    },
+    {
+        "name": "Ranger le QG orga",
+        "description": "la manif est fini c\"était bien rigolo mais maintenant au boulot on range tout",
+        "start_date": "2019/05/19 20:00:00",
+        "end_date": "2019/05/20 18:00:00",
+        "event_id": 1,
+        "supervisor_id": 3
+    }
+]

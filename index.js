@@ -55,17 +55,7 @@ const sequelize = require("./sequelize")
  *   This method will be invoked on every request we get. It allows us to log every requests we get with its origin.
  */
 app.use(function(req, res, next) {
-  let log =
-    "[" +
-    dateFormat(new Date(), "yyyy-mm-dd h:MM:ss") +
-    "] : " +
-    req.method +
-    " " +
-    HOST +
-    req.originalUrl +
-    " FROM " +
-    req.ip +
-    "\n";
+  let log = `[${dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")}] : ${req.method} ${HOST}${req.originalUrl} FROM ${req.ip}`;
   console.log(log);
   next();
 });
@@ -94,7 +84,7 @@ let models = require("./models/import")(sequelize, Sequelize); // we retrieve th
 console.log("\nLoading models complete\n");
 
 console.log("Loading requests...\n");
-require("./api_requests/import")(app, sequelize, models, Sequelize, keycloak); // we add all the requests for every model to the app
+let router = require("./router")(models, keycloak);
 console.log("\nLoading requests complete\n");
 
 /*
@@ -104,10 +94,11 @@ console.log("\nLoading requests complete\n");
 sequelize
   .sync({ force: false })
   .then(() => {
+      app.use("/", router);
       console.log("\nDatabase synced");
       app.listen(2424, function() {
-      console.log("\n\tPROJECT_A LOADING COMPLETE");
-      console.log("\nServer running on port 2424");
+        console.log("\n\tPROJECT_A LOADING COMPLETE");
+        console.log("\nServer running on port 2424");
     });
   })
   .catch(err => {

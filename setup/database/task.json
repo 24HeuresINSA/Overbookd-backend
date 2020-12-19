@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Stocker le clackos",
+        "description": "on prend la liste de course et on achete ce qu\"il y a marqué",
+        "start_date": "2019/05/11 12:00:00",
+        "end_date": "2019/05/11 14:00:00",
+        "supervisor_id": 2,
+        "team_id": 2,
+        "location_id": 2,
+        "activity_id": 1
+    },
+    {
+        "name": "Acheter le fromedu",
+        "description": "on prend le fromage dans le camion et on le met dans les frigos",
+        "start_date": "2019/05/11 14:00:00",
+        "end_date": "2019/05/11 18:00:00",
+        "supervisor_id": 2,
+        "team_id": 2,
+        "location_id": 2,
+        "activity_id": 1
+    },
+    {
+        "name": "Ranger l\"Agora",
+        "description": "on range l\"agora",
+        "start_date": "2019/05/19 20:00:00",
+        "end_date": "2019/05/20 16:00:00",
+        "supervisor_id": 3,
+        "team_id": 1,
+        "location_id": 3,
+        "activity_id": 2
+    },
+    {
+        "name": "Ranger la salle dodo",
+        "description": "on a pas envie de se faire niquer alors on va la ranger bien proprement",
+        "start_date": "2019/05/20 06:00:00",
+        "end_date": "2019/05/20 08:00:00",
+        "supervisor_id": 3,
+        "team_id": 1,
+        "location_id": 3,
+        "activity_id": 2
+    }
+]

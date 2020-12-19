@@ -1,0 +1,18 @@
+[
+    {
+        "content": "Vous avez un nouveau message.",
+        "user_id": 3,
+        "team_id": null
+    },
+    {
+        "content": "Vous avez un projet A en attente.",
+        "user_id": 2,
+        "team_id": null
+    },
+    {
+        "content": "Vous avez des FT à faire les enfants.",
+        "user_id": null,
+        "team_id": 1
+    }
+
+]
