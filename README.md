@@ -33,6 +33,9 @@ apres vous aurez bersoin de run la commande `sudo npm run setup` et puis lance l
 `docker-compose up -d` pour lancer les conteneurs 
 
 ### Script utile
+    >   npm run repopulate 
+supprime puis repeuple la base de donnée
+
     >   npm run populate 
 peuple la base de donnée.
 
@@ -47,7 +50,7 @@ que le serveur keycloak se trouve en local
 cree un utilisateur `user_admin` avec le mot de passe `user_admin` et les permissions d'admin.
 
     >   npm test 
-lance une serie de test unitaire avec `newman` 
+lance une serie de test unitaire avec `newman`
 
 
 #### API
