@@ -1,36 +1,35 @@
 const express = require('express');
+const {keycloak, models} = require("../app")
 
-module.exports = (models, keycloak) => {
-    let router = express.Router();
+let availabilityRouter = express.Router();
 
-    router.route("/")
+availabilityRouter.route("/")
     .get(keycloak.protect("realm:user"), (req, res) => {
         models.Availability.findAll({where: req.query})
-        .then(availability => res.send(availability))
-        .catch(err => res.status(500).send(err));
+            .then(availability => res.send(availability))
+            .catch(err => res.status(500).send(err));
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.Availability.bulkCreate(req.body)
-        .then(availability => res.send(availability))
-        .catch(err => res.status(500).send(err));
+            .then(availability => res.send(availability))
+            .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
         models.Availability.update(req.body, {where: {id: req.body.id}})
-        .then(() => {
-            models.Availability.findByPk(req.body.id)
-            .then(availability => res.send(availability))
+            .then(() => {
+                models.Availability.findByPk(req.body.id)
+                    .then(availability => res.send(availability))
+                    .catch(err => res.status(500).send(err));
+            })
             .catch(err => res.status(500).send(err));
-        })
-        .catch(err => res.status(500).send(err));
     })
     .delete(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Availability.destroy({where: {id: req.query.id}})
-        .then(result => {
-            if(result) res.sendStatus(204);
-            else res.sendStatus(404);
-        })
-        .catch(err => res.status(500).send(err));
+            .then(result => {
+                if (result) res.sendStatus(204);
+                else res.sendStatus(404);
+            })
+            .catch(err => res.status(500).send(err));
     });
 
-    return router;
-}
+module.exports = availabilityRouter
