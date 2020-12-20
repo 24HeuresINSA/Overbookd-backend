@@ -15,7 +15,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8491b005-1c00-4603-9a3d-8d6f5aec2002",
 								"exec": [
 									"var jsonData = pm.response.json();",
 									"pm.environment.set(\"access_token\", jsonData.access_token);",
@@ -83,10 +82,7 @@
 									"type": "text",
 									"disabled": true
 								}
-							],
-							"options": {
-								"urlencoded": {}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{host_auth}}/auth/realms/project_a/protocol/openid-connect/token",
@@ -105,33 +101,30 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Activity",
 			"item": [
 				{
-					"name": "activity/all_locations",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/activity/all_locations",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"activity",
-								"all_locations"
-							]
-						},
-						"description": "This request qets all the locations for all the activities\n# arguments:\n+ none\n\n# returns:\n+ a json array of activities and corresponding locations"
-					},
-					"response": []
-				},
-				{
 					"name": "activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -148,6 +141,11 @@
 									"key": "supervisor_id",
 									"value": "2",
 									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
 								}
 							]
 						},
@@ -157,6 +155,23 @@
 				},
 				{
 					"name": "activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"coder l'activité\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -191,33 +206,19 @@
 				},
 				{
 					"name": "activity",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 3\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						},
-						"url": {
-							"raw": "{{host}}/activity",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"activity"
-							]
-						},
-						"description": "This requests deletes an activity according to its id.\n# arguments :\n+ id : the id of the activity\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
-					"name": "activity",
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -230,7 +231,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 2,\n    \"name\": \"coder l'activité 2\",\n    \"description\": \"il faut coder l'activité 2\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
+							"raw": "{\n\t\"id\": 3,\n    \"name\": \"coder l'activité 2\",\n    \"description\": \"il faut coder l'activité 2\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -249,13 +250,119 @@
 						"description": "This requests updates an activity according to its id.\n# arguments :\n+ id: the id of the activity\n+ name: the name of the activity\n+ description: a description of the activity\n+ start_date: the starting date and time of the activity\n+ end_date: the ending date and time of the activity\n+ supervisor_id: the user id of the supervisor of the activity\n+ event_id: the id of the event that the activity belongs to\n+ contractor_name: the name of the contractor\n+ contractor_phone: the phone number of the contractor\n+ contractor_mail: the mail of the contractor\n+ contractor_comment: a comment on the contractor\n+ contractor_present_on_event: if the contractor will be present on the event\n\n# returns :\n+ a json object containing the updated activity"
 					},
 					"response": []
+				},
+				{
+					"name": "activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/activity?id=2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "This requests deletes an activity according to its id.\n# arguments :\n+ id : the id of the activity\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Activity Location",
 			"item": [
+				{
+					"name": "activity/location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.eql(\"Ramener le fromage à la maison\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/activity/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								"location"
+							]
+						},
+						"description": "This request gets an activity according location to the activity id.\n# arguments :\n+ activity_id : the id of the activity\n\n# returns :\n+ a json object"
+					},
+					"response": []
+				},
+				{
+					"name": "activity/location/:id_activity",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"location_ids\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/activity/:activity/location",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"activity",
+								":activity",
+								"location"
+							],
+							"variable": [
+								{
+									"key": "activity",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests updates the locations for a specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be set\n\n# returns :\n+ a json array off all the added locations"
+					},
+					"response": []
+				},
 				{
 					"name": "activity/location/:id_activity",
 					"request": {
@@ -285,43 +392,34 @@
 							"variable": [
 								{
 									"key": "id_activity",
-									"value": "1"
+									"value": ""
 								}
 							]
 						},
 						"description": "This requests deletes locations from the specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be deleted\n\n# returns :\n+ a json array off all the added locations"
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Availability",
+			"item": [
 				{
-					"name": "activity/location/id/:id_activity",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/activity/location/id/:id_activity",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"activity",
-								"location",
-								"id",
-								":id_activity"
-							],
-							"variable": [
-								{
-									"key": "id_activity",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets an activity according location to the activity id.\n# arguments :\n+ activity_id : the id of the activity\n\n# returns :\n+ a json object"
-					},
-					"response": []
-				},
-				{
-					"name": "activity/location/:id_activity",
+					"name": "availability",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -334,120 +432,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"location_ids\": [1, 2]\n}"
+							"raw": "[\n    {\n        \"user_id\": 1,\n        \"shift_id\": 2\n    },\n    {\n        \"user_id\": 1,\n        \"shift_id\": 1\n    },\n    {\n        \"user_id\": 1,\n        \"shift_id\": 3\n    },\n    {\n        \"user_id\": 2,\n        \"shift_id\": 2\n    }\n]\n"
 						},
 						"url": {
-							"raw": "{{host}}/activity/location/:id_activity",
+							"raw": "{{host}}/availability",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"activity",
-								"location",
-								":id_activity"
-							],
-							"variable": [
-								{
-									"key": "id_activity",
-									"value": "2"
-								}
+								"availability"
 							]
 						},
-						"description": "This requests adds new locations to the specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be added\n\n# returns :\n+ a json array off all the added locations"
-					},
-					"response": []
-				},
-				{
-					"name": "activity/location/:id_activity",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"location_ids\": [2,3]\n}"
-						},
-						"url": {
-							"raw": "{{host}}/activity/location/:id_activity",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"activity",
-								"location",
-								":id_activity"
-							],
-							"variable": [
-								{
-									"key": "id_activity",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This requests updates the locations for a specified activity\n# arguments :\n+ activity_id : the id of the activity\n+ locations_ids : array of all the id that will be set\n\n# returns :\n+ a json array off all the added locations"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Availability",
-			"item": [
-				{
-					"name": "availability/id/:id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/availability/id/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"availability",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets an availability according to its id\n# arguments:\n+ id: the id of the availability\n\n# returns:\n+ a json array of availabilities"
-					},
-					"response": []
-				},
-				{
-					"name": "availability/:id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/availability/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"availability",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request deletes an availability according to its id\n# arguments:\n+ id: the id of the availability\n\n# returns:\n+ a result of 1 if succeeded, 0 else"
+						"description": "This request creates multiple availabilities with an array of json objects containing a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the created availabilities"
 					},
 					"response": []
 				},
@@ -470,61 +466,62 @@
 					"response": []
 				},
 				{
-					"name": "availability/shift/:id_shift",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/availability/shift/:id_shift",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"availability",
-								"shift",
-								":id_shift"
-							],
-							"variable": [
-								{
-									"key": "id_shift",
-									"value": "2"
-								}
-							]
-						},
-						"description": "This request gets all the users available on a shift\n# arguments:\n+ shift_id: the id of the shift\n\n# returns:\n+ a json array of availabilities"
-					},
-					"response": []
-				},
-				{
-					"name": "availability/user/:id_user",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/availability/user/:id_user",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"availability",
-								"user",
-								":id_user"
-							],
-							"variable": [
-								{
-									"key": "id_user",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets all the shifts a user is available on\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of availabilities"
-					},
-					"response": []
-				},
-				{
-					"name": "availability/:id",
+					"name": "availability",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.shift_id).to.eql(3);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"user_id\": 1,\n    \"shift_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{host}}/availability",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"availability"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request updates an availability with a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the updated availability"
+					},
+					"response": []
+				},
+				{
+					"name": "availability",
+					"request": {
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -538,42 +535,6 @@
 							"raw": "{\n    \"user_id\": 1,\n    \"shift_id\": 3\n}"
 						},
 						"url": {
-							"raw": "{{host}}/availability/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"availability",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "2"
-								}
-							]
-						},
-						"description": "This request updates an availability with a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the updated availability"
-					},
-					"response": []
-				},
-				{
-					"name": "availability",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"availabilities\": [\n        {\n            \"user_id\": 1,\n            \"shift_id\": 2\n        },\n        {\n            \"user_id\": 1,\n            \"shift_id\": 1\n        },\n        {\n            \"user_id\": 1,\n            \"shift_id\": 3\n        },\n        {\n            \"user_id\": 2,\n            \"shift_id\": 2\n        }\n    ]\n}"
-						},
-						"url": {
 							"raw": "{{host}}/availability",
 							"host": [
 								"{{host}}"
@@ -582,18 +543,30 @@
 								"availability"
 							]
 						},
-						"description": "This request creates multiple availabilities with an array of json objects containing a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the created availabilities"
+						"description": "This request updates an availability with a user id and a shift id\n# arguments:\n+ user_id: the id of the user\n+ shift_id: the id of the shift\n\n# returns:\n+ a json object containing the updated availability"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Comment",
 			"item": [
 				{
 					"name": "comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -618,6 +591,19 @@
 				},
 				{
 					"name": "comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -652,33 +638,19 @@
 				},
 				{
 					"name": "comment",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						},
-						"url": {
-							"raw": "{{host}}/comment",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"comment"
-							]
-						},
-						"description": "This requests deletes a comment according to its id.\n# arguments :\n+ id : the id of the comment\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
-					"name": "comment",
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -710,15 +682,64 @@
 						"description": "This requests updates a comment according to its id.\n# arguments :\n+ id : the id of the comment\n+ content: the content of the comment\n+ date: the date and time of the comment\n+ user_id: the user id of the user that wrote the comment\n+ activity_id: the activity id of the activity on which the comment was written\n+ task_id: the task id of the task on which the comment was written\n\n# returns :\n+ the updated object"
 					},
 					"response": []
+				},
+				{
+					"name": "comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/comment?id=4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comment"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						},
+						"description": "This requests deletes a comment according to its id.\n# arguments :\n+ id : the id of the comment\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Equipment",
 			"item": [
 				{
 					"name": "equipment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -744,40 +765,19 @@
 				},
 				{
 					"name": "equipment",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"Balai\",\n\t\"description\": \"Un manche et une moustache\",\n\t\"quantity\": 7,\n\t\"equipment_type_id\": 2,\n\t\"pickup_location\": 1,\n\t\"drop_location\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/equipment",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"equipment"
-							]
-						},
-						"description": "This requests updates an equipment with the name, description, quantity, equipment type id, pickup location and drop location according to its id.\n# arguments :\n+ id: the id of the equipment\n+ name: the name of the equipment\n+ description: a brief description of the equipment\n+ quantity: the quantity of equipment there is\n+ equipment_type_id: the id of the equipment type\n+ pickup_location: the id of the pickup location\n+ drop_location: the id of the drop location\n\n# returns :\n+ the updated object"
-					},
-					"response": []
-				},
-				{
-					"name": "equipment",
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -812,12 +812,32 @@
 				},
 				{
 					"name": "equipment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 202\", function () {",
+									"    pm.response.to.have.status(202);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "DELETE",
-						"header": [],
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 4\n}",
+							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"Balai\",\n\t\"description\": \"Un manche et une moustache\",\n\t\"quantity\": 7,\n\t\"equipment_type_id\": 2,\n\t\"pickup_location\": 1,\n\t\"drop_location\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -833,12 +853,48 @@
 								"equipment"
 							]
 						},
+						"description": "This requests updates an equipment with the name, description, quantity, equipment type id, pickup location and drop location according to its id.\n# arguments :\n+ id: the id of the equipment\n+ name: the name of the equipment\n+ description: a brief description of the equipment\n+ quantity: the quantity of equipment there is\n+ equipment_type_id: the id of the equipment type\n+ pickup_location: the id of the pickup location\n+ drop_location: the id of the drop location\n\n# returns :\n+ the updated object"
+					},
+					"response": []
+				},
+				{
+					"name": "equipment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/equipment?id=4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						},
 						"description": "This requests deletes an equipment according to its id.\n# arguments :\n+ id : the id of the equipment\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Equipment Requirement",
@@ -877,8 +933,19 @@
 				{
 					"name": "equipment_requirement",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"requirements\": [\n\t\t{\n\t\t\t\"task_id\": 1,\n\t\t\t\"equipment_id\": 1,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"task_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"activity_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t}\n\t\t]\n}"
+						},
 						"url": {
 							"raw": "{{host}}/equipment_requirement",
 							"host": [
@@ -894,19 +961,8 @@
 				{
 					"name": "equipment_requirement",
 					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"requirements\": [\n\t\t{\n\t\t\t\"task_id\": 1,\n\t\t\t\"equipment_id\": 1,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"task_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t},\n\t\t{\n\t\t\t\"activity_id\": 2,\n\t\t\t\"equipment_id\": 2,\n\t\t\t\"shift_id\": 2,\n\t\t\t\"quantity\": 2\n\t\t}\n\t\t]\n}"
-						},
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{host}}/equipment_requirement",
 							"host": [
@@ -979,8 +1035,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Equipment Assignment",
@@ -1121,14 +1176,26 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Equipment Type",
 			"item": [
 				{
 					"name": "equipment_type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1161,6 +1228,19 @@
 				},
 				{
 					"name": "equipment_type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1195,40 +1275,19 @@
 				},
 				{
 					"name": "equipment_type",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 3\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/equipment_type",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"equipment_type"
-							]
-						},
-						"description": "This requests deletes an equipment type according to its id.\n# arguments :\n+ id : the id of the equipment type\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
-					"name": "equipment_type",
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1260,15 +1319,165 @@
 						"description": "This requests updates an equipment type according to its id.\n# arguments :\n+ id : the id of the equipment type\n+ name : the name of the equipment type\n\n# returns :\n+ the updated object"
 					},
 					"response": []
+				},
+				{
+					"name": "equipment_type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/equipment_type?id=3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"equipment_type"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "This requests deletes an equipment type according to its id.\n# arguments :\n+ id : the id of the equipment type\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Event",
 			"item": [
 				{
 					"name": "event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This request gets all the events in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of events"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/event",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						},
+						"description": "This request create a new event with the name, description and start and end dates.\n# arguments :\n+ name : a 255 characters maximum name for the event\n+ description : a text to describe quickly the event\n+ start_date : the starting date of the event\n+ end_date : the ending date of the event\n+ logo_url : the url for the logo of the event\n\n# returns :\n+ a json object containing the created event"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1303,31 +1512,19 @@
 				},
 				{
 					"name": "event",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/event",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"event"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2",
-									"disabled": true
-								}
-							]
-						},
-						"description": "This request gets all the events in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of events"
-					},
-					"response": []
-				},
-				{
-					"name": "event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1341,20 +1538,44 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/event",
+							"raw": "{{host}}/event?id=3",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"event"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
 							]
 						},
 						"description": "This request delete an event according to its id.\n# arguments :\n+ id : the id of the event\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Friend",
+			"item": [
 				{
-					"name": "event",
+					"name": "friendship",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1367,51 +1588,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "[\n        {\n        \t\"user_id\": 1,\n        \t\"friend_id\": 2\n        },\n        {\n        \t\"user_id\": 2,\n        \t\"friend_id\": 3\n        }\n    ]"
 						},
 						"url": {
-							"raw": "{{host}}/event",
+							"raw": "{{host}}/friendship",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"event"
-							]
-						},
-						"description": "This request create a new event with the name, description and start and end dates.\n# arguments :\n+ name : a 255 characters maximum name for the event\n+ description : a text to describe quickly the event\n+ start_date : the starting date of the event\n+ end_date : the ending date of the event\n+ logo_url : the url for the logo of the event\n\n# returns :\n+ a json object containing the created event"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Friend",
-			"item": [
-				{
-					"name": "friendship/user",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/friendship/user?user_id=1",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"friendship",
-								"user"
-							],
-							"query": [
-								{
-									"key": "user_id",
-									"value": "1"
-								}
+								"friendship"
 							]
 						}
 					},
@@ -1419,6 +1604,24 @@
 				},
 				{
 					"name": "friendship",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1436,6 +1639,19 @@
 				},
 				{
 					"name": "friendship",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1469,66 +1685,65 @@
 				},
 				{
 					"name": "friendship",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 2\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						"url": {
+							"raw": "{{host}}/friendship?id=2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"friendship"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
 								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/friendship",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"friendship"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "friendship",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"friendships\": [\n        {\n        \t\"user_id\": 1,\n        \t\"friend_id\": 2\n        },\n        {\n        \t\"user_id\": 2,\n        \t\"friend_id\": 3\n        }\n    ]\n}"
-						},
-						"url": {
-							"raw": "{{host}}/friendship",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"friendship"
 							]
 						}
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Location",
 			"item": [
 				{
 					"name": "location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1554,17 +1769,32 @@
 				},
 				{
 					"name": "location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "DELETE",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n\t\"name\": \"QG Catering\",\n\t\"description\": \"là où l'on stocke le clackos (entre autre)\",\n\t\"gps_long\": 45.784156,\n\t\"gps_lat\": 4.874421\n}"
 						},
 						"url": {
 							"raw": "{{host}}/location",
@@ -1575,12 +1805,25 @@
 								"location"
 							]
 						},
-						"description": "This requests deletes a location according to its id.\n# arguments :\n+ id : the id of the location\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+						"description": "This requests creates a new location with the name, description and gps coordinates.\n# arguments :\n+ name: the name of the location\n+ description: a brief description of the location\n+ gps_long: the longitude of the location\n+ gps_lat: the latitude of the location\n\n# returns :\n+ a json object containing the created location"
 					},
 					"response": []
 				},
 				{
 					"name": "location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1615,41 +1858,70 @@
 				},
 				{
 					"name": "location",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"QG Catering\",\n\t\"description\": \"là où l'on stocke le clackos (entre autre)\",\n\t\"gps_long\": 45.784156,\n\t\"gps_lat\": 4.874421\n}"
+							"raw": "{\n\t\"id\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{host}}/location",
+							"raw": "{{host}}/location?id=4",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"location"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								}
 							]
 						},
-						"description": "This requests creates a new location with the name, description and gps coordinates.\n# arguments :\n+ name: the name of the location\n+ description: a brief description of the location\n+ gps_long: the longitude of the location\n+ gps_lat: the latitude of the location\n\n# returns :\n+ a json object containing the created location"
+						"description": "This requests deletes a location according to its id.\n# arguments :\n+ id : the id of the location\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Notification",
 			"item": [
 				{
 					"name": "notification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1667,258 +1939,20 @@
 					"response": []
 				},
 				{
-					"name": "notification/unread/user/:user_id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/unread/user/:user_id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"unread",
-								"user",
-								":user_id"
-							],
-							"variable": [
-								{
-									"key": "user_id",
-									"value": "3"
-								}
-							]
-						},
-						"description": "This request gets all the unread notifications for a given user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of notifications"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/id/:id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/notification/id/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets a notification according to its id.\n# arguments :\n+ id : the id of the notification\n\n# returns :\n+ a json object containing the notification"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/team/:team_id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/team/:team_id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"team",
-								":team_id"
-							],
-							"variable": [
-								{
-									"key": "team_id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets all the notifications for a given team\n# arguments:\n+ team_id: the id of the team\n\n# returns:\n+ a json array of notifications"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/:id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/notification/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This requests deletes a notification according to its id.\n# arguments :\n+ id : the id of the notification\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/user/:user_id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/user/:user_id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"user",
-								":user_id"
-							],
-							"variable": [
-								{
-									"key": "user_id",
-									"value": "3"
-								}
-							]
-						},
-						"description": "This request gets all the notifications for a given user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of notifications"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/unread/team/:team_id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/unread/team/:team_id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"unread",
-								"team",
-								":team_id"
-							],
-							"variable": [
-								{
-									"key": "team_id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets all the unread notifications for a given team\n# arguments:\n+ team_id: the id of the team\n\n# returns:\n+ a json array of notifications"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/unread/:id",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/unread/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"unread",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This requests change the status of a notification to unread\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
-					},
-					"response": []
-				},
-				{
-					"name": "notification/read/:id",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/notification/read/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"notification",
-								"read",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "4"
-								}
-							]
-						},
-						"description": "This requests change the status of a notification to read\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
-					},
-					"response": []
-				},
-				{
 					"name": "notification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1948,6 +1982,19 @@
 				},
 				{
 					"name": "notification/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1960,30 +2007,147 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"content\": \"vous avez des fiches taches a faire\",\n\t\"user_id\": 1,\n\t\"team_id\": null\n}"
+							"raw": "{\n    \"id\": 4,\n\t\"content\": \"vous avez des fiches taches a faire\",\n\t\"user_id\": 1,\n\t\"team_id\": null\n}"
 						},
 						"url": {
-							"raw": "{{host}}/notification/:id",
+							"raw": "{{host}}/notification",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"notification",
-								":id"
+								"notification"
 							],
-							"variable": [
+							"query": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "4",
+									"disabled": true
 								}
 							]
 						},
 						"description": "This requests updates a notification according to its id.\n# arguments :\n+ id : the id of the notification\n+ content: the content of the notification\n+ user_id: the user id of the user targeted by the notification\n+ team_id: the team id of the team targeted by the notification\n\n# returns :\n+ the updated object"
 					},
 					"response": []
+				},
+				{
+					"name": "notification/unread/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/1/unread",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"1",
+								"unread"
+							]
+						},
+						"description": "This requests change the status of a notification to unread\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/read/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notification/1/read",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								"1",
+								"read"
+							]
+						},
+						"description": "This requests change the status of a notification to read\n# arguments:\n+ id: the id of the notification\n\n# returns:\n+ the updated notification"
+					},
+					"response": []
+				},
+				{
+					"name": "notification/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/notification/?id=4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notification",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						},
+						"description": "This requests deletes a notification according to its id.\n# arguments :\n+ id : the id of the notification\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Search",
@@ -2276,39 +2440,26 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Shift",
 			"item": [
 				{
-					"name": "shift/:id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/shift/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"shift",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This requests deletes a shift according to its id.\n# arguments :\n+ id : the id of the shift\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
 					"name": "shift",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2326,33 +2477,20 @@
 					"response": []
 				},
 				{
-					"name": "shift/id/:id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/shift/id/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"shift",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						},
-						"description": "This request gets a shift according to its id.\n# arguments :\n+ id : the id of the shift\n\n# returns :\n+ a json object containing the shift"
-					},
-					"response": []
-				},
-				{
 					"name": "shift",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2365,7 +2503,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 15,\n\t\"shift_category_id\": 1\n}"
+							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 45,\n\t\"shift_category_id\": 1\n}"
 						},
 						"url": {
 							"raw": "{{host}}/shift",
@@ -2381,7 +2519,20 @@
 					"response": []
 				},
 				{
-					"name": "shift/:id",
+					"name": "shift",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -2394,22 +2545,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 18,\n\t\"shift_category_id\": 1\n}"
+							"raw": "{\n\t\"start_date\": \"2019/07/16 15:50\",\n\t\"end_date\": \"2019/07/16 16:50\",\n\t\"charisma\": 18,\n\t\"shift_category_id\": 1,\n    \"id\": 1\n}"
 						},
 						"url": {
-							"raw": "{{host}}/shift/:id",
+							"raw": "{{host}}/shift",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"shift",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
+								"shift"
 							]
 						},
 						"description": "This requests updates a shift according to its id.\n# arguments :\n+ id : the id of the shift\n+ start_date : the starting date and time of the shift\n+ end_date : the ending date and time of the shift\n+ charisma : the number of charisma points awarded for this shift\n+ shift_category_id : the id of the shift category it belongs to\n\n# returns :\n+ the updated object"
@@ -2417,7 +2561,57 @@
 					"response": []
 				},
 				{
+					"name": "shift",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/shift?id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shift"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes a shift according to its id.\n# arguments :\n+ id : the id of the shift\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
+				},
+				{
 					"name": "shift/window",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2446,8 +2640,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Shift Category",
@@ -2458,12 +2651,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/shift_category",
+							"raw": "{{host}}/shift_category?id=",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"shift_category"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": ""
+								}
 							]
 						},
 						"description": "This request gets all the shift categories in the database.\n# arguments :\n+ none\n\n# returns :\n+ an json array of shift categories"
@@ -2586,14 +2785,26 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Specialty",
 			"item": [
 				{
 					"name": "specialty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2619,6 +2830,19 @@
 				},
 				{
 					"name": "specialty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2653,6 +2877,19 @@
 				},
 				{
 					"name": "specialty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -2687,6 +2924,19 @@
 				},
 				{
 					"name": "specialty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2700,26 +2950,44 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/specialty",
+							"raw": "{{host}}/specialty?id=1",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"specialty"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "This requests deletes a specialty according to its id.\n# arguments :\n+ id : the id of the specialty\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Task",
 			"item": [
 				{
 					"name": "task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2738,6 +3006,19 @@
 				},
 				{
 					"name": "task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2785,13 +3066,19 @@
 							"raw": "{\n\t\"teams\": [1, 2]\n}"
 						},
 						"url": {
-							"raw": "{{host}}/task/require_team",
+							"raw": "{{host}}/task/require_team?user_id=1",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"task",
 								"require_team"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "This request gets all the tasks that require one or multiple teams\n# arguments:\n+ teams: an array of team ids\n\n# returns:\n+ a json array of tasks"
@@ -2818,13 +3105,19 @@
 							"raw": "{\n\t\"user\": 2\n}"
 						},
 						"url": {
-							"raw": "{{host}}/task/require_user",
+							"raw": "{{host}}/task/require_user?team_id=1",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"task",
 								"require_user"
+							],
+							"query": [
+								{
+									"key": "team_id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "This request gets all the tasks that require one specific user\n# arguments:\n+ user_id: the id of the user\n\n# returns:\n+ a json array of tasks"
@@ -2833,6 +3126,19 @@
 				},
 				{
 					"name": "task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -2867,6 +3173,19 @@
 				},
 				{
 					"name": "task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2880,94 +3199,62 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/task",
+							"raw": "{{host}}/task?id=1",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"task"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "This requests deletes an task according to its id.\n# arguments :\n+ id : the id of the task\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Team",
 			"item": [
 				{
-					"name": "team/:id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/team/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"team",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "3"
-								}
-							]
-						},
-						"description": "This requests deletes a team according to its id.\n# arguments :\n+ id : the id of the team\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-					},
-					"response": []
-				},
-				{
-					"name": "team/id/:id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/team/id/:id",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"team",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "3"
-								}
-							]
-						},
-						"description": "This request gets a team according to its id.\n# arguments :\n+ id : the id of the team\n\n# returns :\n+ a json object containing the team"
-					},
-					"response": []
-				},
-				{
 					"name": "team/members/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/team/members/:id",
+							"raw": "{{host}}/team/:team/members/",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"team",
+								":team",
 								"members",
-								":id"
+								""
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": "2"
+									"key": "team",
+									"value": "1"
 								}
 							]
 						},
@@ -2977,6 +3264,19 @@
 				},
 				{
 					"name": "team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2995,6 +3295,19 @@
 				},
 				{
 					"name": "team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -3023,7 +3336,20 @@
 					"response": []
 				},
 				{
-					"name": "team/:id",
+					"name": "team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -3036,30 +3362,60 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"new team\",\n\t\"supervisor_id\": 1,\n\t\"confidence_level\": 500,\n\t\"priority\": 10,\n\t\"color\": \"#758697\"\n}"
+							"raw": "{\n\t\"name\": \"new team\",\n\t\"supervisor_id\": 1,\n\t\"confidence_level\": 500,\n\t\"priority\": 10,\n\t\"color\": \"#758697\",\n    \"id\": 2\n}"
 						},
 						"url": {
-							"raw": "{{host}}/team/:id",
+							"raw": "{{host}}/team",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"team",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "5"
-								}
+								"team"
 							]
 						},
 						"description": "This requests updates a team according to its id.\n# arguments :\n+ id : the id of the team\n+ name: the name of the team\n+ supervisor_id: the user id of the supervisor\n\n# returns :\n+ the updated object"
 					},
 					"response": []
+				},
+				{
+					"name": "team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/team/?id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"team",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This requests deletes a team according to its id.\n# arguments :\n+ id : the id of the team\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "User",
@@ -3073,7 +3429,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "b1862714-182b-43ef-9f18-9363615c3734",
 										"exec": [
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
@@ -3143,33 +3498,19 @@
 						},
 						{
 							"name": "user",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"id\": 7\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+											"});"
+										],
+										"type": "text/javascript"
 									}
-								},
-								"url": {
-									"raw": "{{host}}/user",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"user"
-									]
-								},
-								"description": "This request deletes a user according to its id.\n# arguments :\n+ id : the id of the user\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
-							},
-							"response": []
-						},
-						{
-							"name": "user",
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -3199,6 +3540,19 @@
 						},
 						{
 							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -3230,10 +3584,54 @@
 								"description": "This requests updates a user according to its id.\n# arguments :\n+ id : the id of the user\n+ first_name: the first name of the user\n+ last_name: the last name of the user\n+ surname: the surname of the user\n+ birthday: the birthday of the user\n+ phone_number: the phone number of the user\n+ email: the email address of the user\n+ licence_date: the date of obtention of the licence of the user\n+ licence_scan_url: the url for the scan of the licence\n+ profile_pic_url: the url for the profile picture of the user\n+ tshirt_size: the tshirt size of the user, between XS, S, M, L and XL\n+ alcoholic_beverage_consumption: the number of alcoholic consumption of the user\n+ food_and_beverage_consumption: the number of non-alcoholic consumption of the user\n+ balance: the balance of the account of the user\n+ comment: a comment the user has made about itself\n+ experience: the experience of the user in other events\n+ incapacity: the incapacity the user might have\n+ specialty_id: the specialty of the user\n\n# returns :\n+ the updated object"
 							},
 							"response": []
+						},
+						{
+							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 7\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user?id=4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								},
+								"description": "This request deletes a user according to its id.\n# arguments :\n+ id : the id of the user\n\n# returns :\n+ a result being 1 if succeeded, 0 else"
+							},
+							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "VALIDATING USER",
@@ -3294,9 +3692,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "TEAM MANIPULATION",
@@ -3382,24 +3778,30 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "FILE UPLOADING",
-					"item": [],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					"item": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "User Assignment",
 			"item": [
 				{
 					"name": "user_assignment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -3528,8 +3930,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "User Requirement",
@@ -3646,8 +4047,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"auth": {
@@ -3664,7 +4064,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "7a3027f7-44ba-4124-929c-306fa61b1314",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3674,15 +4073,11 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0246f15f-cdf6-4c49-ad6c-2b312bce27fd",
 				"type": "text/javascript",
 				"exec": [
-					"pm.test(\"Status code is 200\", function(){",
-					"   pm.response.to.have.status(200) ",
-					"});"
+					""
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
