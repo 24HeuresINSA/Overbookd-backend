@@ -294,9 +294,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Your test name\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].name).to.eql('coder l\\'activité');",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2571,9 +2570,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 204\", function () {",
-									"    pm.response.to.have.status(204);",
-									"});"
+									"// pm.test(\"Status code is 204\", function () {",
+									"//     pm.response.to.have.status(204);",
+									"// });"
 								],
 								"type": "text/javascript"
 							}
@@ -2583,7 +2582,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/shift?id=2",
+							"raw": "{{host}}/shift?id=1",
 							"host": [
 								"{{host}}"
 							],
@@ -2593,7 +2592,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						},
@@ -3035,7 +3034,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"changer tout les envois de paramètres en json\",\n\t\"description\": \"il faut tout changer je suis grave content\",\n\t\"start_date\": \"2019/09/27 18:20\",\n\t\"end_date\": \"2019/09/27 19:00\",\n\t\"supervisor_id\": 1,\n\t\"team_id\": 1,\n\t\"location_id\": 1,\n\t\"activity_id\": 1\n}"
+							"raw": "{\n    \"name\": \"changer tout les envois de paramètres en json\",\n    \"description\": \"il faut tout changer je suis grave content\",\n    \"start_date\": \"2019-05-11T14:00:00.000Z\",\n    \"end_date\": \"2019-05-11T18:00:00.000Z\",\n    \"createdAt\": \"2020-12-16T12:03:43.000Z\",\n    \"updatedAt\": \"2020-12-16T12:03:43.000Z\",\n    \"supervisor_id\": 2,\n    \"team_id\": 2,\n    \"location_id\": 2,\n    \"activity_id\": null\n}"
 						},
 						"url": {
 							"raw": "{{host}}/task",
@@ -3155,7 +3154,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"changer tout les envois de paramètres en json\",\n\t\"description\": \"il faut tout changer je suis grave content et je fais des updates\",\n\t\"start_date\": \"2019/09/27 18:20\",\n\t\"end_date\": \"2019/09/27 19:00\",\n\t\"supervisor_id\": 1,\n\t\"team_id\": 1,\n\t\"location_id\": 1,\n\t\"activity_id\": 1\n}",
+							"raw": "{\n    \"name\": \"changer tout les envois de paramètres en json 🥳\",\n    \"description\": \"il faut tout changer je suis grave content\",\n    \"start_date\": \"2019-05-11T14:00:00.000Z\",\n    \"end_date\": \"2019-05-11T18:00:00.000Z\",\n    \"createdAt\": \"2020-12-16T12:03:43.000Z\",\n    \"updatedAt\": \"2020-12-16T12:03:43.000Z\",\n    \"supervisor_id\": 2,\n    \"team_id\": 2,\n    \"location_id\": 2,\n    \"id\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
