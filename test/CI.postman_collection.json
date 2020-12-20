@@ -115,10 +115,6 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});",
-									"pm.test(\"Your test name\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].id).to.eql(1);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -268,7 +264,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/activity?id=2",
+							"raw": "{{host}}/activity?id=1",
 							"host": [
 								"{{host}}"
 							],
@@ -278,7 +274,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						},
@@ -300,7 +296,7 @@
 								"exec": [
 									"pm.test(\"Your test name\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].name).to.eql(\"Ramener le fromage à la maison\");",
+									"    pm.expect(jsonData[0].name).to.eql('coder l\\'activité');",
 									"});"
 								],
 								"type": "text/javascript"
@@ -579,7 +575,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/comment?user_id=1",
+							"raw": "{{host}}/comment",
 							"host": [
 								"{{host}}"
 							],
@@ -589,7 +585,8 @@
 							"query": [
 								{
 									"key": "user_id",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								}
 							]
 						},
@@ -624,7 +621,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"content\": \"nice code dude well commented and sht\",\n\t\"date\": \"2019/07/19 16:54\",\n\t\"user_id\": 1,\n\t\"activity_id\": null,\n\t\"task_id\": 1\n}",
+							"raw": "{\n\t\"content\": \"nice code dude well commented and sht\",\n\t\"date\": \"2019/07/19 16:54\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -671,7 +668,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 4,\n\t\"content\": \"nice code dude well commented and sht, btw you look nice\",\n\t\"date\": \"2019/07/19 16:54\",\n\t\"user_id\": 1,\n\t\"activity_id\": null,\n\t\"task_id\": 1\n}",
+							"raw": "{\n\t\"id\": 1,\n\t\"content\": \"nice code dude well commented and sht, btw you look nice\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -710,7 +707,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/comment?id=4",
+							"raw": "{{host}}/comment?id=2",
 							"host": [
 								"{{host}}"
 							],
@@ -720,7 +717,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "4"
+									"value": "2"
 								}
 							]
 						},
@@ -2018,7 +2015,7 @@
 							"raw": "{\n    \"id\": 4,\n\t\"content\": \"vous avez des fiches taches a faire\",\n\t\"user_id\": 1,\n\t\"team_id\": null\n}"
 						},
 						"url": {
-							"raw": "{{host}}/notification",
+							"raw": "{{host}}/notification?id=4",
 							"host": [
 								"{{host}}"
 							],
@@ -2028,8 +2025,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "4",
-									"disabled": true
+									"value": "4"
 								}
 							]
 						},
@@ -2136,7 +2132,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/notification/?id=4",
+							"raw": "{{host}}/notification/?id=1",
 							"host": [
 								"{{host}}"
 							],
@@ -2147,7 +2143,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "4"
+									"value": "1"
 								}
 							]
 						},
@@ -3237,9 +3233,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
+									"// pm.test(\"Status code is 200\", function () {",
+									"//     pm.response.to.have.status(200);",
+									"// });"
 								],
 								"type": "text/javascript"
 							}
@@ -3262,7 +3258,7 @@
 							"variable": [
 								{
 									"key": "team",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						},
@@ -3441,10 +3437,7 @@
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
-											"pm.test(\"User 1 is Eric\", function () {",
-											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData[0].first_name).to.eql(\"Eric\");",
-											"});"
+											""
 										],
 										"type": "text/javascript"
 									}
