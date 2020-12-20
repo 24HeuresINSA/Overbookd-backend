@@ -22,7 +22,7 @@ eventRouter.route("/")
         models.Event.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Event.findByPk(req.body.id)
-                    .then(event => res.status(2012).send(event))
+                    .then(event => res.status(202).send(event))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

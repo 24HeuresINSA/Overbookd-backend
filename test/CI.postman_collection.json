@@ -211,9 +211,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
+									"// needs tests"
 								],
 								"type": "text/javascript"
 							}
@@ -231,7 +229,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 3,\n    \"name\": \"coder l'activité 2\",\n    \"description\": \"il faut coder l'activité 2\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
+							"raw": "{\n\t\"id\": 1,\n    \"name\": \"coder l'activité 2\",\n    \"description\": \"il faut coder l'activité 2\",\n    \"start_date\": \"2019/07/18 15:46\",\n    \"end_date\": \"2019/07/18 16:00\",\n    \"supervisor_id\": 1,\n    \"event_id\": 1,\n    \"contractor_name\": \"Bigou BOULANGER\",\n    \"contractor_phone\": \"0645860897\",\n    \"contractor_mail\": \"bigou.boulanger@24heures.org\",\n    \"contractor_comment\": \"là on a pris le top du top\",\n    \"contractor_present_on_event\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -432,7 +430,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"user_id\": 1,\n        \"shift_id\": 2\n    },\n    {\n        \"user_id\": 1,\n        \"shift_id\": 1\n    },\n    {\n        \"user_id\": 1,\n        \"shift_id\": 3\n    },\n    {\n        \"user_id\": 2,\n        \"shift_id\": 2\n    }\n]\n"
+							"raw": "{\n    \"user_id\": 1,\n    \"shift_id\": 2\n}\n"
 						},
 						"url": {
 							"raw": "{{host}}/availability",
@@ -449,6 +447,19 @@
 				},
 				{
 					"name": "availability",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -475,10 +486,7 @@
 									"pm.test(\"Status code is 201\", function () {",
 									"    pm.response.to.have.status(201);",
 									"});",
-									"pm.test(\"Your test name\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.shift_id).to.eql(3);",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1490,7 +1498,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 3,\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\",\n\t\"logo_url\": \"logo_24_45.png\"\n}",
+							"raw": "{\n\t\"id\": 1,\n\t\"name\": \"24h de l'INSA, 45ème édition\",\n\t\"description\": \"La 45ème édition des 24 heures de l'INSA\",\n\t\"start_date\": \"2019/05/23 20:00:00\",\n\t\"end_date\": \"2019/05/25 23:00:00\",\n\t\"logo_url\": \"logo_24_45.png\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2579,7 +2587,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/shift?id=1",
+							"raw": "{{host}}/shift?id=2",
 							"host": [
 								"{{host}}"
 							],
@@ -2589,7 +2597,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						},
@@ -3435,7 +3443,7 @@
 											"});",
 											"pm.test(\"User 1 is Eric\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.users[0].first_name).to.eql(\"Eric\");",
+											"    pm.expect(jsonData[0].first_name).to.eql(\"Eric\");",
 											"});"
 										],
 										"type": "text/javascript"
