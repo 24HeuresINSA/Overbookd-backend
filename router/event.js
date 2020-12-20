@@ -15,14 +15,14 @@ eventRouter.route("/")
     })
     .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Event.create(req.body)
-            .then(event => res.send(event))
+            .then(event => res.status(201).send(event))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Event.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Event.findByPk(req.body.id)
-                    .then(event => res.send(event))
+                    .then(event => res.status(2012).send(event))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

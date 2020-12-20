@@ -11,14 +11,14 @@ userAssignmentRouter.route("/")
     })
     .post(keycloak.protect("realm:user_affect"), (req, res) => {
         models.User_Assignment.create(req.body)
-            .then(user_assignment => res.send(user_assignment))
+            .then(user_assignment => res.status(201).send(user_assignment))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_affect"), (req, res) => {
         models.User_Assignment.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.User_Assignment.findByPk(req.body.id)
-                    .then(user_assignment => res.send(user_assignment))
+                    .then(user_assignment => res.status(202).send(user_assignment))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

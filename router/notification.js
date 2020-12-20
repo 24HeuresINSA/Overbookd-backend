@@ -11,14 +11,14 @@ notificationRouter.route("/")
     })
     .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Notification.create(req.body)
-            .then(notification => res.send(notification))
+            .then(notification => res.status(201).send(notification))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Notification.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Notification.findByPk(req.body.id)
-                    .then(notification => res.send(notification))
+                    .then(notification => res.status(202).send(notification))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

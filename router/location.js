@@ -11,14 +11,14 @@ locationRouter.route("/")
     })
     .post(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Location.create(req.body)
-            .then(location => res.send(location))
+            .then(location => res.status(201).send(location))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Location.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Location.findByPk(req.body.id)
-                    .then(location => res.send(location))
+                    .then(location => res.status(202).send(location))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

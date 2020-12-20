@@ -11,14 +11,14 @@ taskRouter.route("/")
     })
     .post(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Task.create(req.body)
-            .then(task => res.send(task))
+            .then(task => res.status(201).send(task))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_modifier"), (req, res) => {
         models.Task.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Task.findByPk(req.body.id)
-                    .then(task => res.send(task))
+                    .then(task => res.status(202).send(task))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

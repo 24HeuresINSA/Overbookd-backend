@@ -11,14 +11,14 @@ friendshipRouter.route("/")
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.Friendship.bulkCreate(req.body)
-            .then(friendship => res.send(friendship))
+            .then(friendship => res.status(201).send(friendship))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
         models.Friendship.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Friendship.findByPk(req.body.id)
-                    .then(friendship => res.send(friendship))
+                    .then(friendship => res.status(202).send(friendship))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

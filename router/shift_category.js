@@ -11,14 +11,14 @@ shiftCategoryRouter.route("/")
     })
     .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Shift_category.create(req.body)
-            .then(shift_category => res.send(shift_category))
+            .then(shift_category => res.status(201).send(shift_category))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Shift_category.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Shift_category.findByPk(req.body.id)
-                    .then(shift_category => res.send(shift_category))
+                    .then(shift_category => res.status(202).send(shift_category))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

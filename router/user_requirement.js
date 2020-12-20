@@ -13,14 +13,14 @@ userRequirementRouter.route("/")
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.User_Requirement.create(req.body)
-            .then(user_requirement => res.send(user_requirement))
+            .then(user_requirement => res.status(201).send(user_requirement))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
         models.User_Requirement.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.User_Requirement.findByPk(req.body.id)
-                    .then(user_requirement => res.send(user_requirement))
+                    .then(user_requirement => res.status(202).send(user_requirement))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

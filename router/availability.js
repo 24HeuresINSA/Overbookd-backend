@@ -11,14 +11,14 @@ availabilityRouter.route("/")
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.Availability.bulkCreate(req.body)
-            .then(availability => res.send(availability))
+            .then(availability => res.status(201).send(availability))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
         models.Availability.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Availability.findByPk(req.body.id)
-                    .then(availability => res.send(availability))
+                    .then(availability => res.status(201).send(availability))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

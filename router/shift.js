@@ -12,14 +12,14 @@ shiftRouter.route("/")
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.Shift.bulkCreate(req.body)
-            .then(shift => res.send(shift))
+            .then(shift => res.status(201).send(shift))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
         models.Shift.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Shift.findByPk(req.body.id)
-                    .then(shift => res.send(shift))
+                    .then(shift => res.status(202).send(shift))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

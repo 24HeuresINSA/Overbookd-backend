@@ -11,14 +11,14 @@ specialityRouter.route("/")
     })
     .post(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Specialty.create(req.body)
-            .then(specialty => res.send(specialty))
+            .then(specialty => res.status(201).send(specialty))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_admin"), (req, res) => {
         models.Specialty.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Specialty.findByPk(req.body.id)
-                    .then(specialty => res.send(specialty))
+                    .then(specialty => res.status(202).send(specialty))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

@@ -11,14 +11,14 @@ equipmentTypeRouter.route("/")
     })
     .post(keycloak.protect("realm:user_log"), (req, res) => {
         models.Equipment_Type.create(req.body)
-            .then(equipment_type => res.send(equipment_type))
+            .then(equipment_type => res.status(201).send(equipment_type))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_log"), (req, res) => {
         models.Equipment_Type.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Equipment_Type.findByPk(req.body.id)
-                    .then(equipment_type => res.send(equipment_type))
+                    .then(equipment_type => res.status(202).send(equipment_type))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

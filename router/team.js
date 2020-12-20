@@ -11,14 +11,14 @@ teamRouter.route("/")
     })
     .post(keycloak.protect("realm:user_affect"), (req, res) => {
         models.Team.create(req.body)
-            .then(team => res.send(team))
+            .then(team => res.status(201).send(team))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user_affect"), (req, res) => {
         models.Team.update(req.body, {where: {id: req.body.id}})
             .then(() => {
                 models.Team.findByPk(req.body.id)
-                    .then(team => res.send(team))
+                    .then(team => res.status(202).send(team))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));

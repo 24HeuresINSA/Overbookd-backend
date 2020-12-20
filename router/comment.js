@@ -11,7 +11,7 @@ commentRouter.route("/")
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
         models.CommentObject.create(req.body)
-            .then(comment => res.send(comment))
+            .then(comment => res.status(201).send(comment))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
