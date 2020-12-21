@@ -21,8 +21,6 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
-#    ports:
-#      - 3306:3306
     networks:
       - keycloak
 
@@ -36,10 +34,8 @@ services:
       MYSQL_DATABASE: project_a
       MYSQL_USER: project_a
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_TCP_PORT: ${DATABASE_PORT}
-
     ports:
-      - ${DATABASE_PORT}:${DATABASE_PORT} # for debug
+      - ${DATABASE_PORT}:3306
     networks:
       - api
 
@@ -58,9 +54,6 @@ services:
       DB_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
-      #KEYCLOAK_IMPORT_REALM: "/tmp/realm-export.json"
-      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
-      #JDBC_PARAMS: "connectTimeout=30000"
     ports:
       - 8180:8180
     depends_on:
@@ -82,6 +75,6 @@ services:
     environment:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: db_project_a
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_PORT: 3306
 
 

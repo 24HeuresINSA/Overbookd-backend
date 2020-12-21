@@ -36,7 +36,6 @@ services:
       MYSQL_DATABASE: project_a
       MYSQL_USER: project_a
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_TCP_PORT: ${DATABASE_PORT}
 
     networks:
       - api
@@ -79,7 +78,7 @@ services:
     environment:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: db_project_a
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_PORT: 3306
       ENVIONMENT: production
 
 
