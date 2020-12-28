@@ -1,0 +1,84 @@
+
+version: '3'
+
+volumes:
+  mysql_keycloak_database:
+    driver: local
+  mysql_project_a_database:
+    driver: local
+
+networks:
+  keycloak: {}
+  api:
+    driver: bridge
+
+services:
+  db_keycloak:
+    image: library/mysql
+    volumes:
+      - mysql_keycloak_database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
+    networks:
+      - keycloak
+
+  db_project_a:
+    image: library/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_project_a_database:/var/lib/mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: project_a
+      MYSQL_USER: project_a
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+
+    networks:
+      - api
+
+
+  keycloak:
+    image: jboss/keycloak
+    volumes:
+      - ./assets/json/realm-export.json:/tmp/realm-export.json
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.import=/tmp/realm-export.json -Djboss.socket.binding.port-offset=100"
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: db_keycloak
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "connectTimeout=30000"
+    ports:
+      - 8180:8180
+    depends_on:
+      - db_keycloak
+    networks:
+      - api
+      - keycloak
+
+  api:
+    image: docker.pkg.github.com/24heuresinsa/assomaker-backend/assomaker_backend_api:latest
+    restart: unless-stopped
+    depends_on:
+      - db_project_a
+      - keycloak
+    ports:
+      - 2424:2424
+    networks:
+      - api
+    environment:
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: db_project_a
+      DATABASE_PORT: 3306
+      ENVIONMENT: production
+
+
