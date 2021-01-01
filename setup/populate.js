@@ -1,7 +1,7 @@
 /*
 * WARNING 🛑 DO NOT RUN THIS FILE TWICE OR IT WILL DUPLICATE DATA IN THE DATABASE
 *
-* this programme populate the database with dummy data
+* this program populate the database with dummy data
 * */
 require('dotenv').config()
 const Sequelize = require("sequelize");
@@ -20,9 +20,9 @@ sequelize
             models.Shift_Category.bulkCreate(require("./database/shift_category.json"))
         ])
         await Promise.all([
+            models.Shift.bulkCreate(require("./database/shift.json")),
             models.User.bulkCreate(require("./database/user.json")),
             models.Equipment.bulkCreate(require("./database/equipment.json")),
-            models.Shift_Category.bulkCreate(require("./database/shift_category.json")),
         ])
         await Promise.all([
             models.Activity.bulkCreate(require("./database/activity.json")),
