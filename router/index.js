@@ -2,6 +2,10 @@ const express = require('express');
 
 let router = express.Router();
 
+router.get("/", (_, res) => {
+  res.status(301).redirect("https://orgassomakerify.debrej.fr/docs/api");
+})
+
 router.use("/activity", require("./activity"));
 router.use("/availability", require("./availability"));
 router.use("/comment", require("./comment"));
