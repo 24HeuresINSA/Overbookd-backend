@@ -1,20 +1,20 @@
 [
     {
-        "start_date": "2019/05/19 12:00:00",
-        "end_date": "2019/05/19 14:00:00",
+        "startDate": "2019/05/19 12:00:00",
+        "endDate": "2019/05/19 14:00:00",
         "charisma": 15,
-        "shift_category_id": 1
+        "shiftCategoryId": 1
     },
     {
-        "start_date": "2019/05/19 20:00:00",
-        "end_date": "2019/05/19 22:00:00",
+        "startDate": "2019/05/19 20:00:00",
+        "endDate": "2019/05/19 22:00:00",
         "charisma": 30,
-        "shift_category_id": 1
+        "shiftCategoryId": 1
     },
     {
-        "start_date": "2019/05/20 00:00:00",
-        "end_date": "2019/05/20 02:00:00",
+        "startDate": "2019/05/20 00:00:00",
+        "endDate": "2019/05/20 02:00:00",
         "charisma": 15,
-        "shift_category_id": 2
+        "shiftCategoryId": 2
     }
 ]

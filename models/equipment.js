@@ -16,16 +16,13 @@ module.exports = function(sequelize, Sequelize, Equipment_Type, Location) {
         type: Sequelize.INTEGER,
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  Equipment.belongsTo(Equipment_Type, { foreignKey: "equipment_type_id" });
+  Equipment.belongsTo(Equipment_Type, { foreignKey: "equipmentTypeId" });
 
-  Location.hasOne(Equipment, { foreignKey: "pickup_location" });
-  Location.hasOne(Equipment, { foreignKey: "drop_location" });
+  Location.hasOne(Equipment, { foreignKey: "pickupLocation" });
+  Location.hasOne(Equipment, { foreignKey: "dropLocation" });
 
   return Equipment;
 };

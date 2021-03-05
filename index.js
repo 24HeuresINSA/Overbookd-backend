@@ -14,7 +14,7 @@ sequelize
     .then(() => {
         console.log("\nDatabase synced");
         app.listen(2424, function () {
-            console.log("\n\tPROJECT_A LOADING COMPLETE");
+            console.log("\n\tOverbookd API LOADING COMPLETE");
             console.log("\nServer running on port 2424");
         });
     })

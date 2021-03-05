@@ -12,21 +12,18 @@ module.exports = function(sequelize, Sequelize) {
       description: {
         type: Sequelize.TEXT("medium")
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      logo_url: {
+      logoURL: {
         type: Sequelize.STRING,
-        defaultValue: "event_logo_default.png"
+        defaultValue: "eventLogoDefault.png"
       }
-    },
-    {
-      underscored: true
     }
   );
 };

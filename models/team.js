@@ -9,7 +9,7 @@ module.exports = function(sequelize, Sequelize, User) {
         type: Sequelize.STRING,
         allowNull: false
       },
-      confidence_level: {
+      confidenceLevel: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
@@ -24,13 +24,10 @@ module.exports = function(sequelize, Sequelize, User) {
         allowNull: false,
         defaultValue: "#888888"
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(Team, { foreignKey: "supervisor_id" });
+  User.hasOne(Team, { foreignKey: "supervisorId" });
 
   return Team;
 };

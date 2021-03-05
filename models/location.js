@@ -12,17 +12,14 @@ module.exports = function(sequelize, Sequelize) {
       description: {
         type: Sequelize.TEXT("medium")
       },
-      gps_long: {
+      gpsLng: {
         type: Sequelize.DECIMAL(9, 6),
         allowNull: false
       },
-      gps_lat: {
+      gpsLat: {
         type: Sequelize.DECIMAL(9, 6),
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 };

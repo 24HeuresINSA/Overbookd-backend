@@ -7,26 +7,26 @@ let userRequirementRouter = express.Router();
 
 userRequirementRouter.route("/")
     .get(keycloak.protect("realm:user"), (req, res) => {
-        models.User_Requirement.findAll({where: req.query})
-            .then(user_requirement => res.send(user_requirement))
+        models.UserRequirement.findAll({where: req.query})
+            .then(userRequirement => res.send(userRequirement))
             .catch(err => res.status(500).send(err));
     })
     .post(keycloak.protect("realm:user"), (req, res) => {
-        models.User_Requirement.create(req.body)
-            .then(user_requirement => res.status(201).send(user_requirement))
+        models.UserRequirement.create(req.body)
+            .then(userRequirement => res.status(201).send(userRequirement))
             .catch(err => res.status(500).send(err));
     })
     .put(keycloak.protect("realm:user"), (req, res) => {
-        models.User_Requirement.update(req.body, {where: {id: req.body.id}})
+        models.UserRequirement.update(req.body, {where: {id: req.body.id}})
             .then(() => {
-                models.User_Requirement.findByPk(req.body.id)
-                    .then(user_requirement => res.status(202).send(user_requirement))
+                models.UserRequirement.findByPk(req.body.id)
+                    .then(userRequirement => res.status(202).send(userRequirement))
                     .catch(err => res.status(500).send(err));
             })
             .catch(err => res.status(500).send(err));
     })
     .delete(keycloak.protect("realm:user"), (req, res) => {
-        models.User_Requirement.destroy({where: {id: req.query.id}})
+        models.UserRequirement.destroy({where: {id: req.query.id}})
             .then(result => {
                 if (result) res.sendStatus(204);
                 else res.sendStatus(404);
@@ -34,22 +34,22 @@ userRequirementRouter.route("/")
             .catch(err => res.status(500).send(err));
     });
 
-userRequirementRouter.param("user_requirement", (req, res, next, id) => {
-    models.User_Requirement.findByPk(id)
-        .then(user_requirement => {
-            req.user_requirement = user_requirement;
+userRequirementRouter.param("userRequirement", (req, res, next, id) => {
+    models.UserRequirement.findByPk(id)
+        .then(userRequirement => {
+            req.userRequirement = userRequirement;
             next();
         })
         .catch(err => next(err));
 });
 
-userRequirementRouter.get("/:user_requirement/users", keycloak.protect("realm:user"), (req, res) => {
-    if (req.user_requirement.user_id) {
-        models.User.findByPk(req.user_requirement.user_id)
+userRequirementRouter.get("/:userRequirement/users", keycloak.protect("realm:user"), (req, res) => {
+    if (req.userRequirement.userId) {
+        models.User.findByPk(req.userRequirement.userId)
             .then(user => res.send(user))
             .catch(err => res.status(500).send(err));
-    } else if (req.user_requirement.team_id) {
-        models.Team.findByPk(req.user_requirement.team_id)
+    } else if (req.userRequirement.teamId) {
+        models.Team.findByPk(req.userRequirement.teamId)
             .then(team => {
                 team.getUsers()
                     .then(users => res.send(users))
@@ -62,18 +62,18 @@ userRequirementRouter.get("/:user_requirement/users", keycloak.protect("realm:us
 userRequirementRouter.get("/window", keycloak.protect("realm:user"), (req, res) => {
     models.Shift.findAll({
         where: {
-            start_date: {
-                [Op.gte]: new Date(req.body.start_date)
+            startDate: {
+                [Op.gte]: new Date(req.body.startDate)
             },
-            end_date: {
-                [Op.lte]: new Date(req.body.end_date)
+            endDate: {
+                [Op.lte]: new Date(req.body.endDate)
             }
         }
     })
         .then(shifts => {
-            let shift_ids = [];
-            shifts.forEach(shift => shift_ids.push(shift.id));
-            models.User_Requirement.findAll({where: {shift_id: shift_ids}})
+            let shiftIds = [];
+            shifts.forEach(shift => shiftIds.push(shift.id));
+            models.UserRequirement.findAll({where: {shiftId: shiftIds}})
                 .then(requirements => res.send(requirements))
                 .catch(err => res.status(500).send(err));
         })

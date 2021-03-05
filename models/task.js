@@ -19,27 +19,24 @@ module.exports = function(
       description: {
         type: Sequelize.TEXT("medium")
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(Task, { foreignKey: "supervisor_id" });
+  User.hasOne(Task, { foreignKey: "supervisorId" });
 
-  Team.hasOne(Task, { foreignKey: "team_id" });
+  Team.hasOne(Task, { foreignKey: "teamId" });
 
-  Location.hasOne(Task, { foreignKey: "location_id" });
+  Location.hasOne(Task, { foreignKey: "locationId" });
 
-  Task.belongsTo(Activity, { foreignKey: "activity_id" });
+  Task.belongsTo(Activity, { foreignKey: "activityId" });
 
   return Task;
 };

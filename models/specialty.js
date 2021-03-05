@@ -12,9 +12,6 @@ module.exports = function(sequelize, Sequelize) {
       year: {
         type: Sequelize.INTEGER
       }
-    },
-    {
-      underscored: true
     }
   );
 };
