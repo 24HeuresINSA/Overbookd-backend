@@ -1,17 +1,14 @@
 module.exports = function(sequelize, Sequelize) {
-  console.log("\tequipment type model loaded");
+  console.log("\tshift category model loaded");
 
   return sequelize.define(
-    "equipment_type",
+    "shiftCategory",
     {
       // attributes
       name: {
         type: Sequelize.STRING,
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 };

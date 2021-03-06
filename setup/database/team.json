@@ -1,14 +1,14 @@
 [
     {
         "name": "INSA",
-        "supervisor_id": 1
+        "supervisorId": 1
     },
     {
         "name": "Fromage",
-        "supervisor_id": 2
+        "supervisorId": 2
     },
     {
         "name": "Jaune",
-        "supervisor_id": 3
+        "supervisorId": 3
     }
 ]

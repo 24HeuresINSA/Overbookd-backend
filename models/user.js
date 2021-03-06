@@ -5,11 +5,11 @@ module.exports = function(sequelize, Sequelize, Specialty) {
     "user",
     {
       // attributes
-      first_name: {
+      firstName: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      last_name: {
+      lastName: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -20,7 +20,7 @@ module.exports = function(sequelize, Sequelize, Specialty) {
         type: Sequelize.DATEONLY
       },
 
-      phone_number: {
+      phoneNumber: {
         type: Sequelize.STRING(15)
       },
       email: {
@@ -28,27 +28,27 @@ module.exports = function(sequelize, Sequelize, Specialty) {
         allowNull: false
       },
 
-      licence_date: {
+      licenceDate: {
         type: Sequelize.DATE
       },
-      licence_scan_url: {
+      licenceScanURL: {
         type: Sequelize.STRING
       },
 
-      profile_pic_url: {
+      profilePicURL: {
         type: Sequelize.STRING,
-        defaultValue: "images/default_pic_url.jpg"
+        defaultValue: "images/defaultPicURL.jpg"
       },
-      tshirt_size: {
+      tshirtSize: {
         type: Sequelize.ENUM("XS", "S", "M", "L", "XL")
       },
 
-      alcoholic_beverage_consumption: {
+      alcoholicBeverageConsumption: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false
       },
-      food_and_beverage_consumption: {
+      foodAndBeverageConsumption: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false
@@ -69,24 +69,21 @@ module.exports = function(sequelize, Sequelize, Specialty) {
         type: Sequelize.TEXT("medium")
       },
 
-      validity_status: {
+      validityStatus: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
 
-      keycloak_user_id: {
+      keycloakUserId: {
         type: Sequelize.STRING,
         defaultValue: "",
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.belongsTo(Specialty, { foreignKey: "specialty_id" });
+  User.belongsTo(Specialty, { foreignKey: "specialtyId" });
 
   return User;
 };

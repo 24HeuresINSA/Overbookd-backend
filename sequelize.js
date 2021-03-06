@@ -6,7 +6,7 @@ const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 
 //region DATABASE CONNECTION
 
-let sequelize = new Sequelize("project_a", "project_a", DATABASE_PASSWORD, {
+let sequelize = new Sequelize("overbookd", "overbookd", DATABASE_PASSWORD, {
     host: process.env.DATABASE_HOST || "localhost" , //when running node in Docker container the host is the database container's name
     port: process.env.DATABASE_PORT || 3306,
     dialect: "mysql",

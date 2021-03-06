@@ -11,16 +11,14 @@ module.exports = function(sequelize, Sequelize, User, Team) {
       },
       status: {
         type: Sequelize.ENUM("unread", "read"),
-        defaultValue: "unread"
+        defaultValue: "unread",
+        allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(Notification, { foreignKey: "user_id" });
-  Team.hasOne(Notification, { foreignKey: "team_id" });
+  User.hasOne(Notification, { foreignKey: "userId" });
+  Team.hasOne(Notification, { foreignKey: "teamId" });
 
   return Notification;
 };

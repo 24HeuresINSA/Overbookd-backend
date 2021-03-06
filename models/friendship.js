@@ -5,14 +5,11 @@ module.exports = function(sequelize, Sequelize, User) {
     "friendship",
     {
       // Attributes
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(Friendship, { foreignKey: "user_id" });
-  User.hasOne(Friendship, { foreignKey: "friend_id" });
+  User.hasOne(Friendship, { foreignKey: "userId" });
+  User.hasOne(Friendship, { foreignKey: "friendId" });
 
   return Friendship;
 };

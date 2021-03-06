@@ -1,15 +1,15 @@
-module.exports = function(sequelize, Sequelize, Shift_Category) {
+module.exports = function(sequelize, Sequelize, ShiftCategory) {
   console.log("\tshift model loaded");
 
   const Shift = sequelize.define(
     "shift",
     {
       // attributes
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
@@ -17,13 +17,10 @@ module.exports = function(sequelize, Sequelize, Shift_Category) {
         type: Sequelize.INTEGER,
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  Shift.belongsTo(Shift_Category, { foreignKey: "shift_category_id" });
+  Shift.belongsTo(ShiftCategory, { foreignKey: "shiftCategoryId" });
 
   return Shift;
 };

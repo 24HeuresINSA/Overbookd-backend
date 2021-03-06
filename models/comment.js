@@ -2,7 +2,7 @@ module.exports = function(sequelize, Sequelize, User, Activity, Task) {
   console.log("\tcomment model loaded");
 
   const CommentObject = sequelize.define(
-    "comment_object",
+    "commentObject",
     {
       // attributes
       content: {
@@ -13,15 +13,12 @@ module.exports = function(sequelize, Sequelize, User, Activity, Task) {
         type: Sequelize.DATE,
         allowNull: false
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(CommentObject, { foreignKey: "user_id" });
-  Activity.hasOne(CommentObject, { foreignKey: "activity_id" });
-  Task.hasOne(CommentObject, { foreignKey: "task_id" });
+  User.hasOne(CommentObject, { foreignKey: "userId" });
+  Activity.hasOne(CommentObject, { foreignKey: "activityId" });
+  Task.hasOne(CommentObject, { foreignKey: "taskId" });
 
   return CommentObject;
 };

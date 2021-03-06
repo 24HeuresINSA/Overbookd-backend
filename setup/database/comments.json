@@ -2,22 +2,22 @@
     {
         "content": "T\"es sûr qu\"un seul camion ça va suffire ?",
         "date": "2019/04/12 13:57:04",
-        "user_id": 3,
-        "activity_id": null,
-        "task_id": 1
+        "userId": 3,
+        "activityId": null,
+        "taskId": 1
     },
     {
         "content": "Ouais tkt, j\"en mangerai en sortant du magasin",
         "date": "2019/04/13 12:08:56",
-        "user_id": 2,
-        "activity_id": null,
-        "task_id": 1
+        "userId": 2,
+        "activityId": null,
+        "taskId": 1
     },
     {
         "content": "Ouais, rangez-moi tout ça avant que je ne parte dans le privé",
         "date": "2019/05/17 09:17:56",
-        "user_id": 1,
-        "activity_id": 2,
-        "task_id": null
+        "userId": 1,
+        "activityId": 2,
+        "taskId": null
     }
 ]

@@ -3,24 +3,24 @@
         "name": "12m3",
         "description": "un bien beau camtar",
         "quantity": 1,
-        "pickup_location": 1,
-        "drop_location": 3,
-        "equipment_type_id": 1
+        "pickupLocation": 1,
+        "dropLocation": 3,
+        "equipmentTypeId": 1
     },
     {
         "name": "Colson",
         "description": "de bien beaux colliers",
         "quantity": 500,
-        "pickup_location": 3,
-        "drop_location": 3,
-        "equipment_type_id": 2
+        "pickupLocation": 3,
+        "dropLocation": 3,
+        "equipmentTypeId": 2
     },
     {
         "name": "balais",
         "description": "de bien beaux balais",
         "quantity": 7,
-        "pickup_location": 3,
-        "drop_location": 3,
-        "equipment_type_id": 2
+        "pickupLocation": 3,
+        "dropLocation": 3,
+        "equipmentTypeId": 2
     }
 ]

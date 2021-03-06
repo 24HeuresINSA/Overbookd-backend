@@ -30,16 +30,16 @@ module.exports = function(sequelize, Sequelize) {
     db.Task
   );
 
-  db.Equipment_Type = require("./equipment_type")(sequelize, Sequelize);
+  db.EquipmentType = require("./equipmentType")(sequelize, Sequelize);
   db.Equipment = require("./equipment")(
     sequelize,
     Sequelize,
-    db.Equipment_Type,
+    db.EquipmentType,
     db.Location
   );
 
-  db.Shift_Category = require("./shift_category")(sequelize, Sequelize);
-  db.Shift = require("./shift")(sequelize, Sequelize, db.Shift_Category);
+  db.ShiftCategory = require("./shiftCategory")(sequelize, Sequelize);
+  db.Shift = require("./shift")(sequelize, Sequelize, db.ShiftCategory);
 
   /**
    * Creation of table availability which represents which shifts a user is available on
@@ -52,7 +52,7 @@ module.exports = function(sequelize, Sequelize) {
     db.User
   );
 
-  db.User_Requirement = require("./user_requirement")(
+  db.UserRequirement = require("./userRequirement")(
     sequelize,
     Sequelize,
     db.User,
@@ -61,14 +61,14 @@ module.exports = function(sequelize, Sequelize) {
     db.Shift
   );
 
-  db.User_Assigment = require("./user_assignment")(
+  db.UserAssigment = require("./userAssignment")(
     sequelize,
     Sequelize,
     db.User,
     db.Availability
   );
 
-  db.Equipment_Requirement = require("./equipment_requirement")(
+  db.EquipmentRequirement = require("./equipmentRequirement")(
     sequelize,
     Sequelize,
     db.Task,
@@ -77,17 +77,17 @@ module.exports = function(sequelize, Sequelize) {
     db.Shift
   );
 
-  db.Equipment_Assignment = require("./equipment_assignment")(
+  db.EquipmentAssignment = require("./equipmentAssignment")(
     sequelize,
     Sequelize,
-    db.Equipment_Requirement
+    db.EquipmentRequirement
   );
 
   /**
-   * Table user_team which represents in which teams users are
+   * Table userTeam which represents in which teams users are
    */
-  db.User.belongsToMany(db.Team, { through: "user_team" });
-  db.Team.belongsToMany(db.User, { through: "user_team" });
+  db.User.belongsToMany(db.Team, { through: "userTeam" });
+  db.Team.belongsToMany(db.User, { through: "userTeam" });
 
   /**
    * Table friend which represents friendship between users
@@ -95,10 +95,10 @@ module.exports = function(sequelize, Sequelize) {
   db.Friendship = require("./friendship")(sequelize, Sequelize, db.User);
 
   /**
-   * Table activity_location which represents on which location(s) activities are located
+   * Table activityLocation which represents on which location(s) activities are located
    */
-  db.Activity.belongsToMany(db.Location, { through: "activity_location" });
-  db.Location.belongsToMany(db.Activity, { through: "activity_location" });
+  db.Activity.belongsToMany(db.Location, { through: "activityLocation" });
+  db.Location.belongsToMany(db.Activity, { through: "activityLocation" });
 
   return db;
 };

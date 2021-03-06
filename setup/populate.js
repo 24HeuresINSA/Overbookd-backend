@@ -16,8 +16,8 @@ sequelize
             models.Event.bulkCreate(require("./database/event.json")),
             models.Location.bulkCreate(require("./database/location.json")),
             models.Specialty.bulkCreate(require("./database/specialty.json")),
-            models.Equipment_Type.bulkCreate(require("./database/equipment_type.json")),
-            models.Shift_Category.bulkCreate(require("./database/shift_category.json"))
+            models.EquipmentType.bulkCreate(require("./database/equipmentType.json")),
+            models.ShiftCategory.bulkCreate(require("./database/shiftCategory.json"))
         ])
         await Promise.all([
             models.Shift.bulkCreate(require("./database/shift.json")),

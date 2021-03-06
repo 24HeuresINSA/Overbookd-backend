@@ -12,38 +12,35 @@ module.exports = function(sequelize, Sequelize, User, Event) {
       description: {
         type: Sequelize.TEXT("medium")
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      contractor_name: {
+      contractorName: {
         type: Sequelize.STRING
       },
-      contractor_phone: {
+      contractorPhone: {
         type: Sequelize.STRING
       },
-      contractor_mail: {
+      contractorMail: {
         type: Sequelize.STRING
       },
-      contractor_comment: {
+      contractorComment: {
         type: Sequelize.STRING
       },
-      contractor_present_on_event: {
+      contractorPresentOnEvent: {
         type: Sequelize.STRING
       }
-    },
-    {
-      underscored: true
     }
   );
 
-  User.hasOne(Activity, { foreignKey: "supervisor_id" });
+  User.hasOne(Activity, { foreignKey: "supervisorId" });
 
-  Activity.belongsTo(Event, { foreignKey: "event_id" });
+  Activity.belongsTo(Event, { foreignKey: "eventId" });
 
   return Activity;
 };
