@@ -5,6 +5,8 @@ volumes:
     driver: local
   mysql_project_a_database:
     driver: local
+  keycloak_data:
+    driver: local
 
 networks:
   keycloak: {}
@@ -14,6 +16,7 @@ networks:
 services:
   db_keycloak:
     image: library/mysql
+    restart: always
     volumes:
       - mysql_keycloak_database:/var/lib/mysql
     environment:
@@ -23,51 +26,70 @@ services:
       MYSQL_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
     networks:
       - keycloak
+    ports: 
+      - 3306:3306
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
 
   db_project_a:
     image: library/mysql
+    restart: always
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql_project_a_database:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: project_a
-      MYSQL_USER: project_a
+      MYSQL_DATABASE: overbookd
+      MYSQL_USER: overbookd
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-    ports:
-      - ${DATABASE_PORT}:3306
     networks:
       - api
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
 
 
   keycloak:
     image: jboss/keycloak
+    restart: always
     volumes:
       - ./assets/json/realm-export.json:/tmp/realm-export.json
+      - keycloak_data:/data
     command:
       - "-b 0.0.0.0 -Dkeycloak.import=/tmp/realm-export.json -Djboss.socket.binding.port-offset=100"
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: db_keycloak
+      DB_PORT: 3306
       DB_DATABASE: keycloak
       DB_USER: keycloak
       DB_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      JDBC_PARAMS: "useSSL=false"
     ports:
       - 8180:8180
     depends_on:
-      - db_keycloak
+      db_keycloak:
+        condition: service_healthy
     networks:
       - api
       - keycloak
+    healthcheck:
+            test: ["CMD", "curl" ,"--fail", "http://localhost:8180/auth/realms/master"]
+            interval: 30s
+            timeout: 3s
+            retries: 10
 
   api:
     build: .
-    restart: unless-stopped
+    restart: always
     depends_on:
-      - db_project_a
-      - keycloak
+      db_project_a:
+        condition: service_healthy
     ports:
       - 2424:2424
     networks:
@@ -76,5 +98,3 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: db_project_a
       DATABASE_PORT: 3306
-
-
