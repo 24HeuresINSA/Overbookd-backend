@@ -15,4 +15,3 @@ buildx:
     - docker build --platform=local -o . ./docker-buildx
   only:
     - master
-    - ci/cd
