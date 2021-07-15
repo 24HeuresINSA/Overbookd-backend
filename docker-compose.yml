@@ -12,6 +12,7 @@ networks:
 
 services:
   db_keycloak:
+    platform: linux/x86_64
     image: library/mysql
     restart: always
     volumes:
@@ -29,6 +30,7 @@ services:
             retries: 10
 
   db_project_a:
+    platform: linux/x86_64
     image: library/mysql
     restart: always
     command: --default-authentication-plugin=mysql_native_password
@@ -48,6 +50,7 @@ services:
 
 
   keycloak:
+    platform: linux/x86_64
     image: jboss/keycloak
     restart: always
     environment:
