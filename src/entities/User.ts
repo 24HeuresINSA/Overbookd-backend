@@ -32,7 +32,7 @@ const UserSchema = new Schema<IUser>({
     birthday: { type: Date, required: false},
     friends: { type: Array, required: false},
 
-});
+}, {strict: false});
 
 const UserModel = model<User>('User', UserSchema);
 

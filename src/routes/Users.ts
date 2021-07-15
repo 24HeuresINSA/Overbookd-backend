@@ -2,11 +2,9 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
 
 import UserDao from '@daos/User/UserDao.mock';
-import { paramMissingError } from '@shared/constants';
 import logger from "@shared/Logger";
 import KcAdminClient from 'keycloak-admin';
 import UserModel from "@entities/User";
-import {connect} from "mongoose";
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK } = StatusCodes;
@@ -36,8 +34,6 @@ export async function getAllUsers(req: Request, res: Response) {
  */
 export async function setUser(req: Request, res: Response) {
     const mUser = req.body;
-    await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
-        {useNewUrlParser: true, useUnifiedTopology: true});
     // create user in keycloak
     mUser.keycloakID = await createUserInKeycloak(mUser);
 

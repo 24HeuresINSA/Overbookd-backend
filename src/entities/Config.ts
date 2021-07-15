@@ -9,7 +9,7 @@ const ConfigSchema = new Schema<IConfig>({
     key: { type: String, required: true },
     value: { type: Object, required: true },
     description: {type: String, required: false,}
-});
+},{strict: false});
 
 const ConfigModel = model<Config>('config', ConfigSchema);
 
