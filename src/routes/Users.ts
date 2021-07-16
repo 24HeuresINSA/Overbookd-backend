@@ -35,6 +35,7 @@ export async function getAllUsers(req: Request, res: Response) {
 export async function setUser(req: Request, res: Response) {
     const mUser = req.body;
     // create user in keycloak
+    // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
 
     await saveUser(mUser);
