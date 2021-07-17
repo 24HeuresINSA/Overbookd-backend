@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import { getConfig, setConfig} from "./Config";
 import mCors from "../cors";
-import {setUser , getUserByKeycloakID} from "./Users";
+import {setUser, getUserByKeycloakID, updateUserByKeycloakID, getAllUsersName} from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
+import {getAvailabilities, setAvailabilities} from "./Avalabilities";
 
 // User-route
 const userRouter = Router();
-userRouter.post('/', setUser)
-// userRouter.get('/', getUsers)
+userRouter.post('/', setUser);
+userRouter.get('/all', getAllUsersName)
 userRouter.get('/:keycloakID', getUserByKeycloakID)
+userRouter.put('/:keycloakID', updateUserByKeycloakID)
 
 // Config-route
 const configRouter = Router();
@@ -28,12 +30,18 @@ const equipmentRouter = Router();
 equipmentRouter.get('/', getEquipment);
 equipmentRouter.put('/', setEquipment)
 
+// Availabilities routes
+const availabilitiesRouter = Router();
+availabilitiesRouter.get('/', getAvailabilities)
+availabilitiesRouter.put('/', setAvailabilities)
+
 // Export the base-router
 const baseRouter = Router();
 baseRouter.use('/user', userRouter);
 baseRouter.use('/config', configRouter);
 baseRouter.use('/FA', FArouter);
 baseRouter.use('/equipment', equipmentRouter);
+baseRouter.use('/availabilities', availabilitiesRouter);
 baseRouter.use(mCors)
 
 export default baseRouter;

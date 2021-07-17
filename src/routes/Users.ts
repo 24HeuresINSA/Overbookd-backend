@@ -5,25 +5,12 @@ import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
 import KcAdminClient from 'keycloak-admin';
 import UserModel from "@entities/User";
+import User from "@entities/User";
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK } = StatusCodes;
 
 const kcAdminClient = new KcAdminClient();
-
-
-/**
- * Get all users.
- * 
- * @param req 
- * @param res 
- * @returns 
- */
-export async function getAllUsers(req: Request, res: Response) {
-    const users = await userDao.getAll();
-    return res.status(OK).json({users});
-}
-
 
 /**
  * Add one user.
@@ -79,3 +66,20 @@ export async function getUserByKeycloakID(req: Request, res: Response) {
     const mUser = await UserModel.findOne({keycloakID})
     res.json(mUser)
 }
+
+export async function updateUserByKeycloakID(req: Request, res: Response) {
+    // TODO check user role
+    const keycloakID = req.params.keycloakID;
+    logger.info('updating info for ' + keycloakID);
+    const mUser = await UserModel.findOneAndUpdate({keycloakID}, req.body);
+    res.json(mUser)
+}
+
+
+export async function getAllUsersName(req: Request, res: Response) {
+    // TODO check role
+    let users= await UserModel.find({});
+    res.json(users.map(user => user.firstname + '.' +  user.lastname));
+}
+
+
