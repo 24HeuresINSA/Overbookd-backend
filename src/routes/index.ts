@@ -1,17 +1,27 @@
 import { Router } from 'express';
 import { getConfig, setConfig} from "./Config";
 import mCors from "../cors";
-import {setUser, getUserByKeycloakID, updateUserByKeycloakID, getAllUsersName} from "./Users";
+import {
+    setUser,
+    getUserByKeycloakID,
+    updateUserByKeycloakID,
+    getAllUsersName,
+    getUsers,
+    broadcastNotification, addNotificationByFullName
+} from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities} from "./Avalabilities";
 
 // User-route
 const userRouter = Router();
+userRouter.get('/', getUsers);
 userRouter.post('/', setUser);
 userRouter.get('/all', getAllUsersName)
 userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID', updateUserByKeycloakID)
+userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
+userRouter.put('/notification', broadcastNotification)
 
 // Config-route
 const configRouter = Router();

@@ -8,7 +8,7 @@ import UserModel from "@entities/User";
 import User from "@entities/User";
 
 const userDao = new UserDao();
-const { BAD_REQUEST, CREATED, OK } = StatusCodes;
+const { BAD_REQUEST, CREATED, OK, NOT_FOUND} = StatusCodes;
 
 const kcAdminClient = new KcAdminClient();
 
@@ -27,6 +27,11 @@ export async function setUser(req: Request, res: Response) {
 
     await saveUser(mUser);
     res.status(CREATED).end();
+}
+
+export async function getUsers(req: Request, res: Response) {
+    const users = await UserModel.find({});
+    res.json(users);
 }
 
 async function saveUser(user: any){
@@ -80,6 +85,46 @@ export async function getAllUsersName(req: Request, res: Response) {
     // TODO check role
     let users= await UserModel.find({});
     res.json(users.map(user => user.firstname + '.' +  user.lastname));
+}
+
+export async function addNotificationByFullName(req: Request, res: Response) {
+    let query = req.params;
+    if(!query.firstname || ! query.lastname){
+        res.sendStatus(BAD_REQUEST)
+    } else {
+        let user = await UserModel.findOne({firstname : query.firstname, lastname: query.lastname});
+        if (user){
+            if(user.notifications === undefined){
+                user.notifications = [];
+            }
+            // @ts-ignore
+            user.notifications.push(req.body)
+            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications})
+            res.sendStatus(OK)
+        } else {
+            res.sendStatus(NOT_FOUND)
+        }
+    }
+
+
+}
+
+export async function broadcastNotification(req: Request, res: Response) {
+    // TODO check role
+    const isHard = true
+    if(isHard){
+        let users = await UserModel.find({});
+        users.forEach(async (user) => {
+            if(user.notifications === undefined){
+                user.notifications = [];
+            }
+            // @ts-ignore
+            user.notifications.push(req.body)
+            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications})
+        })
+        res.sendStatus(OK)
+
+    }
 }
 
 
