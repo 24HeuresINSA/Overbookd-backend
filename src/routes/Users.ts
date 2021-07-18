@@ -2,30 +2,15 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
 
 import UserDao from '@daos/User/UserDao.mock';
-import { paramMissingError } from '@shared/constants';
 import logger from "@shared/Logger";
 import KcAdminClient from 'keycloak-admin';
 import UserModel from "@entities/User";
-import {connect} from "mongoose";
+import User from "@entities/User";
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK } = StatusCodes;
 
 const kcAdminClient = new KcAdminClient();
-
-
-/**
- * Get all users.
- * 
- * @param req 
- * @param res 
- * @returns 
- */
-export async function getAllUsers(req: Request, res: Response) {
-    const users = await userDao.getAll();
-    return res.status(OK).json({users});
-}
-
 
 /**
  * Add one user.
@@ -36,9 +21,8 @@ export async function getAllUsers(req: Request, res: Response) {
  */
 export async function setUser(req: Request, res: Response) {
     const mUser = req.body;
-    await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
-        {useNewUrlParser: true, useUnifiedTopology: true});
     // create user in keycloak
+    // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
 
     await saveUser(mUser);
@@ -55,7 +39,7 @@ async function createUserInKeycloak({firstname, lastname, password} ){
         'auth/admin/realms/project_a/users'
     logger.info('creating new user ' + lastname)
     await kcAdminClient.auth({
-        username: 'admin',
+        username: process.env.ADMIN_USERNAME || 'admin',
         password: process.env.ADMIN_PASSWORD,
         grantType: 'password',
         clientId: 'admin-cli',
@@ -82,3 +66,20 @@ export async function getUserByKeycloakID(req: Request, res: Response) {
     const mUser = await UserModel.findOne({keycloakID})
     res.json(mUser)
 }
+
+export async function updateUserByKeycloakID(req: Request, res: Response) {
+    // TODO check user role
+    const keycloakID = req.params.keycloakID;
+    logger.info('updating info for ' + keycloakID);
+    const mUser = await UserModel.findOneAndUpdate({keycloakID}, req.body);
+    res.json(mUser)
+}
+
+
+export async function getAllUsersName(req: Request, res: Response) {
+    // TODO check role
+    let users= await UserModel.find({});
+    res.json(users.map(user => user.firstname + '.' +  user.lastname));
+}
+
+
