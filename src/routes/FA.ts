@@ -11,10 +11,10 @@ export async function getFAs(req: Request, res: Response) {
 }
 
 export async function getFAByName(req: Request, res: Response) {
-    if(req.body.name === undefined){
+    if(req.params.name === undefined){
         res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain a name"})
     }
-    const mFA = FAModel.findOne({name: req.body.name})
+    const mFA = await FAModel.findOne({name: req.params.name})
     res.json(mFA);
 }
 

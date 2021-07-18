@@ -23,7 +23,7 @@ configRouter.use(mCors);
 const FArouter = Router();
 FArouter.get('/', getFAs);
 FArouter.get('/:name', getFAByName);
-FArouter.post('/', setFA);
+FArouter.put('/', setFA);
 
 // Equipment-routes
 const equipmentRouter = Router();
