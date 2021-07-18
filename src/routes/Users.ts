@@ -39,7 +39,7 @@ async function createUserInKeycloak({firstname, lastname, password} ){
         'auth/admin/realms/project_a/users'
     logger.info('creating new user ' + lastname)
     await kcAdminClient.auth({
-        username: 'admin',
+        username: process.env.ADMIN_USERNAME || 'admin',
         password: process.env.ADMIN_PASSWORD,
         grantType: 'password',
         clientId: 'admin-cli',
