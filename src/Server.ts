@@ -6,6 +6,8 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
 
 import BaseRouter from './routes';
 import logger from '@shared/Logger';
@@ -90,4 +92,45 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // });
 
 // Export express instance
+
+// snentry
+
+Sentry.init({
+    dsn: "https://31596a84268a40daaca6488fb5cbbb28@o923867.ingest.sentry.io/5871653",
+    integrations: [
+      // enable HTTP calls tracing
+      new Sentry.Integrations.Http({ tracing: true }),
+      // enable Express.js middleware tracing
+      new Tracing.Integrations.Express({ app }),
+    ],
+  
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
+  
+  // RequestHandler creates a separate execution context using domains, so that every
+  // transaction/span/breadcrumb is attached to its own Hub instance
+  app.use(Sentry.Handlers.requestHandler());
+  // TracingHandler creates a trace for every incoming request
+  app.use(Sentry.Handlers.tracingHandler());
+  
+  // All controllers should live here
+  app.get("/", function rootHandler(req, res) {
+    res.end("Hello world!");
+  });
+  
+  // The error handler must be before any other error middleware and after all controllers
+  app.use(Sentry.Handlers.errorHandler());
+  
+  // Optional fallthrough error handler
+  app.use(function onError(err, req, res, next) {
+    // The error id is attached to `res.sentry` to be returned
+    // and optionally displayed to the user for support.
+    res.statusCode = 500;
+    res.end(res.sentry + "\n");
+  });
+
+
 export default app;
