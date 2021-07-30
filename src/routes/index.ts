@@ -22,7 +22,7 @@ userRouter.get('/all', getAllUsersName)
 userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID', updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
-userRouter.put('/notification', broadcastNotification)
+userRouter.post('/broadcast', broadcastNotification)
 
 // Config-route
 const configRouter = Router();

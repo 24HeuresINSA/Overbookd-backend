@@ -112,15 +112,18 @@ export async function addNotificationByFullName(req: Request, res: Response) {
 export async function broadcastNotification(req: Request, res: Response) {
     // TODO check role
     const isHard = true
+    logger.info(`broadcasting message...`)
     if(isHard){
         let users = await UserModel.find({});
-        users.forEach(async (user) => {
-            if(user.notifications === undefined){
+        let mUsers = users.forEach(async (user) => {
+            if (user.notifications === undefined) {
                 user.notifications = [];
             }
+            console.log(req.body);
+
             // @ts-ignore
-            user.notifications.push(req.body)
-            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications})
+            user.notifications.push(req.body);
+            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications});
         })
         res.sendStatus(OK)
 
