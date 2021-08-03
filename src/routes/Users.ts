@@ -37,7 +37,7 @@ async function saveUser(user: any){
 }
 
 // @ts-ignore
-async function createUserInKeycloak({firstname, lastname, password} ){
+async function createUserInKeycloak({firstname, lastname, password, email} ){
     logger.info('creating new user ' + lastname)
     await kcAdminClient.auth({
         username: process.env.ADMIN_USERNAME || 'admin',
@@ -49,6 +49,7 @@ async function createUserInKeycloak({firstname, lastname, password} ){
     const res = await kcAdminClient.users.create({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         username: firstname.toLowerCase() + '.' + lastname.toLowerCase(),
+        email: email,
         enabled: true,
         credentials:[{
             type: 'password',
