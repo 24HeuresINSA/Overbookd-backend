@@ -5,7 +5,7 @@ import FTModel from "@entities/FT";
 
 export async function getAllFTs(req: Request, res: Response) {
     const mFTs = await FTModel.find({});
-    res.json(mFTs)
+    res.json({data: mFTs})
 }
 
 export async function getFTByID(req: Request, res: Response) {
