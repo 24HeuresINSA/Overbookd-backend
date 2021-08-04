@@ -63,6 +63,11 @@ async function createUserInKeycloak({firstname, lastname, password, email} ){
         }],
         realm: 'project_a',
     })
+    kcAdminClient.users.executeActionsEmail({
+        id: res.id,
+        realm: 'project_a',
+        actions: ["VERIFY_EMAIL"]
+    });
     logger.info(`user ${lastname} registred in keycloak as ${res.id}`)
     return res.id
 }
