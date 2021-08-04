@@ -3,7 +3,7 @@ import { Request, Response} from 'express';
 
 import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
-import KcAdminClient from 'keycloak-admin';
+import KcAdminClient, {requiredAction} from 'keycloak-admin';
 import UserModel from "@entities/User";
 import User from "@entities/User";
 
@@ -61,7 +61,7 @@ async function createUserInKeycloak({firstname, lastname, password, email} ){
     kcAdminClient.users.executeActionsEmail({
         id: res.id,
         realm: 'project_a',
-        actions: ["VERIFY_EMAIL"]
+        actions: [requiredAction.VERIFY_EMAIL]
     });
     logger.info(`user ${lastname} registred in keycloak as ${res.id}`)
     return res.id
