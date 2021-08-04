@@ -21,15 +21,15 @@ const { BAD_REQUEST, CREATED, OK } = StatusCodes;
  */
 export async function getConfig(req: Request, res: Response) {
     logger.info('getting config ...');
-    await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
-        {useNewUrlParser: true, useUnifiedTopology: true});
+    // await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
+    //     {useNewUrlParser: true, useUnifiedTopology: true});
     const config = await ConfigModel.find({})
     return res.status(OK).json(config);
 }
 
 export async function setConfig(req: Request, res: Response) {
-    await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
-        {useNewUrlParser: true, useUnifiedTopology: true});
+    // await connect((process.env.DATABASE_URL || 'mongodb://localhost:27017/' )+ 'local' ,
+    //     {useNewUrlParser: true, useUnifiedTopology: true});
     logger.info(`setting new config ${req.body.key}`)
     const isExisting = await ConfigModel.exists({key : req.body.key})
     if(isExisting){
