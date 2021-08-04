@@ -2,6 +2,7 @@ import FAModel from "@entities/FA";
 import {Request, Response} from "express";
 import logger from "@shared/Logger";
 import StatusCodes from 'http-status-codes';
+import FTModel from "@entities/FT";
 
 
 export async function getFAs(req: Request, res: Response) {
@@ -14,7 +15,16 @@ export async function getFAByName(req: Request, res: Response) {
     if(req.params.name === undefined){
         res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain a name"})
     }
-    const mFA = await FAModel.findOne({name: req.params.name})
+    // @ts-ignore
+    let mFA = (await FAModel.findOne({name: req.params.name})).toObject()
+    if(mFA){
+        let FTs = mFA.FTs.map(async (FTID) => (await FTModel.findById(FTID)))
+        // @ts-ignore
+        FTs = await Promise.all(FTs)
+        // @ts-ignore
+        mFA.FTs = FTs
+
+    }
     res.json(mFA);
 }
 

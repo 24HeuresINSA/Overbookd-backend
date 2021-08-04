@@ -1,4 +1,5 @@
 import { Schema, model, connect } from 'mongoose';
+import Any = jasmine.Any;
 
 export interface IUser {
     id: number;
@@ -43,6 +44,7 @@ class User implements IUser {
     balance = 0;
     birthday: Date;
     driverLicenseDate: Date;
+    notifications =  [];
 
     constructor(
         public id: number,
@@ -80,6 +82,14 @@ class User implements IUser {
 
     isBalanceNegative(){
         return this.balance < 0 ;
+    }
+
+    addNotification(notification: any){
+        if(this.notifications === undefined){
+            this.notifications = [];
+        }
+        // @ts-ignore
+        this.notifications.push(notification)
     }
 }
 
