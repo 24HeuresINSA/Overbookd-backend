@@ -6,6 +6,8 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
 
 import BaseRouter from './routes';
 import logger from '@shared/Logger';
@@ -90,4 +92,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // });
 
 // Export express instance
+
 export default app;

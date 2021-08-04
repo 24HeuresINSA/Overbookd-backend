@@ -10,7 +10,10 @@ import User from "@entities/User";
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND} = StatusCodes;
 
-const kcAdminClient = new KcAdminClient();
+const kcAdminClient = new KcAdminClient({
+    baseUrl: (process.env.AUTH_URL || 'http://localhost:8080/'),
+    realmName: 'project_a'
+  });
 
 /**
  * Add one user.
@@ -39,9 +42,7 @@ async function saveUser(user: any){
 }
 
 // @ts-ignore
-async function createUserInKeycloak({firstname, lastname, password} ){
-    const URL = (process.env.AUTH_URL || 'http://localhost:8080/') +
-        'auth/admin/realms/project_a/users'
+async function createUserInKeycloak({firstname, lastname, password, email} ){
     logger.info('creating new user ' + lastname)
     await kcAdminClient.auth({
         username: process.env.ADMIN_USERNAME || 'admin',
@@ -53,6 +54,7 @@ async function createUserInKeycloak({firstname, lastname, password} ){
     const res = await kcAdminClient.users.create({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         username: firstname.toLowerCase() + '.' + lastname.toLowerCase(),
+        email: email,
         enabled: true,
         credentials:[{
             type: 'password',
