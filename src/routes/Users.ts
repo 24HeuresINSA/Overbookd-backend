@@ -109,22 +109,21 @@ export async function addNotificationByFullName(req: Request, res: Response) {
 
 }
 
-export async function broadcastNotification(req: Request, res: Response) {
+export async function broadcastNotification({body}: Request, res: Response) {
     // TODO check role
     const isHard = true
     logger.info(`broadcasting message...`)
     if(isHard){
         let users = await UserModel.find({});
-        let mUsers = users.forEach(async (user) => {
-            if (user.notifications === undefined) {
-                user.notifications = [];
+        await Promise.all(users.map(async (user) => {
+            let mUser = user.toObject();
+            if (mUser.notifications === undefined) {
+                mUser.notifications = [];
             }
-            console.log(req.body);
-
             // @ts-ignore
-            user.notifications.push(req.body);
-            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications});
-        })
+            mUser.notifications.push(body);
+            await UserModel.findByIdAndUpdate(mUser._id, {notifications: mUser.notifications});
+        }));
         res.sendStatus(OK)
 
     }
