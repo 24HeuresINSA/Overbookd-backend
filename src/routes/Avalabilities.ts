@@ -9,7 +9,7 @@ export async function getAvailabilities(req: Request, res: Response) {
     res.json(availabilities);
 }
 
-export async function setAvailabilities(req: Request, res: Response) {
+export async function updateAvailabilities(req: Request, res: Response) {
     const mAvailabilities = req.body;
     if(mAvailabilities.name === undefined){
         res.status(StatusCodes.BAD_REQUEST).json({error: "Availabilities must contain a name"})
@@ -25,6 +25,14 @@ export async function setAvailabilities(req: Request, res: Response) {
         await AvailabilitiesModel.create(mAvailabilities);
         res.sendStatus(StatusCodes.CREATED)
     }
+}
+
+export async function setAvailabilities(req: Request, res: Response) {
+    const mAvailabilities = req.body;
+    // creating Equipment
+    logger.info(`creating Availabilities ${mAvailabilities.name}`)
+    await AvailabilitiesModel.create(mAvailabilities);
+    res.sendStatus(StatusCodes.CREATED)
 }
 
 

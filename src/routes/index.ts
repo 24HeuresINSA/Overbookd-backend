@@ -11,7 +11,7 @@ import {
 } from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
-import {getAvailabilities, setAvailabilities} from "./Avalabilities";
+import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
 
 // User-route
@@ -52,7 +52,8 @@ equipmentRouter.put('/', setEquipment)
 // Availabilities routes
 const availabilitiesRouter = Router();
 availabilitiesRouter.get('/', getAvailabilities)
-availabilitiesRouter.put('/', setAvailabilities)
+availabilitiesRouter.post('/', setAvailabilities)
+availabilitiesRouter.put('/', updateAvailabilities)
 
 // Export the base-router
 const baseRouter = Router();
