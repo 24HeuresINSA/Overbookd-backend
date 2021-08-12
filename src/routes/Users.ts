@@ -1,11 +1,13 @@
 import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
-
 import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
 import KcAdminClient, {requiredAction} from 'keycloak-admin';
 import UserModel from "@entities/User";
-import User from "@entities/User";
+import path from "path";
+import * as fs from "fs";
+const multer = require('multer');
+
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND} = StatusCodes;
@@ -134,6 +136,40 @@ export async function broadcastNotification({body}: Request, res: Response) {
         res.sendStatus(OK)
 
     }
+}
+
+
+export async function uploadPP(req: Request, res: Response) {
+    // @ts-ignore
+    const oldPP = (await UserModel.findById(req.body._id)).toObject()
+    // @ts-ignore
+    console.log('asss', oldPP.pp)
+    // @ts-ignore
+    if(oldPP.pp){
+        // @ts-ignore
+        const filename = oldPP.pp
+        console.log(filename)
+        const dirname = path.resolve();
+        // @ts-ignore
+        fs.unlinkSync(`${dirname}/images/${filename}`)
+        logger.info(`deleted ${filename} 🗑`)
+    }
+
+    await UserModel.findByIdAndUpdate(req.body._id, {
+        // @ts-ignore
+        pp: req.files[0].filename,
+    })
+    logger.info('pp updated')
+
+    res.json('/image api');
+}
+
+
+export async function getPP(req: Request, res: Response) {
+    const filename = req.params.filename;
+    const dirname = path.resolve();
+    logger.info('getting image ' + filename)
+    return res.sendFile(`${dirname}/images/${filename}`);
 }
 
 

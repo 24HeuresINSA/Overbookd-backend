@@ -7,12 +7,13 @@ import {
     updateUserByKeycloakID,
     getAllUsersName,
     getUsers,
-    broadcastNotification, addNotificationByFullName
+    broadcastNotification, addNotificationByFullName, getPP, uploadPP
 } from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
+const multer = require('multer');
 
 // User-route
 const userRouter = Router();
@@ -23,6 +24,13 @@ userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID', updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
 userRouter.post('/broadcast', broadcastNotification)
+
+const imageUpload = multer({
+    dest: 'images',
+});
+
+userRouter.post('/pp', imageUpload.array("files"), uploadPP);
+userRouter.get('/pp/:filename', getPP)
 
 // Config-route
 const configRouter = Router();
