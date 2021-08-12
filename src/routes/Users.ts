@@ -5,6 +5,7 @@ import logger from "@shared/Logger";
 import KcAdminClient from 'keycloak-admin';
 import UserModel from "@entities/User";
 import path from "path";
+import * as fs from "fs";
 const multer = require('multer');
 
 
@@ -133,12 +134,25 @@ export async function broadcastNotification({body}: Request, res: Response) {
 
 export async function uploadPP(req: Request, res: Response) {
     // @ts-ignore
-    console.log(req.files)
+    const oldPP = (await UserModel.findById(req.body._id)).toObject()
+    // @ts-ignore
+    console.log('asss', oldPP.pp)
+    // @ts-ignore
+    if(oldPP.pp){
+        // @ts-ignore
+        const filename = oldPP.pp
+        console.log(filename)
+        const dirname = path.resolve();
+        // @ts-ignore
+        fs.unlinkSync(`${dirname}/images/${filename}`)
+        logger.info(`deleted ${filename} 🗑`)
+    }
+
     await UserModel.findByIdAndUpdate(req.body._id, {
         // @ts-ignore
         pp: req.files[0].filename,
     })
-    logger.info('pp upadated')
+    logger.info('pp updated')
 
     res.json('/image api');
 }
