@@ -1,11 +1,12 @@
 import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
-
 import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
 import KcAdminClient from 'keycloak-admin';
 import UserModel from "@entities/User";
-import User from "@entities/User";
+import path from "path";
+const multer = require('multer');
+
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND} = StatusCodes;
@@ -127,6 +128,27 @@ export async function broadcastNotification({body}: Request, res: Response) {
         res.sendStatus(OK)
 
     }
+}
+
+
+export async function uploadPP(req: Request, res: Response) {
+    // @ts-ignore
+    console.log(req.files)
+    await UserModel.findByIdAndUpdate(req.body._id, {
+        // @ts-ignore
+        pp: req.files[0].filename,
+    })
+    logger.info('pp upadated')
+
+    res.json('/image api');
+}
+
+
+export async function getPP(req: Request, res: Response) {
+    const filename = req.params.filename;
+    const dirname = path.resolve();
+    logger.info('getting image ' + filename)
+    return res.sendFile(`${dirname}/images/${filename}`);
 }
 
 
