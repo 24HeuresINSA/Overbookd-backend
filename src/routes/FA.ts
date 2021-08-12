@@ -17,7 +17,7 @@ export async function getFAByName(req: Request, res: Response) {
     }
     // @ts-ignore
     let mFA = (await FAModel.findOne({name: req.params.name})).toObject()
-    if(mFA){
+    if(mFA && mFA.FTs){
         let FTs = mFA.FTs.map(async (FTID) => (await FTModel.findById(FTID)))
         // @ts-ignore
         FTs = await Promise.all(FTs)
