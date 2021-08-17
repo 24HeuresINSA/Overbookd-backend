@@ -1,6 +1,6 @@
 import StatusCodes from 'http-status-codes';
 import {Request, Response} from "express";
-import FTModel from "@entities/FT";
+import FTModel, {IFT} from "@entities/FT";
 
 
 export async function getAllFTs(req: Request, res: Response) {
@@ -15,13 +15,13 @@ export async function getFTByID(req: Request, res: Response) {
 
 
 export async function createFT(req: Request, res: Response) {
-    const mFT = req.body;
+    const mFT = <IFT> req.body;
     const FT = await FTModel.create(mFT);
     res.json(FT);
 }
 
 export async function updateFT(req: Request, res: Response) {
-    const mFT = req.body;
+    const mFT = <IFT> req.body;
     if(mFT._id){
         await FTModel.findByIdAndUpdate(mFT._id, mFT);
         res.sendStatus(StatusCodes.OK)
@@ -31,7 +31,7 @@ export async function updateFT(req: Request, res: Response) {
 }
 
 export async function deleteFT(req: Request, res: Response) {
-    const mFT = req.body;
+    const mFT = <IFT> req.body;
     if(mFT._id){
         await FTModel.findByIdAndDelete(mFT._id);
         res.sendStatus(StatusCodes.OK)

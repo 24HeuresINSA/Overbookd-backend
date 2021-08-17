@@ -14,6 +14,7 @@ class timeframe implements ITimeframe{
 }
 
 export interface IAvailabilities {
+    _id? : string;
     name: string,
     description?: string,
     days: timeframe[],

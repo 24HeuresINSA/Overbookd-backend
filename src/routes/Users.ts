@@ -2,10 +2,11 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
 import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
-import KcAdminClient, {requiredAction} from 'keycloak-admin';
-import UserModel from "@entities/User";
+import KcAdminClient from 'keycloak-admin';
+import UserModel, {IUser} from "@entities/User";
 import path from "path";
 import * as fs from "fs";
+import {friendRequest} from "../@types/express";
 const multer = require('multer');
 
 
@@ -25,10 +26,13 @@ const kcAdminClient = new KcAdminClient({
  * @returns 
  */
 export async function setUser(req: Request, res: Response) {
-    const mUser = req.body;
+    const mUser = <IUser> req.body;
     // create user in keycloak
     // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
+
+    delete mUser.password;
+    delete mUser.password2;
 
     await saveUser(mUser);
     res.status(CREATED).end();
@@ -143,8 +147,6 @@ export async function uploadPP(req: Request, res: Response) {
     // @ts-ignore
     const oldPP = (await UserModel.findById(req.body._id)).toObject()
     // @ts-ignore
-    console.log('asss', oldPP.pp)
-    // @ts-ignore
     if(oldPP.pp){
         // @ts-ignore
         const filename = oldPP.pp
@@ -154,7 +156,7 @@ export async function uploadPP(req: Request, res: Response) {
         fs.unlinkSync(`${dirname}/images/${filename}`)
         logger.info(`deleted ${filename} 🗑`)
     }
-
+    // @ts-ignore
     await UserModel.findByIdAndUpdate(req.body._id, {
         // @ts-ignore
         pp: req.files[0].filename,
@@ -170,6 +172,56 @@ export async function getPP(req: Request, res: Response) {
     const dirname = path.resolve();
     logger.info('getting image ' + filename)
     return res.sendFile(`${dirname}/images/${filename}`);
+}
+
+
+export async function createFriendship(req: Request, res: Response) {
+    // check if
+    let friends : friendRequest = <friendRequest>req.body;
+    logger.info('creating friendships ❤️ ' + friends + ' ...');
+
+    let fromUser = await UserModel.findById(friends.from);
+    let toUser = await UserModel.findById(friends.to.id);
+
+    if(fromUser && toUser){
+
+        let MFromUser = <IUser> fromUser.toObject();
+        let MToUser = <IUser> toUser.toObject();
+
+
+        let mFriends: { id: string; username: string; }[] = [];
+        let notifications = MFromUser.notifications;
+        notifications?.shift();
+        if (MFromUser.friends){
+            // @ts-ignore
+            mFriends =  MFromUser.friends;
+        }
+        mFriends.push(friends.to);
+        // @ts-ignore
+        await UserModel.findByIdAndUpdate(friends.from, {
+            friends: mFriends,
+            notifications
+        })
+
+        mFriends  = [];
+        if(MToUser.friends){
+            // @ts-ignore
+            mFriends = MToUser.friends;
+        }
+        mFriends.push({
+            username: `${MFromUser.firstname}.${MFromUser.lastname}`,
+            // @ts-ignore
+            id: MFromUser._id
+        })
+
+        // @ts-ignore
+        await UserModel.findByIdAndUpdate(friends.to.id, {
+            friends: mFriends
+        })
+    }
+
+    return res.sendStatus(200);
+
 }
 
 
