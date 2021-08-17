@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import EquipmentModel from "@entities/Equipment";
+import EquipmentModel, {IEquipment} from "@entities/Equipment";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
@@ -10,7 +10,7 @@ export async function getEquipment(req: Request, res: Response) {
 }
 
 export async function setEquipment(req: Request, res: Response) {
-    const mEquipment = req.body;
+    const mEquipment = <IEquipment> req.body;
     if(mEquipment.name === undefined){
         res.status(StatusCodes.BAD_REQUEST).json({error: "equipment must contain a name"})
     }

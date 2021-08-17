@@ -7,7 +7,7 @@ import {
     updateUserByKeycloakID,
     getAllUsersName,
     getUsers,
-    broadcastNotification, addNotificationByFullName, getPP, uploadPP
+    broadcastNotification, addNotificationByFullName, getPP, uploadPP, createFriendship
 } from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
@@ -24,6 +24,7 @@ userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID', updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
 userRouter.post('/broadcast', broadcastNotification)
+userRouter.post('/friends', createFriendship)
 
 const imageUpload = multer({
     dest: 'images',

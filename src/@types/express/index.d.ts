@@ -6,8 +6,20 @@ declare module 'express' {
             _id?: string;
             name?: RegExp | string | QuerySelector<RegExp | string> | any;
             keycloakID?: string;
-            value: string;
-            key: string;
-        };
+
+        } | friendRequest | Config;
+    }
+}
+
+export interface Config {
+    value: string,
+    key: string,
+}
+
+export interface friendRequest {
+    from: string,
+    to: {
+        id: string,
+        username: string,
     }
 }

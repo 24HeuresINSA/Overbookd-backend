@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
 
 export interface IFT{
+    _id?: string;
     name: string;
 }
 
