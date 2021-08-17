@@ -2,6 +2,8 @@ import { Schema, model, connect } from 'mongoose';
 import Any = jasmine.Any;
 
 export interface IUser {
+    password?: string;
+    password2?: string;
     notifications?: any[];
     _id?: string;
     id: number;

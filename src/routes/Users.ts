@@ -23,10 +23,13 @@ const kcAdminClient = new KcAdminClient();
  * @returns 
  */
 export async function setUser(req: Request, res: Response) {
-    const mUser = req.body;
+    const mUser = <IUser> req.body;
     // create user in keycloak
     // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
+
+    delete mUser.password;
+    delete mUser.password2;
 
     await saveUser(mUser);
     res.status(CREATED).end();
