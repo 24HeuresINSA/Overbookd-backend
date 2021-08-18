@@ -55,7 +55,8 @@ function exec(cmd: string, loc: string): Promise<void> {
                 logger.info(stdout);
             }
             if (!!stderr) {
-                logger.warn(stderr);
+                logger.err(stderr);
+                rej(stderr);
             }
             return (!!err ? rej(err) : res());
         });
