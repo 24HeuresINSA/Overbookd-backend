@@ -56,6 +56,7 @@ function exec(cmd: string, loc: string): Promise<void> {
             }
             if (!!stderr) {
                 logger.err(stderr);
+                rej(stderr);
             }
             return (!!err ? rej(err) : res());
         });
