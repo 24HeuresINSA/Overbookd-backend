@@ -7,8 +7,6 @@ declare module 'express' {
             name?: RegExp | string | QuerySelector<RegExp | string> | any;
             keycloakID?: string;
 
-        } | IConfig;
+        } | friendRequest | Config;
     }
 }
-
-

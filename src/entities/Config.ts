@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-interface IConfig {
+export interface IConfig {
     key: string,
     value:string,
 }

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Request, Response, Router} from 'express';
 import { getConfig, setConfig} from "./Config";
 import mCors from "../cors";
 import {
@@ -14,6 +14,10 @@ import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
 const multer = require('multer');
+
+function ping(req: Request, res: Response) {
+    return res.send('pong')
+}
 
 // User-route
 const userRouter = Router();
@@ -72,6 +76,10 @@ baseRouter.use('/FA', FArouter);
 baseRouter.use('/FT', FTrouter);
 baseRouter.use('/equipment', equipmentRouter);
 baseRouter.use('/availabilities', availabilitiesRouter);
+
+// ping
+baseRouter.get('/ping', ping);
+
 baseRouter.use(mCors)
 
 export default baseRouter;
