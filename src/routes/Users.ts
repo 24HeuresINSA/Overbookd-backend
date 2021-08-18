@@ -2,7 +2,7 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response} from 'express';
 import UserDao from '@daos/User/UserDao.mock';
 import logger from "@shared/Logger";
-import KcAdminClient from 'keycloak-admin';
+import KcAdminClient, {requiredAction} from 'keycloak-admin';
 import UserModel, {IUser} from "@entities/User";
 import path from "path";
 import * as fs from "fs";
@@ -68,7 +68,7 @@ async function createUserInKeycloak({firstname, lastname, password, email} ){
         }],
         realm: 'project_a',
     })
-    kcAdminClient.users.executeActionsEmail({
+    await kcAdminClient.users.executeActionsEmail({
         id: res.id,
         realm: 'project_a',
         actions: [requiredAction.VERIFY_EMAIL]
