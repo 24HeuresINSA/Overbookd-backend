@@ -6,7 +6,6 @@ import KcAdminClient from 'keycloak-admin';
 import UserModel, {IUser} from "@entities/User";
 import path from "path";
 import * as fs from "fs";
-import {friendRequest} from "../@types/express";
 const multer = require('multer');
 
 
@@ -167,14 +166,22 @@ export async function getPP(req: Request, res: Response) {
     return res.sendFile(`${dirname}/images/${filename}`);
 }
 
+interface friendRequest {
+    from: string,
+    to: {
+        id: string,
+        username: string,
+    }
+}
+
 
 export async function createFriendship(req: Request, res: Response) {
     // check if
-    let friends : friendRequest = <friendRequest>req.body;
+    let friends  = <friendRequest> req.body;
+
     logger.info('creating friendships ❤️ ' + friends + ' ...');
 
-    let fromUser = await UserModel.findById(friends.from);
-    let toUser = await UserModel.findById(friends.to.id);
+    let [fromUser, toUser] = await Promise.all([UserModel.findById(friends.from), UserModel.findById(friends.to.id)]);
 
     if(fromUser && toUser){
 

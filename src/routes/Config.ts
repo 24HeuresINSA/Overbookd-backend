@@ -2,9 +2,8 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response } from 'express';
 
 import UserDao from '@daos/User/UserDao.mock';
-import ConfigModel from "@entities/Config";
+import ConfigModel, {IConfig} from "@entities/Config";
 import logger from "@shared/Logger";
-import {Config} from "../@types/express";
 
 const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK } = StatusCodes;
@@ -25,7 +24,7 @@ export async function getConfig(req: Request, res: Response) {
 }
 
 export async function setConfig(req: Request, res: Response) {
-    const {key, value} = <Config> req.body;
+    const {key, value} = <IConfig> req.body;
     logger.info(`setting new config ${key}`)
     const isExisting = await ConfigModel.exists({key})
     if(isExisting){
