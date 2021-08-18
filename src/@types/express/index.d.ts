@@ -1,4 +1,4 @@
-import { IUser } from "@entities/User";
+import {IConfig} from "@entities/Config";
 
 declare module 'express' {
     export interface Request  {
@@ -7,19 +7,8 @@ declare module 'express' {
             name?: RegExp | string | QuerySelector<RegExp | string> | any;
             keycloakID?: string;
 
-        } | friendRequest | Config;
+        } | IConfig;
     }
 }
 
-export interface Config {
-    value: string,
-    key: string,
-}
 
-export interface friendRequest {
-    from: string,
-    to: {
-        id: string,
-        username: string,
-    }
-}
