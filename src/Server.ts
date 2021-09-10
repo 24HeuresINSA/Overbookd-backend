@@ -1,13 +1,9 @@
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import path from 'path';
 import helmet from 'helmet';
-import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
-import * as Sentry from "@sentry/node";
-import * as Tracing from "@sentry/tracing";
 
 import BaseRouter from './routes';
 import logger from '@shared/Logger';
@@ -32,11 +28,10 @@ app.use(mCors)
 // Keycloak
 import session, {MemoryStore} from 'express-session';
 import Keycloak from "keycloak-connect"
+import {keycloak, memoryStore} from "./keycloak";
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-const memoryStore = new MemoryStore();
+
 app.use(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     session({
         secret: "abcdefageguhdok654sd65_djzuéOdnjzKIJDjneé0I",
         resave: false,
@@ -44,10 +39,6 @@ app.use(
         store: memoryStore
     })
 );
-
-const keycloak = new Keycloak({
-    store: memoryStore
-});
 
 app.use(
     keycloak.middleware({

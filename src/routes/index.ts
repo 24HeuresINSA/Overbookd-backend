@@ -13,6 +13,9 @@ import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
+import {keycloak} from "../keycloak";
+import issueHandler from "./Issue";
+
 const multer = require('multer');
 
 function ping(req: Request, res: Response) {
@@ -21,14 +24,14 @@ function ping(req: Request, res: Response) {
 
 // User-route
 const userRouter = Router();
-userRouter.get('/', getUsers);
+userRouter.get('/', keycloak.protect(), getUsers);
 userRouter.post('/', setUser);
-userRouter.get('/all', getAllUsersName)
-userRouter.get('/:keycloakID', getUserByKeycloakID)
-userRouter.put('/:keycloakID', updateUserByKeycloakID)
-userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
-userRouter.post('/broadcast', broadcastNotification)
-userRouter.post('/friends', createFriendship)
+userRouter.get('/all',keycloak.protect(), getAllUsersName)
+userRouter.get('/:keycloakID',keycloak.protect(), getUserByKeycloakID)
+userRouter.put('/:keycloakID',keycloak.protect(), updateUserByKeycloakID)
+userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
+userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)
+userRouter.post('/friends',keycloak.protect(), createFriendship)
 
 const imageUpload = multer({
     dest: 'images',
@@ -76,6 +79,7 @@ baseRouter.use('/FA', FArouter);
 baseRouter.use('/FT', FTrouter);
 baseRouter.use('/equipment', equipmentRouter);
 baseRouter.use('/availabilities', availabilitiesRouter);
+baseRouter.post('/issue', issueHandler)
 
 // ping
 baseRouter.get('/ping', ping);

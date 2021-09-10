@@ -38,6 +38,8 @@ export async function setUser(req: Request, res: Response) {
 }
 
 export async function getUsers(req: Request, res: Response) {
+    //@ts-ignore
+    console.log(req.kauth.grant)
     const users = await UserModel.find({});
     res.json(users);
 }
@@ -73,7 +75,7 @@ async function createUserInKeycloak({firstname, lastname, password, email} ){
         realm: 'project_a',
         actions: [requiredAction.VERIFY_EMAIL]
     });
-    logger.info(`user ${lastname} registred in keycloak as ${res.id}`)
+    logger.info(`user ${lastname} registered in keycloak as ${res.id}`)
     return res.id
 }
 
@@ -117,8 +119,6 @@ export async function addNotificationByFullName(req: Request, res: Response) {
             res.sendStatus(NOT_FOUND)
         }
     }
-
-
 }
 
 export async function broadcastNotification({body}: Request, res: Response) {
@@ -143,26 +143,27 @@ export async function broadcastNotification({body}: Request, res: Response) {
 
 
 export async function uploadPP(req: Request, res: Response) {
-    // @ts-ignore
-    const oldPP = (await UserModel.findById(req.body._id)).toObject()
-    // @ts-ignore
-    if(oldPP.pp){
+    let queryResult = await UserModel.findById(req.body._id)
+    if(queryResult){
+        const oldPP = queryResult.toObject()
         // @ts-ignore
-        const filename = oldPP.pp
-        console.log(filename)
-        const dirname = path.resolve();
+        if(oldPP.pp){
+            // @ts-ignore
+            const filename = oldPP.pp
+            const dirname = path.resolve();
+            // @ts-ignore
+            fs.unlinkSync(`${dirname}/images/${filename}`)
+            logger.info(`deleted ${filename} 🗑`)
+        }
         // @ts-ignore
-        fs.unlinkSync(`${dirname}/images/${filename}`)
-        logger.info(`deleted ${filename} 🗑`)
-    }
-    // @ts-ignore
-    await UserModel.findByIdAndUpdate(req.body._id, {
-        // @ts-ignore
-        pp: req.files[0].filename,
-    })
-    logger.info('pp updated')
+        await UserModel.findByIdAndUpdate(req.body._id, {
+            // @ts-ignore
+            pp: req.files[0].filename,
+        })
+        logger.info('pp updated')
 
-    res.json('/image api');
+        res.json('/image api');
+    }
 }
 
 
