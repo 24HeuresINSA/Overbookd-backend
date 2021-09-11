@@ -20,6 +20,7 @@ export interface IUser {
     hasDriverLicense: boolean;
     birthday: Date;
     friends: string[]
+    transactionHistory?: any;
 }
 
 const UserSchema = new Schema<IUser>({

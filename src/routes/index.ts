@@ -7,7 +7,7 @@ import {
     updateUserByKeycloakID,
     getAllUsersName,
     getUsers,
-    broadcastNotification, addNotificationByFullName, getPP, uploadPP, createFriendship
+    broadcastNotification, addNotificationByFullName, getPP, uploadPP, createFriendship, transferMoney
 } from "./Users";
 import {getFAByName, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
@@ -32,6 +32,7 @@ userRouter.put('/:keycloakID',keycloak.protect(), updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
 userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)
 userRouter.post('/friends',keycloak.protect(), createFriendship)
+userRouter.post('/transfer', transferMoney)
 
 const imageUpload = multer({
     dest: 'images',

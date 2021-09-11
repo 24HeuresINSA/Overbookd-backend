@@ -23,10 +23,8 @@ const kcAdminClient = new KcAdminClient({
 export async function setUser(req: Request, res: Response) {
     const mUser = <IUser> req.body;
     // create user in keycloak
-    console.log(mUser)
     // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
-    console.log(mUser)
     delete mUser.password;
     delete mUser.password2;
 
@@ -35,8 +33,6 @@ export async function setUser(req: Request, res: Response) {
 }
 
 export async function getUsers(req: Request, res: Response) {
-    //@ts-ignore
-    console.log(req.kauth.grant)
     const users = await UserModel.find({});
     res.json(users);
 }
@@ -67,11 +63,13 @@ async function createUserInKeycloak({firstname, lastname, password, email} ){
         }],
         realm: 'project_a',
     })
-    await kcAdminClient.users.executeActionsEmail({
-        id: res.id,
-        realm: 'project_a',
-        actions: [requiredAction.VERIFY_EMAIL]
-    });
+    if(process.env.NODE_ENV !== 'development'){
+        await kcAdminClient.users.executeActionsEmail({
+            id: res.id,
+            realm: 'project_a',
+            actions: [requiredAction.VERIFY_EMAIL]
+        });
+    }
     logger.info(`user ${lastname} registered in keycloak as ${res.id}`)
     return res.id
 }
@@ -226,6 +224,63 @@ export async function createFriendship(req: Request, res: Response) {
     }
 
     return res.sendStatus(200);
+}
+
+
+export async function transferMoney(req: Request, res: Response) {
+    const transfer = req.body;
+    if(Math.sign(transfer.amount) === -1){
+        return res.sendStatus(400);
+    }
+    //@ts-ignore
+    const username = req.kauth.grant.access_token.content.preferred_username;
+    let [firstname, lastname] = username.split('.')
+    logger.info(`transferring money ${username}`)
+    const mUser = await UserModel.findOne({ firstname, lastname  })
+
+    if(mUser){
+        let mUserObject: IUser = mUser.toObject();
+        let transactionHistory = [];
+        if(mUserObject.transactionHistory){
+            transactionHistory = mUserObject.transactionHistory;
+        }
+        transactionHistory.unshift({
+            reason: `virement pour ${transfer.user}, ${transfer.reason}`,
+            amount: '- ' +transfer.amount,
+        })
+
+        await UserModel.findByIdAndUpdate(mUser._id, {
+            balance: +(mUserObject.balance || 0) - +transfer.amount,
+            transactionHistory,
+        })
+
+        // add money to recipient
+        let [firstnameR, lastnameR] = transfer.user.split('.')
+        const mUserR = await UserModel.findOne({
+            lastname: lastnameR,
+            firstname: firstnameR,
+
+        })
+        if(mUserR){
+            let mUserRObject: IUser = mUser.toObject();
+            let transactionHistoryR = [];
+            if(mUserRObject.transactionHistory){
+                transactionHistoryR = mUserRObject.transactionHistory;
+            }
+            transactionHistoryR.unshift({
+                reason: `virement par ${username} pour ${transfer.reason}`,
+                amount: '+ ' + transfer.amount,
+            })
+            await mUserR.updateOne({
+                balance: +(mUserRObject.balance || 0) + +transfer.amount,
+                transactionHistory: transactionHistoryR,
+            })
+            await mUserR.save()
+        }
+        res.sendStatus(200)
+    }
+
+
 
 }
 
