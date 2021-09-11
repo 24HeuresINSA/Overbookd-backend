@@ -27,7 +27,7 @@ const userRouter = Router();
 userRouter.get('/', keycloak.protect(), getUsers);
 userRouter.post('/', setUser);
 userRouter.get('/all',keycloak.protect(), getAllUsersName)
-userRouter.get('/:keycloakID',keycloak.protect(), getUserByKeycloakID)
+userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID',keycloak.protect(), updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
 userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)

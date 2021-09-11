@@ -6,10 +6,6 @@ import KcAdminClient, {requiredAction} from 'keycloak-admin';
 import UserModel, {IUser} from "@entities/User";
 import path from "path";
 import * as fs from "fs";
-const multer = require('multer');
-
-
-const userDao = new UserDao();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND} = StatusCodes;
 
 const kcAdminClient = new KcAdminClient({
@@ -27,9 +23,10 @@ const kcAdminClient = new KcAdminClient({
 export async function setUser(req: Request, res: Response) {
     const mUser = <IUser> req.body;
     // create user in keycloak
+    console.log(mUser)
     // @ts-ignore
     mUser.keycloakID = await createUserInKeycloak(mUser);
-
+    console.log(mUser)
     delete mUser.password;
     delete mUser.password2;
 
