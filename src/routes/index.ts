@@ -24,14 +24,14 @@ function ping(req: Request, res: Response) {
 
 // User-route
 const userRouter = Router();
-userRouter.get('/', keycloak.protect(), getUsers);
+userRouter.get('/', getUsers);
 userRouter.post('/', setUser);
-userRouter.get('/all',keycloak.protect(), getAllUsersName)
+userRouter.get('/all', getAllUsersName)
 userRouter.get('/:keycloakID', getUserByKeycloakID)
 userRouter.put('/:keycloakID', updateUserByKeycloakID)
-userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
-userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)
-userRouter.post('/friends',keycloak.protect(), createFriendship)
+userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
+userRouter.post('/broadcast', broadcastNotification)
+userRouter.post('/friends', createFriendship)
 userRouter.post('/transfer', transferMoney)
 
 const imageUpload = multer({
@@ -83,7 +83,7 @@ baseRouter.use('/availabilities', availabilitiesRouter);
 baseRouter.post('/issue', issueHandler)
 
 // ping
-baseRouter.get('/ping', ping);
+baseRouter.get('/ping',keycloak.protect(), ping);
 
 baseRouter.use(mCors)
 
