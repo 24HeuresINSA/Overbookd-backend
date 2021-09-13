@@ -9,7 +9,7 @@ import {
     getUsers,
     broadcastNotification, addNotificationByFullName, getPP, uploadPP, createFriendship, transferMoney
 } from "./Users";
-import {getFAByName, getFAs, setFA} from "./FA";
+import {createFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
@@ -50,7 +50,8 @@ configRouter.use(mCors);
 // FA-routes
 const FArouter = Router();
 FArouter.get('/', getFAs);
-FArouter.get('/:name', getFAByName);
+FArouter.get('/:id', getFAByCount);
+FArouter.post('/', createFA);
 FArouter.put('/', setFA);
 
 // FA-routes

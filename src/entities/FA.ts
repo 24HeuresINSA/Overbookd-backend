@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
 
 export interface IFA{
+    count: number;
     name: string;
     FTs : Object[];
 }
@@ -15,6 +16,7 @@ class FA implements IFA {
     FTs = [];
     constructor(
         public name: string,
+        public count: number,
     ) {
     }
 }

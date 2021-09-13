@@ -11,22 +11,25 @@ export async function getFAs(req: Request, res: Response) {
     res.json(FAs)
 }
 
-export async function getFAByName(req: Request, res: Response) {
-    if(req.params.name === undefined){
-        res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain a name"})
+export async function getFAByCount(req: Request, res: Response) {
+    if(req.params.id === undefined){
+        res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain an id"})
     }
-
+    logger.info(`getting info ${req.params.id}`)
     // @ts-ignore
-    let mFA = (await FAModel.findOne({name: req.params.name})).toObject()
-    if(mFA && mFA.FTs){
-        let FTs = mFA.FTs.map(async (FTID) => (await FTModel.findById(FTID)))
-        // @ts-ignore
-        FTs = await Promise.all(FTs)
-        // @ts-ignore
-        mFA.FTs = FTs
-
+    let mFAQuery = await FAModel.findOne({count: +req.params.id})
+    if(mFAQuery){
+        let mFA = mFAQuery.toObject()
+        if(mFA && mFA.FTs){
+            let FTs = mFA.FTs.map(async (FTID) => (await FTModel.findById(FTID)))
+            // @ts-ignore
+            FTs = await Promise.all(FTs)
+            // @ts-ignore
+            mFA.FTs = FTs
+        }
+        res.json(mFA);
     }
-    res.json(mFA);
+
 }
 
 export async function setFA(req: Request, res: Response) {
@@ -45,4 +48,16 @@ export async function setFA(req: Request, res: Response) {
         await FAModel.create(mFA);
         res.sendStatus(StatusCodes.CREATED)
     }
+}
+
+export async function createFA(req: Request, res: Response) {
+    const mFA = <IFA> req.body;
+    if(mFA.name === undefined){
+        res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain a name"})
+    }
+    mFA.count = (await FAModel.count()) + 1;
+    // creating FA
+    logger.info(`creating FA ${mFA.name} id: ${mFA.count}`)
+    await FAModel.create(mFA);
+    res.sendStatus(StatusCodes.CREATED)
 }
