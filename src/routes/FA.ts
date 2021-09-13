@@ -37,16 +37,11 @@ export async function setFA(req: Request, res: Response) {
     if(mFA.name === undefined){
         res.status(StatusCodes.BAD_REQUEST).json({error: "FA must contain a name"})
     }
-    if (await FAModel.exists({name: mFA.name})){
+    if (await FAModel.exists({count: mFA.count})){
         // this FA already exists so update it
-        logger.info(`updating FA ${mFA.name}`)
-        await FAModel.replaceOne({name: mFA.name}, mFA)
+        logger.info(`updating FA ${mFA.count} - ${mFA.name}`)
+        await FAModel.replaceOne({count: mFA.count}, mFA)
         res.sendStatus(StatusCodes.OK)
-    } else {
-        // creating FA
-        logger.info(`creating FA ${mFA.name}`)
-        await FAModel.create(mFA);
-        res.sendStatus(StatusCodes.CREATED)
     }
 }
 
