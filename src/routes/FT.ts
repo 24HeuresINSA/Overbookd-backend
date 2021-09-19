@@ -1,6 +1,7 @@
 import StatusCodes from 'http-status-codes';
 import {Request, Response} from "express";
 import FTModel, {IFT} from "@entities/FT";
+import logger from "@shared/Logger";
 
 
 export async function getAllFTs(req: Request, res: Response) {
@@ -27,6 +28,24 @@ export async function updateFT(req: Request, res: Response) {
         res.sendStatus(StatusCodes.OK)
     } else {
         res.sendStatus(StatusCodes.BAD_REQUEST)
+    }
+}
+
+export async function unassign(req: Request, res: Response){
+    // unassign a user from an FT
+    const {FTID, _id} = req.body;
+    let FT =  await FTModel.findById(FTID);
+    if (FT){
+        let mFT = <IFT> FT.toObject()
+        mFT.schedules?.forEach(schedule => {
+            if (schedule.assigned){
+                schedule.assigned = schedule.assigned.filter(assign => assign._id !== _id);
+            }
+        })
+        logger.info(`unassigning ${FTID}`)
+        await FTModel.findByIdAndUpdate(FTID, {
+            schedules: mFT.schedules
+        });
     }
 }
 

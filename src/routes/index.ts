@@ -12,7 +12,7 @@ import {
 import {createFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
-import {createFT, deleteFT, getAllFTs, getFTByID, updateFT} from "./FT";
+import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT} from "./FT";
 import {keycloak} from "../keycloak";
 import issueHandler from "./Issue";
 
@@ -54,12 +54,13 @@ FArouter.get('/:id', getFAByCount);
 FArouter.post('/', createFA);
 FArouter.put('/', setFA);
 
-// FA-routes
+// FT-routes
 const FTrouter = Router();
 FTrouter.get('/', getAllFTs);
 FTrouter.get('/:FTID', getFTByID);
 FTrouter.post('/', createFT);
 FTrouter.put('/', updateFT);
+FTrouter.put('/unassign', unassign);
 FTrouter.delete('/', deleteFT);
 
 // Equipment-routes
