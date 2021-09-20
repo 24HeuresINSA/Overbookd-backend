@@ -9,7 +9,7 @@ export const keycloak = new Keycloak({
 }, {
     "realm": "project_a",
     "bearer-only": true,
-    "auth-server-url": "http://localhost:8080/auth/",
+    "auth-server-url": process.env.AUTH_URL || 'http://localhist:8080/auth',
     "ssl-required": "external",
     "resource": "project_a_api",
     "confidential-port": 0
