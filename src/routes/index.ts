@@ -43,7 +43,7 @@ userRouter.get('/pp/:filename', getPP)
 
 // Config-route
 const configRouter = Router();
-configRouter.get('/',keycloak.protect(), getConfig);
+configRouter.get('/',getConfig);
 configRouter.put('/',keycloak.protect(), setConfig);
 configRouter.use(mCors);
 
