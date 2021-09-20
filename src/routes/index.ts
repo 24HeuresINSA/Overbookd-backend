@@ -24,15 +24,15 @@ function ping(req: Request, res: Response) {
 
 // User-route
 const userRouter = Router();
-userRouter.get('/', getUsers);
+userRouter.get('/',keycloak.protect(), getUsers);
 userRouter.post('/', setUser);
-userRouter.get('/all', getAllUsersName)
-userRouter.get('/:keycloakID', getUserByKeycloakID)
-userRouter.put('/:keycloakID', updateUserByKeycloakID)
-userRouter.put('/notification/:lastname/:firstname', addNotificationByFullName)
-userRouter.post('/broadcast', broadcastNotification)
-userRouter.post('/friends', createFriendship)
-userRouter.post('/transfer', transferMoney)
+userRouter.get('/all',keycloak.protect(), getAllUsersName)
+userRouter.get('/:keycloakID',keycloak.protect(), getUserByKeycloakID)
+userRouter.put('/:keycloakID',keycloak.protect(), updateUserByKeycloakID)
+userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
+userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)
+userRouter.post('/friends',keycloak.protect(), createFriendship)
+userRouter.post('/transfer',keycloak.protect(), transferMoney)
 
 const imageUpload = multer({
     dest: 'images',
@@ -43,36 +43,36 @@ userRouter.get('/pp/:filename', getPP)
 
 // Config-route
 const configRouter = Router();
-configRouter.get('/', getConfig);
-configRouter.put('/', setConfig);
+configRouter.get('/',keycloak.protect(), getConfig);
+configRouter.put('/',keycloak.protect(), setConfig);
 configRouter.use(mCors);
 
 // FA-routes
 const FArouter = Router();
-FArouter.get('/', getFAs);
-FArouter.get('/:id', getFAByCount);
-FArouter.post('/', createFA);
-FArouter.put('/', setFA);
+FArouter.get('/',keycloak.protect(), getFAs);
+FArouter.get('/:id',keycloak.protect(), getFAByCount);
+FArouter.post('/',keycloak.protect(), createFA);
+FArouter.put('/',keycloak.protect(), setFA);
 
 // FT-routes
 const FTrouter = Router();
-FTrouter.get('/', getAllFTs);
-FTrouter.get('/:FTID', getFTByID);
-FTrouter.post('/', createFT);
-FTrouter.put('/', updateFT);
-FTrouter.put('/unassign', unassign);
-FTrouter.delete('/', deleteFT);
+FTrouter.get('/',keycloak.protect(), getAllFTs);
+FTrouter.get('/:FTID',keycloak.protect(), getFTByID);
+FTrouter.post('/',keycloak.protect(), createFT);
+FTrouter.put('/',keycloak.protect(), updateFT);
+FTrouter.put('/unassign',keycloak.protect(), unassign);
+FTrouter.delete('/',keycloak.protect(), deleteFT);
 
 // Equipment-routes
 const equipmentRouter = Router();
-equipmentRouter.get('/', getEquipment);
-equipmentRouter.put('/', setEquipment)
+equipmentRouter.get('/',keycloak.protect(), getEquipment);
+equipmentRouter.put('/',keycloak.protect(), setEquipment)
 
 // Availabilities routes
 const availabilitiesRouter = Router();
-availabilitiesRouter.get('/', getAvailabilities)
-availabilitiesRouter.post('/', setAvailabilities)
-availabilitiesRouter.put('/', updateAvailabilities)
+availabilitiesRouter.get('/',keycloak.protect(), getAvailabilities)
+availabilitiesRouter.post('/',keycloak.protect(), setAvailabilities)
+availabilitiesRouter.put('/',keycloak.protect(), updateAvailabilities)
 
 // Export the base-router
 const baseRouter = Router();
