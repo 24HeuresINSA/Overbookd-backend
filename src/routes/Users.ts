@@ -146,9 +146,10 @@ export async function uploadPP(req: Request, res: Response) {
             // @ts-ignore
             const filename = oldPP.pp
             const dirname = path.resolve();
-            // @ts-ignore
-            fs.unlinkSync(`${dirname}/images/${filename}`)
-            logger.info(`deleted ${filename} 🗑`)
+            if (fs.existsSync(`${dirname}/images/${filename}`)){
+                fs.unlinkSync(`${dirname}/images/${filename}`)
+                logger.info(`deleted ${filename} 🗑`)
+            }
         }
         // @ts-ignore
         await UserModel.findByIdAndUpdate(req.body._id, {
