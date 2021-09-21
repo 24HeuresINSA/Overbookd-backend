@@ -1,5 +1,9 @@
 # PROJECT A - BACKEND
 
+![](https://gitlab.com/24-heures-insa/overbookd/backend/badges/develop/pipeline.svg?key_text=develop+pipeleine&key_width=105)
+![](https://gitlab.com/24-heures-insa/overbookd/backend/badges/pre-prod/pipeline.svg?key_text=pre-prod+pipeleine&key_width=110)
+![](https://gitlab.com/24-heures-insa/overbookd/backend/badges/master/pipeline.svg?key_text=master+pipeleine&key_width=100)
+
 La refonte d'Assomaker est un projet qui depuis quelques années est dans les discussions. 
 Le logiciel devient vieux et les technologies utilisées associé au manque de documentation
 rends la maintenance et l'exploitation assez difficile. L'objectif de ce projet est, en 
