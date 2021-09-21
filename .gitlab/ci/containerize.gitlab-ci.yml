@@ -24,6 +24,8 @@ containerize:
     - mv buildx ~/.docker/cli-plugins/docker-buildx
     - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - ls -al
+    - echo $VERSION_TAG
   script:
     - docker buildx create --use
     - docker buildx build --push --platform linux/amd64,linux/arm64 --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$VERSION_TAG --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$TAG .
