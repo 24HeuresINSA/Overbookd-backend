@@ -9,11 +9,8 @@ containerize:
     - mv buildx ~/.docker/cli-plugins/docker-buildx
     - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
-    - ls -al
     - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then VERSION_TAG=$(cat package.json | grep version | head -1  | head -1  | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'); else VERSION_TAG=${CI_COMMIT_REF_NAME}_$(cat package.json | grep version | head -1  | head -1  | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'); fi
     - if [ "$CI_COMMIT_REF_NAME" = "master"]; then TAG="latest"; else TAG=$CI_COMMIT_REF_NAME; fi
-    - echo $VERSION_TAG
-    - echo $TAG
   script:
     - docker buildx create --use
     - docker buildx build --push --platform linux/amd64,linux/arm64 --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$VERSION_TAG --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$TAG .
