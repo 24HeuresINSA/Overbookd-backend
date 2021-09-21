@@ -29,3 +29,5 @@ containerize:
     - docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$VERSION_TAG --tag registry.gitlab.com/24-heures-insa/overbookd/backend:$TAG .
   only:
     - master
+    - pre-prod
+    - develop
