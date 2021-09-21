@@ -12,6 +12,7 @@ networks:
 
 services:
   db_keycloak:
+    platform: linux/x86_64
     image: library/mysql
     restart: always
     volumes:
@@ -32,6 +33,9 @@ services:
     platform: linux/x86_64
     image: library/mysql
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_project_a_database:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: overbookd
@@ -39,9 +43,14 @@ services:
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     networks:
       - api
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
 
 
   keycloak:
+    platform: linux/x86_64
     image: jboss/keycloak
     restart: always
     environment:
@@ -61,7 +70,6 @@ services:
       - ./assets/json/realm-export.json:/tmp/realm-export.json
     networks: 
       - net_keycloak
-      - api
     depends_on:
       db_keycloak:
         condition: service_healthy

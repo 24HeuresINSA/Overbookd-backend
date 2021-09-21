@@ -15,5 +15,3 @@ buildx:
     - docker build --platform=local -o . ./docker-buildx
   only:
     - master
-    - pre-prod
-    - develop
