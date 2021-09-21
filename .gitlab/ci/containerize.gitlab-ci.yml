@@ -3,15 +3,15 @@ workflow:
     - if: '$CI_COMMIT_REF_NAME== "master"'
       variables:
         TAG: latest
-        VERSION_TAG: ${cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
+        VERSION_TAG: ${cat package.json | grep version | head -1  | head -1  | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
     - if: '$CI_COMMIT_REF_NAME == "pre-prod"'
       variables:
         TAG: $CI_COMMIT_REF_NAME
-        VERSION_TAG: ${CI_COMMIT_REF_NAME}_${cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
+        VERSION_TAG: ${CI_COMMIT_REF_NAME}_${cat package.json | grep version | head -1  | head -1  | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
     - if: '$CI_COMMIT_REF_NAME == "develop"'
       variables:
         TAG: $CI_COMMIT_REF_NAME
-        VERSION_TAG: ${CI_COMMIT_REF_NAME}_${cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
+        VERSION_TAG: ${CI_COMMIT_REF_NAME}_${cat package.json | grep version | head -1  | head -1  | sed 's/[version:,\",]//g' | tr -d '[[:space:]]'}
 
 containerize:
   image: docker
