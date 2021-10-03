@@ -103,12 +103,15 @@ export async function addNotificationByFullName(req: Request, res: Response) {
     } else {
         let user = await UserModel.findOne({firstname : query.firstname, lastname: query.lastname});
         if (user){
-            if(user.notifications === undefined){
-                user.notifications = [];
+            let mUser = <IUser> user.toObject();
+            if(mUser.notifications === undefined){
+                mUser.notifications = [];
             }
+            mUser.notifications.push(req.body)
             // @ts-ignore
-            user.notifications.push(req.body)
-            await UserModel.findByIdAndUpdate(user._id, {notifications: user.notifications})
+            await UserModel.findByIdAndUpdate(user._id, {
+                notifications: mUser.notifications,
+            })
             res.sendStatus(OK)
         } else {
             res.sendStatus(NOT_FOUND)
