@@ -6,6 +6,7 @@
   "exclude": [
     "spec",
     "src/**/*.mock.ts",
-    "src/public/"
+    "src/public/",
+    "node_modules"
   ]
 }
