@@ -85,6 +85,7 @@
     "spec/**/*.ts"
   ],
   "exclude": [
-    "src/public/"
+    "src/public/",
+    "node_modules"
   ]
 }
