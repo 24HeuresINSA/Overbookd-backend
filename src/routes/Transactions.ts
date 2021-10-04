@@ -113,18 +113,28 @@ export async function addTransfer(req: Request, res: Response) {
     let data;
     try {
         // check type
-        if (transfer && transfer.type == "transfer") {
-            // TODO check if from == same as in token
-            data = await TransactionModel.create(transfer);
-            // update user balance
-            await updateUsersBalance(transfer)
-        } else {
-            throw new Error();
+        if (!transfer || transfer.type !== "transfer") {
+            return res.status(403).send("wrong type")
         }
+        //@ts-ignore
+        const actualKeycloakID = req.kauth.grant.access_token.content.sub
+        if (actualKeycloakID !== transfer.from){ // check user identity
+            return res.status(403).send("user not matching with token")
+        }
+
+        if (transfer.amount < 0){ // negative transaction
+            return res.status(403).send("negative amounts are forbidden")
+        }
+        logger.info(`new transaction requested from ${transfer.from} to ${transfer.to} of ${transfer.amount}`)
+        data = await TransactionModel.create(transfer);
+        // update user balance
+        await updateUsersBalance(transfer)
+        return res.send(data)
+
     } catch (error) {
         logger.info(error);
         // handle the error
-        res.status(500).end();
+        res.sendStatus(500);
     }
     res.json(data);
 }
