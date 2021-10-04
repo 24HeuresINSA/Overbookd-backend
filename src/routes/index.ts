@@ -80,7 +80,7 @@ availabilitiesRouter.put('/',keycloak.protect(), updateAvailabilities)
 const transactionRouter = Router();
 transactionRouter.get('/', keycloak.protect(), TransactionHandlers.getAllTransactions)
 transactionRouter.get('/sg', keycloak.protect(), TransactionHandlers.getSgTransactions)
-transactionRouter.get('/user', keycloak.enforcer('user:profile', {response_mode: 'token'}), TransactionHandlers.getSelfTransactions)
+transactionRouter.get('/user',keycloak.protect(), TransactionHandlers.getSelfTransactions)
 transactionRouter.get('/user/:keycloakID', keycloak.protect(), TransactionHandlers.getUserTransactions)
 transactionRouter.post('/sg', keycloak.protect(), TransactionHandlers.addSgTransactions)
 transactionRouter.post('/transfer', keycloak.protect(), TransactionHandlers.addTransfer)

@@ -1,7 +1,9 @@
 import logger from "@shared/Logger";
 import { Request, Response, NextFunction } from "express";
-import TransactionModel from "../entities/Transaction";
+import TransactionModel, {ITransaction} from "../entities/Transaction";
 import UserModel from "../entities/User";
+import {keycloak} from "../keycloak";
+import mapContaining = jasmine.mapContaining;
 
 // GET
 
@@ -32,6 +34,7 @@ export async function getSgTransactions(req: Request, res: Response) {
 
 export async function getSelfTransactions(req: Request, res: Response) {
     //TODO: Implement better way
+    //@ts-ignore
     const username = req.kauth.grant.access_token.content.preferred_username;
     let [firstname, lastname] = username.split('.')
     let data;
@@ -77,10 +80,11 @@ export async function getUserTransactions(req: Request, res: Response) {
 // POST
 
 export async function addSgTransactions(req: Request, res: Response) {
-    const newTransactions = req.body;
+    const newTransactions: ITransaction[] = req.body;
     let data;
     try {
         data = await TransactionModel.create(newTransactions);
+        await Promise.all(newTransactions.map(updateUsersBalance))
     } catch (error) {
         logger.info(error);
         // handle the error
@@ -89,13 +93,31 @@ export async function addSgTransactions(req: Request, res: Response) {
     res.json(data);
 }
 
+async function updateUserBalanceByKeycloakID(keycloakID: null | string, amount: number){
+    if (keycloakID){
+        let user = await UserModel.findOne({keycloakID: keycloakID})
+        if (user){
+            user.balance = +user.balance + amount;
+            user.save()
+        }
+    }
+}
+
+async function updateUsersBalance(transfer: ITransaction){
+    await updateUserBalanceByKeycloakID(transfer.from, -transfer.amount)
+    await updateUserBalanceByKeycloakID(transfer.to, +transfer.amount)
+}
+
 export async function addTransfer(req: Request, res: Response) {
     let transfer = req.body;
     let data;
     try {
         // check type
         if (transfer && transfer.type == "transfer") {
+            // TODO check if from == same as in token
             data = await TransactionModel.create(transfer);
+            // update user balance
+            await updateUsersBalance(transfer)
         } else {
             throw new Error();
         }
@@ -108,7 +130,6 @@ export async function addTransfer(req: Request, res: Response) {
 }
 
 // PUT
-
 export async function updateTransaction(req: Request, res: Response) {
     let id = req.params.id
     let update = req.body

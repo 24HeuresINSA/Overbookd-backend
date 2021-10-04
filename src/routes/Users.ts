@@ -89,11 +89,22 @@ export async function updateUserByKeycloakID(req: Request, res: Response) {
     res.json(mUser)
 }
 
+function capitalizeFirstLetter(s: string) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+
 
 export async function getAllUsersName(req: Request, res: Response) {
     // TODO check role
     let users= await UserModel.find({});
-    res.json(users.map(user => user.firstname + '.' +  user.lastname));
+    res.json(users.map(user => {
+        return {
+            username: `${capitalizeFirstLetter(user.firstname)} ${user.lastname.toUpperCase()}`,
+            keycloakID: user.keycloakID
+        }
+
+    }));
 }
 
 export async function addNotificationByFullName(req: Request, res: Response) {
