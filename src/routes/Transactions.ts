@@ -1,7 +1,9 @@
 import logger from "@shared/Logger";
 import { Request, Response, NextFunction } from "express";
-import TransactionModel from "../entities/Transaction";
+import TransactionModel, {ITransaction} from "../entities/Transaction";
 import UserModel from "../entities/User";
+import {keycloak} from "../keycloak";
+import mapContaining = jasmine.mapContaining;
 
 // GET
 
@@ -32,6 +34,7 @@ export async function getSgTransactions(req: Request, res: Response) {
 
 export async function getSelfTransactions(req: Request, res: Response) {
     //TODO: Implement better way
+    //@ts-ignore
     const username = req.kauth.grant.access_token.content.preferred_username;
     let [firstname, lastname] = username.split('.')
     let data;
@@ -77,16 +80,32 @@ export async function getUserTransactions(req: Request, res: Response) {
 // POST
 
 export async function addSgTransactions(req: Request, res: Response) {
-    const newTransactions = req.body;
+    const newTransactions: ITransaction[] = req.body;
     let data;
     try {
         data = await TransactionModel.create(newTransactions);
+        await Promise.all(newTransactions.map(updateUsersBalance))
     } catch (error) {
         logger.info(error);
         // handle the error
         res.status(500).end();
     }
     res.json(data);
+}
+
+async function updateUserBalanceByKeycloakID(keycloakID: null | string, amount: number){
+    if (keycloakID){
+        let user = await UserModel.findOne({keycloakID: keycloakID})
+        if (user){
+            user.balance = +user.balance + amount;
+            user.save()
+        }
+    }
+}
+
+async function updateUsersBalance(transfer: ITransaction){
+    await updateUserBalanceByKeycloakID(transfer.from, -transfer.amount)
+    await updateUserBalanceByKeycloakID(transfer.to, +transfer.amount)
 }
 
 export async function addTransfer(req: Request, res: Response) {
@@ -94,21 +113,33 @@ export async function addTransfer(req: Request, res: Response) {
     let data;
     try {
         // check type
-        if (transfer && transfer.type == "transfer") {
-            data = await TransactionModel.create(transfer);
-        } else {
-            throw new Error();
+        if (!transfer || transfer.type !== "transfer") {
+            return res.status(403).send("wrong type")
         }
+        //@ts-ignore
+        const actualKeycloakID = req.kauth.grant.access_token.content.sub
+        if (actualKeycloakID !== transfer.from){ // check user identity
+            return res.status(403).send("user not matching with token")
+        }
+
+        if (transfer.amount < 0){ // negative transaction
+            return res.status(403).send("negative amounts are forbidden")
+        }
+        logger.info(`new transaction requested from ${transfer.from} to ${transfer.to} of ${transfer.amount}`)
+        data = await TransactionModel.create(transfer);
+        // update user balance
+        await updateUsersBalance(transfer)
+        return res.send(data)
+
     } catch (error) {
         logger.info(error);
         // handle the error
-        res.status(500).end();
+        res.sendStatus(500);
     }
     res.json(data);
 }
 
 // PUT
-
 export async function updateTransaction(req: Request, res: Response) {
     let id = req.params.id
     let update = req.body
