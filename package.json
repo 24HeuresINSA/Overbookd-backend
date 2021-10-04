@@ -3,11 +3,24 @@
   "version": "0.2.0",
   "scripts": {
     "build": "./node_modules/.bin/ts-node build.ts",
-    "lint": "eslint . --ext .ts",
+    "lint:check": "eslint .",
+    "lint": "eslint . --fix",
+    "pretify:check": "prettier . --check",
+    "pretify": "prettier . --write",
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
     "test": "nodemon --config ./spec/nodemon.json",
     "test:no-reloading": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./spec"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js}": [
+      "npm run lint",
+      "npm run pretify"
+    ],
+    "spec/**/*.{ts,js}": [
+      "npm run lint",
+      "npm run pretify"
+    ]
   },
   "nodemonConfig": {
     "watch": [
@@ -25,40 +38,6 @@
     "@shared": "dist/shared",
     "@server": "dist/Server"
   },
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "rules": {
-      "max-len": [
-        "error",
-        {
-          "code": 100
-        }
-      ],
-      "no-console": 1,
-      "no-extra-boolean-cast": 0,
-      "@typescript-eslint/restrict-plus-operands": 0,
-      "@typescript-eslint/explicit-module-boundary-types": 0,
-      "@typescript-eslint/no-explicit-any": 0,
-      "@typescript-eslint/no-floating-promises": 0,
-      "@typescript-eslint/no-unsafe-member-access": 0,
-      "@typescript-eslint/no-unsafe-assignment": 0
-    }
-  },
-  "eslintIgnore": [
-    "src/public/",
-    "build.ts"
-  ],
   "dependencies": {
     "@sentry/node": "^6.9.0",
     "@sentry/tracing": "^6.9.0",
@@ -98,11 +77,15 @@
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-vue": "^7.15.1",
     "find": "^0.3.0",
     "fs-extra": "^10.0.0",
+    "husky": "^7.0.2",
     "jasmine": "^3.8.0",
+    "lint-staged": "^11.2.0",
     "nodemon": "^2.0.12",
+    "prettier": "^2.4.1",
     "supertest": "^6.1.3",
     "ts-node": "^10.1.0",
     "tsconfig-paths": "^3.10.1",

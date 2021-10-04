@@ -3,10 +3,5 @@
   "compilerOptions": {
     "sourceMap": false
   },
-  "exclude": [
-    "spec",
-    "src/**/*.mock.ts",
-    "src/public/",
-    "node_modules"
-  ]
+  "exclude": ["spec", "src/**/*.mock.ts"]
 }

@@ -1,26 +1,26 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
-export interface IEquipment{
-    name: string;
-    amount: number
-    height?: number;
-    width?: number;
-    image?: string;
+export interface IEquipment {
+  name: string;
+  amount: number;
+  height?: number;
+  width?: number;
+  image?: string;
 }
 
-const EquipmentSchema = new Schema<IEquipment>({
+const EquipmentSchema = new Schema<IEquipment>(
+  {
     name: { type: String, required: true },
-},{strict: false})
+  },
+  { strict: false }
+);
 
-const EquipmentModel = model<Equipment>('Equipment', EquipmentSchema);
+const EquipmentModel = model<Equipment>("Equipment", EquipmentSchema);
 
 class Equipment implements IEquipment {
-    amount = 1;
+  amount = 1;
 
-    constructor(
-        public name: string,
-    ) {
-    }
+  constructor(public name: string) {}
 }
 
-export default EquipmentModel
+export default EquipmentModel;

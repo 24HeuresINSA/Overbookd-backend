@@ -1,6 +1,4 @@
 //Import the mongoose module
-import mongoose  from 'mongoose';
+import mongoose from "mongoose";
 
-
-
-export default { mongoose }
+export default { mongoose };
