@@ -1,24 +1,23 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
-export interface IFA{
-    count: number;
-    name: string;
-    FTs : Object[];
+export interface IFA {
+  count: number;
+  name: string;
+  FTs: Record<string, unknown>[];
 }
 
-const FASchema = new Schema<IFA>({
+const FASchema = new Schema<IFA>(
+  {
     name: { type: String, required: true },
-},{strict: false})
+  },
+  { strict: false }
+);
 
-const FAModel = model<FA>('FA', FASchema);
+const FAModel = model<FA>("FA", FASchema);
 
 class FA implements IFA {
-    FTs = [];
-    constructor(
-        public name: string,
-        public count: number,
-    ) {
-    }
+  FTs = [];
+  constructor(public name: string, public count: number) {}
 }
 
-export default FAModel
+export default FAModel;

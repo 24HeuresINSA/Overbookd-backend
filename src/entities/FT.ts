@@ -1,41 +1,41 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
-export interface IFT{
-    schedules?: ISchedule[];
-    _id?: string;
-    name: string;
+export interface IFT {
+  schedules?: ISchedule[];
+  _id?: string;
+  name: string;
 }
 
 interface ISchedule {
-    date: string;
-    start: Date;
-    end: Date;
-    needs: INeed[];
-    assigned?: IAssign[];
+  date: string;
+  start: Date;
+  end: Date;
+  needs: INeed[];
+  assigned?: IAssign[];
 }
 
 interface INeed {
-    role?: string;
-    amount?: number;
+  role?: string;
+  amount?: number;
 }
 
 interface IAssign {
-    userID: string;
-    _id: string;
-    username?: string;
+  userID: string;
+  _id: string;
+  username?: string;
 }
 
-const FTSchema = new Schema<IFT>({
+const FTSchema = new Schema<IFT>(
+  {
     name: { type: String, required: true },
-},{strict: false})
+  },
+  { strict: false }
+);
 
-const FTModel = model<FT>('FT', FTSchema);
+const FTModel = model<FT>("FT", FTSchema);
 
 class FT implements IFT {
-    constructor(
-        public name: string,
-    ) {
-    }
+  constructor(public name: string) {}
 }
 
-export default FTModel
+export default FTModel;
