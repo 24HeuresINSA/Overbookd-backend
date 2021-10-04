@@ -5,13 +5,11 @@
 import fs from 'fs-extra';
 import Logger from 'jet-logger';
 import childProcess from 'child_process';
+import { exit } from 'process';
 
 // Setup logger
 const logger = new Logger();
 logger.timestamp = false;
-
-
-
 
 (async () => {
     try {
@@ -26,9 +24,10 @@ logger.timestamp = false;
         await exec('tsc --build tsconfig.prod.json', './')
     } catch (err) {
         logger.err(err);
+        // panic to abort build process
+        exit(-1);
     }
 })();
-
 
 function remove(loc: string): Promise<void> {
     return new Promise((res, rej) => {
@@ -38,7 +37,6 @@ function remove(loc: string): Promise<void> {
     });
 }
 
-
 function copy(src: string, dest: string): Promise<void> {
     return new Promise((res, rej) => {
         return fs.copy(src, dest, (err) => {
@@ -46,7 +44,6 @@ function copy(src: string, dest: string): Promise<void> {
         });
     });
 }
-
 
 function exec(cmd: string, loc: string): Promise<void> {
     return new Promise((res, rej) => {
