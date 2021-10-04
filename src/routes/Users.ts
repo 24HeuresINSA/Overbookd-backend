@@ -227,7 +227,7 @@ export async function createFriendship(req: Request, res: Response) {
             mFriends = MToUser.friends;
         }
         mFriends.push({
-            username: `${MFromUser.firstname}.${MFromUser.lastname}`,
+            username: `${capitalizeFirstLetter(MFromUser.firstname)} ${ MFromUser.lastname.toUpperCase()}`,
             // @ts-ignore
             id: MFromUser._id
         })
