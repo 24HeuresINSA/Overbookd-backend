@@ -13,6 +13,7 @@ import {createFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT} from "./FT";
+import * as TransactionHandlers from "./Transactions";
 import {keycloak} from "../keycloak";
 import issueHandler from "./Issue";
 
@@ -32,7 +33,7 @@ userRouter.put('/:keycloakID',keycloak.protect(), updateUserByKeycloakID)
 userRouter.put('/notification/:lastname/:firstname',keycloak.protect(), addNotificationByFullName)
 userRouter.post('/broadcast',keycloak.protect(), broadcastNotification)
 userRouter.post('/friends',keycloak.protect(), createFriendship)
-userRouter.post('/transfer',keycloak.protect(), transferMoney)
+userRouter.post('/transfer', keycloak.enforcer('user:profile', {response_mode: 'token'}), transferMoney)
 
 const imageUpload = multer({
     dest: 'images',
@@ -74,6 +75,19 @@ availabilitiesRouter.get('/',keycloak.protect(), getAvailabilities)
 availabilitiesRouter.post('/',keycloak.protect(), setAvailabilities)
 availabilitiesRouter.put('/',keycloak.protect(), updateAvailabilities)
 
+// Transactions routes
+
+const transactionRouter = Router();
+transactionRouter.get('/', keycloak.protect(), TransactionHandlers.getAllTransactions)
+transactionRouter.get('/sg', keycloak.protect(), TransactionHandlers.getSgTransactions)
+transactionRouter.get('/user',keycloak.protect(), TransactionHandlers.getSelfTransactions)
+transactionRouter.get('/user/:keycloakID', keycloak.protect(), TransactionHandlers.getUserTransactions)
+transactionRouter.post('/sg', keycloak.protect(), TransactionHandlers.addSgTransactions)
+transactionRouter.post('/transfer', keycloak.protect(), TransactionHandlers.addTransfer)
+transactionRouter.put('/:id', keycloak.protect(), TransactionHandlers.updateTransaction)
+transactionRouter.delete('/:id', keycloak.protect(), TransactionHandlers.deleteTransaction)
+
+
 // Export the base-router
 const baseRouter = Router();
 baseRouter.use('/user', userRouter);
@@ -82,6 +96,7 @@ baseRouter.use('/FA', FArouter);
 baseRouter.use('/FT', FTrouter);
 baseRouter.use('/equipment', equipmentRouter);
 baseRouter.use('/availabilities', availabilitiesRouter);
+baseRouter.use('/transaction', transactionRouter);
 baseRouter.post('/issue', issueHandler)
 
 // ping
