@@ -104,8 +104,14 @@ async function updateUserBalanceByKeycloakID(
   if (keycloakID) {
     const user = await UserModel.findOne({ keycloakID: keycloakID });
     if (user) {
-      user.balance = +user.balance + amount;
-      user.save();
+      if (user.balance === undefined){
+                user.balance = 0;
+            }
+            if (isNaN(+user.balance + amount)){
+                logger.err(`can't update balance ${user.balance} by ${amount}`);
+            }
+            user.balance = +user.balance + amount;
+            user.save();
     }
   }
 }
@@ -155,7 +161,10 @@ export async function updateTransaction(req: Request, res: Response) {
   const update = req.body;
   let data;
   try {
-    data = await TransactionModel.updateOne({ _id: id }, update);
+    data = await TransactionModel.findOneAndUpdate({ _id: id }, update);
+        data.amount = -data.amount
+        await updateUsersBalance(data)
+        await updateUsersBalance(update)
   } catch (error) {
     logger.info(error);
     // handle the error
@@ -170,7 +179,9 @@ export async function deleteTransaction(req: Request, res: Response) {
   const id = req.params.id;
   let data;
   try {
-    data = await TransactionModel.deleteOne({ _id: id });
+    data = await TransactionModel.findOneAndDelete({ _id: id });
+        data.amount = -data.amount
+        await updateUsersBalance(data)
   } catch (error) {
     logger.info(error);
     // handle the error
