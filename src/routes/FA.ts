@@ -29,7 +29,9 @@ export async function getFAByCount(req: Request, res: Response) {
       mFA.FTs = FTs;
     }
     res.json(mFA);
-  }
+  }else {
+        res.sendStatus(StatusCodes.BAD_REQUEST)
+    }
 }
 
 export async function setFA(req: Request, res: Response) {
