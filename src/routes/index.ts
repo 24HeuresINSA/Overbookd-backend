@@ -29,8 +29,8 @@ import {
   unassign,
   updateFT,
 } from "./FT";
-import * as TransactionHandlers from "./Transactions";
-import { keycloak } from "../keycloak";
+import * as TransactionHandlers from "./transactions";
+import keycloak from "../keycloak";
 import issueHandler from "./Issue";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -115,7 +115,7 @@ transactionRouter.get(
 );
 transactionRouter.get(
   "/user",
-  keycloak.protect(),
+  keycloak.enforcer("user:profile"),
   TransactionHandlers.getSelfTransactions
 );
 transactionRouter.get(

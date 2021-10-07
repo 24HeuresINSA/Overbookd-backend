@@ -1,9 +1,7 @@
 import logger from "@shared/Logger";
 import { Request, Response, NextFunction } from "express";
-import TransactionModel, { ITransaction } from "../entities/Transaction";
+import TransactionModel, { ITransaction } from "../entities/transaction";
 import UserModel from "../entities/User";
-import { keycloak } from "../keycloak";
-import mapContaining = jasmine.mapContaining;
 
 // GET
 
@@ -38,7 +36,11 @@ export async function getSgTransactions(req: Request, res: Response) {
   res.json(data);
 }
 
-export async function getSelfTransactions(req: Request, res: Response) {
+export async function getSelfTransactions(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   //TODO: Implement better way
   //@ts-ignore
   const username = req.kauth.grant.access_token.content.preferred_username;
@@ -51,18 +53,19 @@ export async function getSelfTransactions(req: Request, res: Response) {
         $or: [{ from: mUser.keycloakID }, { to: mUser.keycloakID }],
       }).lean();
     } else {
-      throw new Error();
+      throw new Error("No user match this username");
     }
   } catch (error) {
     logger.info(error);
     // handle the error
     res.status(500).end();
+    next(error);
   }
   res.json(data);
 }
 
 export async function getUserTransactions(req: Request, res: Response) {
-  const keycloakID = req.params.keycloakId;
+  const keycloakID = req.params.keycloakID;
   let data;
   try {
     const mUser = await UserModel.findOne({ keycloakID });
