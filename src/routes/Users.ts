@@ -1,6 +1,5 @@
 import StatusCodes from "http-status-codes";
 import { Request, Response } from "express";
-import UserDao from "@daos/User/UserDao.mock";
 import logger from "@shared/Logger";
 import KcAdminClient, { requiredAction } from "keycloak-admin";
 import UserModel, { IUser } from "@entities/User";

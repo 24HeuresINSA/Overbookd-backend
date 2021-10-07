@@ -4,3 +4,8 @@ dist
 .github
 .gitlab
 build.ts
+data
+coverage
+.gitlab
+.github
+.husky

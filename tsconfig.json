@@ -8,13 +8,13 @@
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
+    "resolveJsonModule": true,
     "paths": {
-      "@daos/*": ["src/daos/*"],
       "@entities/*": ["src/entities/*"],
       "@shared/*": ["src/shared/*"],
-      "@server": ["src/Server"]
+      "@server": ["src/server"],
+      "@src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "spec/**/*.ts"],
-  "exclude": ["src/public/"]
+  "include": ["src/**/*.ts", "__tests__/**/*.ts", "__mocks__/**/*.ts"]
 }

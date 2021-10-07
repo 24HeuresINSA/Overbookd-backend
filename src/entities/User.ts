@@ -1,27 +1,37 @@
-import { Schema, model, connect } from "mongoose";
-import Any = jasmine.Any;
+import { Schema, model } from "mongoose";
+import * as Factory from "factory.ts";
+import faker from "faker";
 
 export interface IUser {
   password?: string;
   password2?: string;
   notifications?: any[];
   _id?: string;
-  id: number;
+  id?: number;
   firstname: string;
   lastname: string;
   nickname?: string;
-  balance: number;
-  charisma: number;
-  phone: number;
-  picture: number;
+  balance?: number;
+  charisma?: number;
+  phone?: number;
+  picture?: number;
   keycloakID: string;
   email: string;
-  team: string[];
-  hasDriverLicense: boolean;
-  birthday: Date;
-  friends: string[];
+  team?: string[];
+  hasDriverLicense?: boolean;
+  birthday?: Date;
+  friends?: string[];
   transactionHistory?: any;
 }
+
+// Mock interface for data generation
+
+export const UserMock = Factory.Sync.makeFactory<IUser>({
+  firstname: Factory.Sync.each(() => faker.name.firstName()),
+  lastname: Factory.Sync.each(() => faker.name.lastName()),
+  keycloakID: Factory.Sync.each(() => faker.datatype.uuid()),
+  email: Factory.Sync.each(() => faker.internet.email()),
+});
 
 const UserSchema = new Schema<IUser>(
   {
