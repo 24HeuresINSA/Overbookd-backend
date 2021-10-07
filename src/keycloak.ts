@@ -3,7 +3,7 @@ import { MemoryStore } from "express-session";
 
 export const memoryStore = new MemoryStore();
 
-export const keycloak = new Keycloak(
+const keycloak = new Keycloak(
   {
     store: memoryStore,
   },
@@ -16,3 +16,5 @@ export const keycloak = new Keycloak(
     "confidential-port": 0,
   }
 );
+
+export default keycloak;

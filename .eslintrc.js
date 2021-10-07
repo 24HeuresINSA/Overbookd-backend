@@ -2,11 +2,13 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    "jest/globals": true,
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "jest"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
     "prettier",
   ],
   rules: {
