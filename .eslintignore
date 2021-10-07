@@ -5,3 +5,6 @@ dist
 assets
 .github
 .gitlab
+.husky
+data
+coverage

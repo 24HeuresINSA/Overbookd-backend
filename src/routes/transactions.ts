@@ -1,9 +1,7 @@
 import logger from "@shared/Logger";
 import { Request, Response, NextFunction } from "express";
-import TransactionModel, { ITransaction } from "../entities/Transaction";
+import TransactionModel, { ITransaction } from "../entities/transaction";
 import UserModel from "../entities/User";
-import { keycloak } from "../keycloak";
-import mapContaining = jasmine.mapContaining;
 
 // GET
 
@@ -38,7 +36,11 @@ export async function getSgTransactions(req: Request, res: Response) {
   res.json(data);
 }
 
-export async function getSelfTransactions(req: Request, res: Response) {
+export async function getSelfTransactions(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   //TODO: Implement better way
   //@ts-ignore
   const username = req.kauth.grant.access_token.content.preferred_username;
@@ -51,18 +53,19 @@ export async function getSelfTransactions(req: Request, res: Response) {
         $or: [{ from: mUser.keycloakID }, { to: mUser.keycloakID }],
       }).lean();
     } else {
-      throw new Error();
+      throw new Error("No user match this username");
     }
   } catch (error) {
     logger.info(error);
     // handle the error
     res.status(500).end();
+    next(error);
   }
   res.json(data);
 }
 
 export async function getUserTransactions(req: Request, res: Response) {
-  const keycloakID = req.params.keycloakId;
+  const keycloakID = req.params.keycloakID;
   let data;
   try {
     const mUser = await UserModel.findOne({ keycloakID });
@@ -104,8 +107,14 @@ async function updateUserBalanceByKeycloakID(
   if (keycloakID) {
     const user = await UserModel.findOne({ keycloakID: keycloakID });
     if (user) {
-      user.balance = +user.balance + amount;
-      user.save();
+      if (user.balance === undefined){
+                user.balance = 0;
+            }
+            if (isNaN(+user.balance + amount)){
+                logger.err(`can't update balance ${user.balance} by ${amount}`);
+            }
+            user.balance = +user.balance + amount;
+            user.save();
     }
   }
 }
@@ -155,7 +164,10 @@ export async function updateTransaction(req: Request, res: Response) {
   const update = req.body;
   let data;
   try {
-    data = await TransactionModel.updateOne({ _id: id }, update);
+    data = await TransactionModel.findOneAndUpdate({ _id: id }, update);
+        data.amount = -data.amount
+        await updateUsersBalance(data)
+        await updateUsersBalance(update)
   } catch (error) {
     logger.info(error);
     // handle the error
@@ -170,7 +182,9 @@ export async function deleteTransaction(req: Request, res: Response) {
   const id = req.params.id;
   let data;
   try {
-    data = await TransactionModel.deleteOne({ _id: id });
+    data = await TransactionModel.findOneAndDelete({ _id: id });
+        data.amount = -data.amount
+        await updateUsersBalance(data)
   } catch (error) {
     logger.info(error);
     // handle the error

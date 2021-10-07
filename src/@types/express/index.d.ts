@@ -1,5 +1,4 @@
 import { IConfig } from "@entities/Config";
-import { Grant } from "keycloak-connect";
 
 declare module "express" {
   export interface Request {

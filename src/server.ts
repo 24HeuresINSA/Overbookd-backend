@@ -9,6 +9,9 @@ import BaseRouter from "./routes";
 import logger from "@shared/Logger";
 import mCors from "./cors";
 
+import session from "express-session";
+import keycloak, { memoryStore } from "./keycloak";
+
 const app = express();
 const { BAD_REQUEST } = StatusCodes;
 
@@ -21,11 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // CORS
 app.use(mCors);
-
-// Keycloak
-import session, { MemoryStore } from "express-session";
-import Keycloak from "keycloak-connect";
-import { keycloak, memoryStore } from "./keycloak";
 
 app.use(
   session({
@@ -64,19 +62,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     error: err.message,
   });
 });
-
-/************************************************************************************
- *                              Serve front-end content
- ***********************************************************************************/
-
-// const viewsDir = path.join(__dirname, 'views');
-// app.set('views', viewsDir);
-// const staticDir = path.join(__dirname, 'public');
-// app.use(express.static(staticDir));
-// app.get('*', (req: Request, res: Response) => {
-//     res.sendFile('index.html', {root: viewsDir});
-// });
-
-// Export express instance
 
 export default app;

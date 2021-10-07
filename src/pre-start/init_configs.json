@@ -1,0 +1,448 @@
+[{
+  "_id": {
+    "$oid": "60ec74c87c19e7598e6565a2"
+  },
+  "key": "error",
+  "value": "something went wrong blame the bad devs 💩"
+},{
+  "_id": {
+    "$oid": "60ec74f40fda97599c36bfb8"
+  },
+  "key": "error_basic",
+  "value": "something went wrong blame the bad devs 💩"
+},{
+  "_id": {
+    "$oid": "60ec981eaa631d054684b3da"
+  },
+  "key": "isSignupOpen",
+  "value": true
+},{
+  "_id": {
+    "$oid": "60ec99ac97c16b06cab26ec1"
+  },
+  "key": "fb_signup_closed",
+  "value": "les inscription sont ferme 😱"
+},{
+  "_id": {
+    "$oid": "60ecadd012e574084817e655"
+  },
+  "key": "signup_form",
+  "value": [
+    {
+      "key": "firstname",
+      "label": "prenom",
+      "option": "given-name",
+      "isRequired": true
+    },
+    {
+      "key": "lastname",
+      "label": "nom",
+      "option": "family-name",
+      "isRequired": true
+    },
+    {
+      "key": "nickname",
+      "label": "surnom"
+    },
+    {
+      "key": "password",
+      "label": "mot de passe",
+      "option": "password",
+      "isRequired": true,
+      "regex": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$",
+      "errorMessage": "au moins une MAJISCULE, miniscule et un chiffre et au moins 6 characters"
+    },
+    {
+      "key": "password2",
+      "label": "confirme ton mot de passe",
+      "option": "password",
+      "isRequired": true,
+      "regex": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$",
+      "errorMessage": "au moins une MAJISCULE, miniscule et un chiffre et au moins 6 characters"
+    },
+    {
+      "key": "isCouple",
+      "label": "situation maritalle",
+      "type": "select",
+      "options": [
+        "en couple",
+        "celib",
+        "marié",
+        "c'est complique",
+        "mon mari me trompe",
+        "pornhub premium 🍑"
+      ]
+    },
+    {
+      "key": "sex",
+      "label": "sex",
+      "type": "select",
+      "options": [
+        "oui",
+        "male",
+        "femelle",
+        "autre",
+        "Boeing AH-64 Apache"
+      ]
+    },
+    {
+      "key": "birthdate",
+      "label": "date de naissance",
+      "type": "date",
+      "isRequired": true
+    },
+    {
+      "key": "email",
+      "label": "Gmail (important que ca soit une addresse )",
+      "isRequired": true,
+      "option": "email",
+      "regex": ".+@gmail.(com|fr)"
+    },
+    {
+      "key": "phone",
+      "label": "ton 06 ?",
+      "isRequired": true,
+      "option": "tel",
+      "regex": "0[6-7]{1}[0-9]{8}"
+    },
+    {
+      "key": "handicap",
+      "label": "handicape, allergie..."
+    },
+    {
+      "key": "hasDriverLicense",
+      "label": "est ce que tu as un permis de conduire ",
+      "type": "switch"
+    },
+    {
+      "key": "driverLicenseDate",
+      "label": "date de permis",
+      "type": "date"
+    },
+    {
+      "key": "departement",
+      "label": "departement",
+      "type": "select",
+      "options": [
+        "TC",
+        "IF",
+        "BS",
+        "GCU",
+        "SGM",
+        "GI",
+        "GM",
+        "GEN",
+        "SGM",
+        "FIMI",
+        "pas a l'INSA"
+      ]
+    },
+    {
+      "key": "year",
+      "label": "année",
+      "type": "select",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        "cerise"
+      ]
+    },
+    {
+      "key": "comment",
+      "label": "commentaire"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60f05a75808c312a0a1daae0"
+  },
+  "key": "fa_form",
+  "value": [
+    {
+      "key": "name",
+      "label": "nom de la FA"
+    },
+    {
+      "key": "type",
+      "type": "select",
+      "options": [
+        "Com",
+        "Divertissement",
+        "flemme de faire les aurte..."
+      ]
+    },
+    {
+      "key": "team",
+      "label": "equipe",
+      "type": "select",
+      "options": [
+        "Sponso",
+        "ComSI"
+      ]
+    },
+    {
+      "key": "inCharge",
+      "label": "Responsable",
+      "type": "user",
+      "filter": "hard"
+    },
+    {
+      "key": "isPublishable",
+      "label": "Publier sur le site / plaquette",
+      "type": "switch"
+    },
+    {
+      "key": "isMajorAnim",
+      "label": "Anime phare",
+      "type": "switch"
+    },
+    {
+      "key": "isForKids",
+      "label": "Anim pour les gosses",
+      "type": "switch"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "textarea"
+    },
+    {
+      "key": "isParticularSecurityMeasures",
+      "label": "Dispositif de sécurité particulier",
+      "type": "switch"
+    },
+    {
+      "key": "isRequiringPass",
+      "label": "Bessoin de pass",
+      "type": "switch"
+    },
+    {
+      "key": "isRequiringElectricity",
+      "label": "Besoin d'elec ",
+      "type": "switch"
+    },
+    {
+      "key": "isRequiringSignalisation",
+      "label": "Besoin de signalisation",
+      "type": "textarea"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60f05cd6808c312a0a1daaed"
+  },
+  "key": "fb_confirm_submit",
+  "value": "T'es sûr de ta FA la ? les zumains 🧂 seront pas content si c'est de la 💩"
+},{
+  "_id": {
+    "$oid": "60f06427808c312a0a1daafb"
+  },
+  "key": "fa_validators",
+  "value": [
+    {
+      "name": "humain",
+      "icon": "mdi-account"
+    },
+    {
+      "name": "secu",
+      "icon": "mdi-security"
+    },
+    {
+      "name": "log",
+      "icon": "mdi-bus"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60f185779a91d733c64dee53"
+  },
+  "key": "availabilities_description",
+  "value": "Remplis tes disponibilités, plus tu as de points de charisme, plus tu as de chances de faire parti de l'aventure. Coche tout ce que tu peux, nous ne t'affecterons bien évidemment pas à tous tes créneaux et te laisserons du temps pour te reposer et profiter du festival ! Les créneaux oranges ne sont plus modifiables une fois cochés."
+},{
+  "_id": {
+    "$oid": "60f185e59a91d733c64dee59"
+  },
+  "key": "max_charisma",
+  "value": 1500
+},{
+  "_id": {
+    "$oid": "60f2f0cc8bf226448d4f50c3"
+  },
+  "key": "ft_validators",
+  "value": [
+    {
+      "name": "humain",
+      "icon": "mdi-account"
+    },
+    {
+      "name": "secu",
+      "icon": "mdi-security"
+    },
+    {
+      "name": "log",
+      "icon": "mdi-bus"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60f3bc86c8de8005074c469c"
+  },
+  "key": "equipment_form",
+  "value": [
+    {
+      "key": "name",
+      "label": "nom de l'objet"
+    },
+    {
+      "key": "type",
+      "type": "select",
+      "options": [
+        "gros",
+        "petit",
+        "indenombrable"
+      ]
+    },
+    {
+      "key": "amount",
+      "label": "quantite (en stock)",
+      "option": "number"
+    },
+    {
+      "key": "location",
+      "label": "lieu de stockage"
+    },
+    {
+      "key": "comment",
+      "label": "commentaire"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60f43c036fbff118ee03b431"
+  },
+  "key": "ft_form",
+  "value": [
+    {
+      "key": "name",
+      "label": "nom de la FT"
+    },
+    {
+      "key": "inCharge",
+      "label": "Orga responsable",
+      "type": "user"
+    },
+    {
+      "key": "location",
+      "label": "lieu du rdv 📍"
+    },
+    {
+      "key": "isDriverLicenseRequired",
+      "label": "Permis necessaire",
+      "type": "switch"
+    },
+    {
+      "key": "instructions",
+      "label": "Consigne",
+      "type": "textarea"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6108126b919d7ae81866b4cb"
+  },
+  "key": "teams",
+  "value": [
+    {
+      "name": "hard",
+      "color": "#264653",
+      "icon": "mdi-account-hard-hat"
+    },
+    {
+      "name": "soft",
+      "color": "#2a9d8f",
+      "icon": "mdi-account-heart"
+    },
+    {
+      "name": "bureau",
+      "color": "#e9c46a",
+      "icon": "mdi-desk"
+    },
+    {
+      "name": "admin",
+      "color": "#000000",
+      "icon": "mdi-eye-circle"
+    },
+    {
+      "name": "humain",
+      "color": "#f4a261",
+      "icon": "mdi-human"
+    },
+    {
+      "name": "secu",
+      "color": "#e76f51",
+      "icon": "mdi-security"
+    },
+    {
+      "name": "log",
+      "color": "#ffb703",
+      "icon": "mdi-dump-truck"
+    },
+    {
+      "name": "payant",
+      "color": "#118C4F",
+      "icon": "mdi-bitcoin"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "610f96c3fa9698219551d3a0"
+  },
+  "key": "isInventoryOpen",
+  "value": false
+},{
+  "_id": {
+    "$oid": "610fa61afa9698219551d3a1"
+  },
+  "key": "add_availabilities_roles",
+  "value": [
+    "admin",
+    "bureau",
+    "humain"
+  ]
+},{
+  "_id": {
+    "$oid": "6142522c6d7c0504871ba08e"
+  },
+  "key": "timeframes",
+  "value": [
+    {
+      "name": "Manif",
+      "day": "2021-09-15"
+    },
+    {
+      "name": "postManif",
+      "day": "2021-09-26"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "614ef6f25ed3f937449cd054"
+  },
+  "key": "ft_required_role",
+  "value": "admin"
+},{
+  "_id": {
+    "$oid": "614ef6f75ed3f937449cd057"
+  },
+  "key": "fa_required_role",
+  "value": "admin"
+},{
+  "_id": {
+    "$oid": "614ef6d95jd3f127849pd057"
+  },
+  "key": "are_transfers_open",
+  "value": true
+}]
