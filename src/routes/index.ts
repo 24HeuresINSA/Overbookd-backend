@@ -115,7 +115,7 @@ transactionRouter.get(
 );
 transactionRouter.get(
   "/user",
-  keycloak.enforcer("user:profile"),
+  keycloak.protect(),
   TransactionHandlers.getSelfTransactions
 );
 transactionRouter.get(
