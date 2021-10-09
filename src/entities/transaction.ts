@@ -1,3 +1,4 @@
+import { Transaction } from "@sentry/tracing";
 import { Schema, model } from "mongoose";
 import { IUser } from "./User";
 import * as Factory from "factory.ts";
@@ -11,6 +12,8 @@ interface IExpense {
   to: null;
   amount: number;
   context: string;
+  createdAt: Date;
+  isValid: boolean;
 }
 
 interface IDeposit {
@@ -19,6 +22,8 @@ interface IDeposit {
   to: IUser["keycloakID"];
   amount: number;
   context: null;
+  createdAt: Date;
+  isValid: boolean;
 }
 
 interface ITransfer {
@@ -27,6 +32,8 @@ interface ITransfer {
   to: IUser["keycloakID"];
   amount: number;
   context: string;
+  createdAt: Date;
+  isValid: boolean;
 }
 
 // MOdel type regroup interfaces
@@ -36,11 +43,13 @@ export type ITransaction = IExpense | IDeposit | ITransfer;
 // Mock Interfaces for data generation
 
 export const ExpenseMock = Factory.Sync.makeFactory<IExpense>({
+  createdAt: Factory.each(() => faker.datatype.datetime()),
+  isValid: true,
   type: "expense",
   amount: Factory.each(() => faker.datatype.number({ min: 0 })),
   context: Factory.each(() => faker.lorem.sentence()),
   from: "keycloakID",
-  to: null,
+  to: null
 });
 
 export const DepositMock = Factory.Sync.makeFactory<IDeposit>({
@@ -49,6 +58,8 @@ export const DepositMock = Factory.Sync.makeFactory<IDeposit>({
   context: null,
   from: null,
   to: "keycloakID",
+  isValid: true,
+  createdAt: Factory.each(() => faker.datatype.datetime()),
 });
 
 export const TransferMock = Factory.Sync.makeFactory<ITransfer>({
@@ -57,6 +68,8 @@ export const TransferMock = Factory.Sync.makeFactory<ITransfer>({
   context: Factory.each(() => faker.lorem.sentence()),
   from: "keycloakID",
   to: "keycloakID",
+  isValid: true,
+  createdAt: Factory.each(() => faker.datatype.datetime()),
 });
 
 // Mongoose
@@ -72,6 +85,7 @@ const TransactionSchema = new Schema<ITransaction>(
     to: { type: String },
     amount: { type: Number, required: true },
     context: { type: String },
+    isValid: {type: Boolean, default: true}
   },
   {
     timestamps: true,

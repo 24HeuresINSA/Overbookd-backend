@@ -1,4 +1,4 @@
-# PROJECT A - BACKEND
+# Overbookd - BACKEND
 
 ![](https://gitlab.com/24-heures-insa/overbookd/backend/badges/develop/pipeline.svg?key_text=develop+pipeleine&key_width=105)
 ![](https://gitlab.com/24-heures-insa/overbookd/backend/badges/pre-prod/pipeline.svg?key_text=pre-prod+pipeleine&key_width=110)
@@ -23,65 +23,30 @@ Les technologies utilisées sont pour l'API :
 
 - _Express_ : ce framework web permet de structurer le serveur web, en permettant de créer des requêtes très facilement,
   tout en étant très efficace.
-- _Sequelize_ : cet ORM (_Object-Relationnal Manager_) permet d'avoir une surcouche gérant les intéractions avec la base de données.
-  Il permet aussi de rendre le code plus facilement lisible, et donc plus facilement maintenable. De plus, si jamais on doit changer
-  de moteur de base de données, le changement se fait de façon transparente.
-- _Keycloack_ : serveur d'authentification qui gere les tokens des utilidateur.
-- _MySQL_ : base de donnée
+- _Mongoose_ : ce package permet de gérer les intéractions avec la base de données.
+- _MongoDB_ : Base de donnée NoSQL
 
-### Installer et lancer le Projet A - Backend
+### Installer et lancer Oberbookd - Backend
 
-#### Docker 🐳
+Les instructions pour lancer et faire tourner Overbookd sont maintenant centralisées dans le repository ![Management](https://gitlab.com/24-heures-insa/overbookd/management/)
 
-La manière la plus simple pour lancer le backend est d'installer [docker](https://docs.docker.com/get-docker/) et remplir le fichier example.env avec vos propres varible d'environement.
-une fois example.env rempli, il faut le renomme en .env.
-apres vous aurez bersoin de run la commande `sudo npm run setup` et puis lance la commande:
-`docker-compose up -d` pour lancer les conteneurs
+### Lancer les tests
 
-### Script utile
+`npm i`
+`npm run test` ou `npm run test:coverage`
 
-    >   npm run repopulate
+### Git flow 
 
-supprime puis repeuple la base de donnée
+**There is 3 main branches in this repo**
 
-    >   npm run populate
+ - master: Hosting production deployment
+ - pre-prod: Hosting pre-production deployment
+ - develop: Hosting under development version of Overbookd
 
-peuple la base de donnée.
+**When contributing to the codebase you have to:**
 
-    >   npm run depopulate
+ - Open an issue
+ - Branch from develop with the issue ID in the name (ex: 24-fix-random-bugs)
+ - Create a merge request from this branch to develop
 
-supprime tous les donnêes de la base de donnêe.
-
-    >   sudo npm run setup
-
-pour que le contenaire keycloak marche bien vous aurez besoin d'ajouter `127.0.0.1 keycloak` pour indique a votre machine
-que le serveur keycloak se trouve en local
-
-    >   npm create_admin
-
-cree un utilisateur `user_admin` avec le mot de passe `user_admin` et les permissions d'admin.
-
-    >   npm test
-
-lance une serie de test unitaire avec `newman`
-
-#### API
-
-Avant de lancer l'api il faut que vous installiez sur votre machine :
-
-- Server MySQL
-- Keycloack
-
-Pour installer l'API :
-`npm install`.
-
-Pour créer la base de données :
-`sudo npm run create_database`.
-Si on ne lance pas le script avec `sudo` ou avec root, on ne peut pas se connecter à MySQL en root.
-
-Pour lancer l'API :
-`npm start index.js` ou `nodemon index.js`.
-Au niveau du serveur à distance, on utilise [pm2](https://pm2.keymetrics.io/) qui est un gestionnaire de processus
-permettant de facilement les gérer ainsi que d'ajouter du load-balancing.
-On y ajoute le plugin [pm2-logrotate](https://www.npmjs.com/package/pm2-logrotate) pour limiter la taille des fichiers de log.
-Pour utiliser pm2 : `pm2 start index.js`.
+This leverage consistency and relaibility through the whole process.
