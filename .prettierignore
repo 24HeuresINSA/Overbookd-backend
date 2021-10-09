@@ -1,0 +1,11 @@
+node_modules
+src/public
+dist
+.github
+.gitlab
+build.ts
+data
+coverage
+.gitlab
+.github
+.husky

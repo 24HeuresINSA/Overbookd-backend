@@ -1,0 +1,10 @@
+src/public/
+build.ts
+node_modules
+dist
+assets
+.github
+.gitlab
+.husky
+data
+coverage

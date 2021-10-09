@@ -3,5 +3,5 @@ stages:
   - docker
 
 include:
-- local: /.gitlab/ci/buildxSetup.gitlab-ci.yml
-- local: /.gitlab/ci/containerize.gitlab-ci.yml
+  - local: /.gitlab/ci/buildxSetup.gitlab-ci.yml
+  - local: /.gitlab/ci/containerize.gitlab-ci.yml
