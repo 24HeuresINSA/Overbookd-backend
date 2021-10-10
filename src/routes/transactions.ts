@@ -183,6 +183,7 @@ export async function deleteTransaction(req: Request, res: Response) {
     data = await TransactionModel.findByIdAndUpdate(id);
     data.amount = -data.amount;
     await updateUsersBalance(data);
+    data.amount = -data.amount;
     data.isValid = false;
     data.save();
     logger.info(`disabling transaction ${id}`)
