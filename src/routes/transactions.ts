@@ -41,13 +41,11 @@ export async function getSelfTransactions(
   res: Response,
   next: NextFunction
 ) {
-  //TODO: Implement better way
   //@ts-ignore
-  const username = req.kauth.grant.access_token.content.preferred_username;
-  const [firstname, lastname] = username.split(".");
+  const keycloakID = req.kauth.grant.access_token.content.sub;
   let data;
   try {
-    const mUser = await UserModel.findOne({ firstname, lastname });
+    const mUser = await UserModel.findOne({ keycloakID });
     if (mUser) {
       data = await TransactionModel.find({
         $or: [{ from: mUser.keycloakID }, { to: mUser.keycloakID }],
@@ -185,6 +183,7 @@ export async function deleteTransaction(req: Request, res: Response) {
     data = await TransactionModel.findByIdAndUpdate(id);
     data.amount = -data.amount;
     await updateUsersBalance(data);
+    data.amount = -data.amount;
     data.isValid = false;
     data.save();
     logger.info(`disabling transaction ${id}`)
