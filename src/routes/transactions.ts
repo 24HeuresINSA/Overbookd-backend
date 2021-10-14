@@ -1,6 +1,6 @@
 import logger from "@shared/Logger";
-import { Request, Response, NextFunction } from "express";
-import TransactionModel, { ITransaction } from "../entities/transaction";
+import {NextFunction, Request, Response} from "express";
+import TransactionModel, {ITransaction} from "../entities/transaction";
 import UserModel from "../entities/User";
 
 // GET
@@ -12,7 +12,7 @@ export async function getAllTransactions(
 ) {
   let data;
   try {
-    data = await TransactionModel.find({}).lean();
+    data = await TransactionModel.find({}).sort({createdAt: -1}).lean();
   } catch (error) {
     logger.info(error);
     // handle the error
@@ -26,8 +26,8 @@ export async function getSgTransactions(req: Request, res: Response) {
   let data;
   try {
     data = await TransactionModel.find({
-      $or: [{ type: "deposit" }, { type: "expense" }],
-    }).lean();
+      $or: [{type: "deposit"}, {type: "expense"}],
+    }).sort({createdAt: -1}).lean();
   } catch (error) {
     logger.info(error);
     // handle the error
@@ -48,8 +48,8 @@ export async function getSelfTransactions(
     const mUser = await UserModel.findOne({ keycloakID });
     if (mUser) {
       data = await TransactionModel.find({
-        $or: [{ from: mUser.keycloakID }, { to: mUser.keycloakID }],
-      }).lean();
+        $or: [{from: mUser.keycloakID}, {to: mUser.keycloakID}],
+      }).sort({createdAt: -1}).lean();
     } else {
       throw new Error("No user match this username");
     }
@@ -69,8 +69,8 @@ export async function getUserTransactions(req: Request, res: Response) {
     const mUser = await UserModel.findOne({ keycloakID });
     if (mUser) {
       data = await TransactionModel.find({
-        $or: [{ from: mUser.keycloakID }, { to: mUser.keycloakID }],
-      }).lean();
+        $or: [{from: mUser.keycloakID}, {to: mUser.keycloakID}],
+      }).sort({createdAt: -1}).lean();
     } else {
       throw new Error();
     }

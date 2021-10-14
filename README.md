@@ -28,7 +28,7 @@ Les technologies utilisées sont pour l'API :
 
 ### Installer et lancer Oberbookd - Backend
 
-Les instructions pour lancer et faire tourner Overbookd sont maintenant centralisées dans le repository ![Management](https://gitlab.com/24-heures-insa/overbookd/management/)
+Les instructions pour lancer et faire tourner Overbookd sont maintenant centralisées dans le repository [Management](https://gitlab.com/24-heures-insa/overbookd/management/)
 
 ### Lancer les tests
 
