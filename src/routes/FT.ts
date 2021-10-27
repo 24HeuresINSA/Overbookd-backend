@@ -1,11 +1,11 @@
 import StatusCodes from "http-status-codes";
-import { Request, Response } from "express";
-import FTModel, { IFT } from "@entities/FT";
+import {Request, Response} from "express";
+import FTModel, {IFT} from "@entities/FT";
 import logger from "@shared/Logger";
 
 export async function getAllFTs(req: Request, res: Response) {
   const mFTs = await FTModel.find({});
-  res.json({ data: mFTs });
+  res.json({data: mFTs});
 }
 
 export async function getFTByID(req: Request, res: Response) {
@@ -15,6 +15,8 @@ export async function getFTByID(req: Request, res: Response) {
 
 export async function createFT(req: Request, res: Response) {
   const mFT = <IFT>req.body;
+  const count = await FTModel.countDocuments();
+  mFT.count = count + 1
   const FT = await FTModel.create(mFT);
   res.json(FT);
 }
