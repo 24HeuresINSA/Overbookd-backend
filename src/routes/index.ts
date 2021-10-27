@@ -1,34 +1,23 @@
-import { Request, Response, Router } from "express";
-import { getConfig, setConfig } from "./Config";
+import {Request, Response, Router} from "express";
+import {getConfig, setConfig} from "./Config";
 import mCors from "../cors";
 import {
-  setUser,
-  getUserByKeycloakID,
-  updateUserByKeycloakID,
-  getAllUsersName,
-  getUsers,
-  broadcastNotification,
   addNotificationByFullName,
-  getPP,
-  uploadPP,
+  broadcastNotification,
   createFriendship,
+  getAllUsersName,
+  getPP,
+  getUserByKeycloakID,
+  getUsers,
+  setUser,
   transferMoney,
+  updateUserByKeycloakID,
+  uploadPP,
 } from "./Users";
-import { createFA, getFAByCount, getFAs, setFA } from "./FA";
-import { getEquipment, setEquipment } from "./Equipment";
-import {
-  getAvailabilities,
-  setAvailabilities,
-  updateAvailabilities,
-} from "./Avalabilities";
-import {
-  createFT,
-  deleteFT,
-  getAllFTs,
-  getFTByID,
-  unassign,
-  updateFT,
-} from "./FT";
+import {createFA, getFAByCount, getFAs, setFA} from "./FA";
+import {getEquipment, setEquipment} from "./Equipment";
+import {getAvailabilities, setAvailabilities, updateAvailabilities,} from "./Avalabilities";
+import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
 import * as TransactionHandlers from "./transactions";
 import keycloak from "../keycloak";
 import issueHandler from "./Issue";
@@ -70,7 +59,7 @@ userRouter.get("/pp/:filename", getPP);
 // Config-route
 const configRouter = Router();
 configRouter.get("/", getConfig);
-configRouter.put("/", keycloak.protect(), setConfig);
+configRouter.put("/", setConfig);
 configRouter.use(mCors);
 
 // FA-routes

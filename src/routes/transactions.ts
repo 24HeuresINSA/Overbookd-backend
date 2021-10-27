@@ -162,10 +162,12 @@ export async function updateTransaction(req: Request, res: Response) {
   const update = req.body;
   let data;
   try {
-    data = await TransactionModel.findOneAndUpdate({ _id: id }, update);
-        data.amount = -data.amount
-        await updateUsersBalance(data)
-        await updateUsersBalance(update)
+    data = await TransactionModel.findByIdAndUpdate(id);
+    data.amount = -data.amount
+    await updateUsersBalance(data)
+    await updateUsersBalance(update)
+    data.amount = -data.amount
+    data.save();
   } catch (error) {
     logger.info(error);
     // handle the error
