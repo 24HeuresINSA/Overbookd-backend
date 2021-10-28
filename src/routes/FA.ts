@@ -20,13 +20,6 @@ export async function getFAByCount(req: Request, res: Response) {
   const mFAQuery = await FAModel.findOne({ count: +req.params.id });
   if (mFAQuery) {
     const mFA = mFAQuery.toObject();
-    // if (mFA && mFA.FTs) {
-    //   let FTs = mFA.FTs.map(async (FTID) => await FTModel.findById(FTID));
-    //   // @ts-ignore
-    //   FTs = await Promise.all(FTs);
-    //   // @ts-ignore
-    //   mFA.FTs = FTs;
-    // }
     res.json(mFA);
   }else {
         res.sendStatus(StatusCodes.BAD_REQUEST)

@@ -9,7 +9,7 @@ export async function getAllFTs(req: Request, res: Response) {
 }
 
 export async function getFTByID(req: Request, res: Response) {
-  const mFT = await FTModel.findById(req.params.FTID);
+  const mFT = await FTModel.findOne({count: +req.params.FTID});
   res.json(mFT);
 }
 
