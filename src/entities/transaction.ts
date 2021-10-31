@@ -1,6 +1,4 @@
-import { Transaction } from "@sentry/tracing";
 import { Schema, model } from "mongoose";
-import { IUser } from "./User";
 import * as Factory from "factory.ts";
 import faker from "faker";
 
@@ -8,7 +6,7 @@ import faker from "faker";
 
 interface IExpense {
   type: "expense";
-  from: IUser["keycloakID"];
+  from: string;
   to: null;
   amount: number;
   context: string;
@@ -19,7 +17,7 @@ interface IExpense {
 interface IDeposit {
   type: "deposit";
   from: null;
-  to: IUser["keycloakID"];
+  to: string;
   amount: number;
   context: null;
   createdAt: Date;
@@ -28,8 +26,8 @@ interface IDeposit {
 
 interface ITransfer {
   type: "transfer";
-  from: IUser["keycloakID"];
-  to: IUser["keycloakID"];
+  from: string;
+  to: string;
   amount: number;
   context: string;
   createdAt: Date;
@@ -48,8 +46,8 @@ export const ExpenseMock = Factory.Sync.makeFactory<IExpense>({
   type: "expense",
   amount: Factory.each(() => faker.datatype.number({ min: 0 })),
   context: Factory.each(() => faker.lorem.sentence()),
-  from: "keycloakID",
-  to: null
+  from: "user._id",
+  to: null,
 });
 
 export const DepositMock = Factory.Sync.makeFactory<IDeposit>({
@@ -57,7 +55,7 @@ export const DepositMock = Factory.Sync.makeFactory<IDeposit>({
   amount: Factory.each(() => faker.datatype.number({ min: 0 })),
   context: null,
   from: null,
-  to: "keycloakID",
+  to: "user._id",
   isValid: true,
   createdAt: Factory.each(() => faker.datatype.datetime()),
 });
@@ -66,8 +64,8 @@ export const TransferMock = Factory.Sync.makeFactory<ITransfer>({
   type: "transfer",
   amount: Factory.each(() => faker.datatype.number({ min: 0 })),
   context: Factory.each(() => faker.lorem.sentence()),
-  from: "keycloakID",
-  to: "keycloakID",
+  from: "user._id",
+  to: "user._id",
   isValid: true,
   createdAt: Factory.each(() => faker.datatype.datetime()),
 });
@@ -85,7 +83,7 @@ const TransactionSchema = new Schema<ITransaction>(
     to: { type: String },
     amount: { type: Number, required: true },
     context: { type: String },
-    isValid: {type: Boolean, default: true}
+    isValid: { type: Boolean, default: true },
   },
   {
     timestamps: true,
