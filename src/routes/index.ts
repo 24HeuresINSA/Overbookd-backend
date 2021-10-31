@@ -2,25 +2,24 @@ import {Request, Response, Router} from "express";
 import {getConfig, setConfig} from "./Config";
 import mCors from "../cors";
 import {
+  getUserByID,
+  updateUserByID,
+  getAllUsersName,
+  getUsers,
+  getUser,
   addNotificationByFullName,
   broadcastNotification,
   createFriendship,
-  getAllUsersName,
-  getPP,
-  getUserByKeycloakID,
-  getUsers,
-  setUser,
-  transferMoney,
-  updateUserByKeycloakID,
-  uploadPP,
+  broadcastNotification,
 } from "./Users";
 import {createFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities,} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
 import * as TransactionHandlers from "./transactions";
-import keycloak from "../keycloak";
+import * as AuthHandlers from "./Auth";
 import issueHandler from "./Issue";
+import * as authMiddleware from "@src/middleware/auth";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const multer = require("multer");
@@ -31,23 +30,18 @@ function ping(req: Request, res: Response) {
 
 // User-route
 const userRouter = Router();
-userRouter.get("/", keycloak.protect(), getUsers);
-userRouter.post("/", setUser);
-userRouter.get("/all", keycloak.protect(), getAllUsersName);
-userRouter.get("/:keycloakID", keycloak.protect(), getUserByKeycloakID);
-userRouter.put("/:keycloakID", keycloak.protect(), updateUserByKeycloakID);
+userRouter.get("/", authMiddleware.protect(), getUsers);
+userRouter.get("/me", authMiddleware.protect(), getUser);
+userRouter.get("/all", authMiddleware.protect(), getAllUsersName);
+userRouter.get("/:userID", authMiddleware.protect(), getUserByID);
+userRouter.put("/:userID", authMiddleware.protect(), updateUserByID);
 userRouter.put(
   "/notification/:lastname/:firstname",
-  keycloak.protect(),
+  authMiddleware.protect(),
   addNotificationByFullName
 );
-userRouter.post("/broadcast", keycloak.protect(), broadcastNotification);
-userRouter.post("/friends", keycloak.protect(), createFriendship);
-userRouter.post(
-  "/transfer",
-  keycloak.enforcer("user:profile", { response_mode: "token" }),
-  transferMoney
-);
+userRouter.post("/broadcast", authMiddleware.protect(), broadcastNotification);
+userRouter.post("/friends", authMiddleware.protect(), createFriendship);
 
 const imageUpload = multer({
   dest: "images",
@@ -59,77 +53,72 @@ userRouter.get("/pp/:filename", getPP);
 // Config-route
 const configRouter = Router();
 configRouter.get("/", getConfig);
-configRouter.put("/", setConfig);
+configRouter.put("/", authMiddleware.protect(), setConfig);
 configRouter.use(mCors);
 
 // FA-routes
 const FArouter = Router();
-FArouter.get("/", keycloak.protect(), getFAs);
-FArouter.get("/:id", keycloak.protect(), getFAByCount);
-FArouter.post("/", keycloak.protect(), createFA);
-FArouter.put("/", keycloak.protect(), setFA);
+FArouter.get("/", authMiddleware.protect(), getFAs);
+FArouter.get("/:id", authMiddleware.protect(), getFAByCount);
+FArouter.post("/", authMiddleware.protect(), createFA);
+FArouter.put("/", authMiddleware.protect(), setFA);
 
 // FT-routes
 const FTrouter = Router();
-FTrouter.get("/", keycloak.protect(), getAllFTs);
-FTrouter.get("/:FTID", keycloak.protect(), getFTByID);
-FTrouter.post("/", keycloak.protect(), createFT);
-FTrouter.put("/", keycloak.protect(), updateFT);
-FTrouter.put("/unassign", keycloak.protect(), unassign);
-FTrouter.delete("/", keycloak.protect(), deleteFT);
+FTrouter.get("/", authMiddleware.protect(), getAllFTs);
+FTrouter.get("/:FTID", authMiddleware.protect(), getFTByID);
+FTrouter.post("/", authMiddleware.protect(), createFT);
+FTrouter.put("/", authMiddleware.protect(), updateFT);
+FTrouter.put("/unassign", authMiddleware.protect(), unassign);
+FTrouter.delete("/", authMiddleware.protect(), deleteFT);
 
 // Equipment-routes
 const equipmentRouter = Router();
-equipmentRouter.get("/", keycloak.protect(), getEquipment);
-equipmentRouter.put("/", keycloak.protect(), setEquipment);
+equipmentRouter.get("/", authMiddleware.protect(), getEquipment);
+equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
 
 // Availabilities routes
 const availabilitiesRouter = Router();
-availabilitiesRouter.get("/", keycloak.protect(), getAvailabilities);
-availabilitiesRouter.post("/", keycloak.protect(), setAvailabilities);
-availabilitiesRouter.put("/", keycloak.protect(), updateAvailabilities);
+availabilitiesRouter.get("/", authMiddleware.protect(), getAvailabilities);
+availabilitiesRouter.post("/", authMiddleware.protect(), setAvailabilities);
+availabilitiesRouter.put("/", authMiddleware.protect(), updateAvailabilities);
 
 // Transactions routes
 
 const transactionRouter = Router();
 transactionRouter.get(
   "/",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.getAllTransactions
 );
 transactionRouter.get(
   "/sg",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.getSgTransactions
 );
 transactionRouter.get(
   "/user",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.getSelfTransactions
 );
 transactionRouter.get(
-  "/user/:keycloakID",
-  keycloak.protect(),
+  "/user/:userID",
+  authMiddleware.protect(),
   TransactionHandlers.getUserTransactions
 );
 transactionRouter.post(
   "/sg",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.addSgTransactions
 );
 transactionRouter.post(
   "/transfer",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.addTransfer
-);
-transactionRouter.put(
-  "/:id",
-  keycloak.protect(),
-  TransactionHandlers.updateTransaction
 );
 transactionRouter.delete(
   "/:id",
-  keycloak.protect(),
+  authMiddleware.protect(),
   TransactionHandlers.deleteTransaction
 );
 
@@ -142,10 +131,29 @@ baseRouter.use("/FT", FTrouter);
 baseRouter.use("/equipment", equipmentRouter);
 baseRouter.use("/availabilities", availabilitiesRouter);
 baseRouter.use("/transaction", transactionRouter);
+
 baseRouter.post("/issue", issueHandler);
 
+//auth
+baseRouter.post("/signup", AuthHandlers.signup);
+baseRouter.post("/login", AuthHandlers.login);
+baseRouter.post("/migrate", AuthHandlers.migrate);
+
+baseRouter.get("/test", authMiddleware.protect(), (req, res) => {
+  res.status(200).json({ msg: "it wooooorks !" });
+});
+
+baseRouter.get(
+  "/testRoles",
+  authMiddleware.protect(),
+  authMiddleware.verifyRoles(["admin"]),
+  (req, res) => {
+    res.status(200).json({ msg: "it wooooorks !" });
+  }
+);
+
 // ping
-baseRouter.get("/ping", keycloak.protect(), ping);
+baseRouter.get("/ping", authMiddleware.protect(), ping);
 
 baseRouter.use(mCors);
 
