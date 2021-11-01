@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { RequestHandler } from "express";
+import {RequestHandler} from "express";
 import jwt from "jsonwebtoken";
 import UserModel from "@entities/User";
 import logger from "@shared/Logger";
@@ -23,11 +23,12 @@ export const signup: RequestHandler = async function (req, res) {
     // Hashing and salting password
     const salt = await bcrypt.genSalt(10);
     userInput.password = await bcrypt.hash(userInput.password, salt);
+    delete userInput.password2; // DO NOT SAVE INTO DB
 
     user = await UserModel.create(userInput);
 
     jwt.sign(
-      { userID: user._id },
+      {userID: user._id},
       "randomString",
       {
         expiresIn: 60 * 60 * 24,
