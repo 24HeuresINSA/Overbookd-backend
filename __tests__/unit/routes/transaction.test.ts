@@ -1,24 +1,17 @@
-import TransactionModel, {
-  ITransaction,
-  DepositMock,
-  ExpenseMock,
-  TransferMock,
-} from "@entities/transaction";
-import UserModel, { IUser, UserMock } from "@entities/User";
+import TransactionModel, {DepositMock, ExpenseMock, ITransaction, TransferMock,} from "@entities/transaction";
+import UserModel, {IUser, UserMock} from "@entities/User";
 import * as db from "../../db";
-import keycloak from "@src/keycloak";
 import qs from "qs";
+import app from "@server";
+import supertest from "supertest";
 
 // Mock keycloak protect implementation before the keycloak middleware gets loaded in express
 
 const mockProtect = jest.fn((req, res, next) => next());
-keycloak.protect = () => mockProtect;
+// keycloak.protect = () => mockProtect;
 
 const mockEnforcer = jest.fn();
-keycloak.enforcer = () => mockEnforcer;
-
-import app from "@server";
-import supertest from "supertest";
+// keycloak.enforcer = () => mockEnforcer;
 
 const data: { transactions: ITransaction[]; users: IUser[] } = {
   transactions: [],
@@ -59,41 +52,41 @@ describe("transaction", () => {
 
     // user 1 adds 40
     data.transactions.push(
-      DepositMock.build({ to: data.users[0].keycloakID, amount: 40 })
+      DepositMock.build({to: data.users[0]._id, amount: 40})
     );
     // user 2 adds 100
     data.transactions.push(
-      DepositMock.build({ to: data.users[1].keycloakID, amount: 100 })
+      DepositMock.build({to: data.users[1]._id, amount: 100})
     );
     // user 3 adds 20
     data.transactions.push(
-      DepositMock.build({ to: data.users[2].keycloakID, amount: 20 })
+      DepositMock.build({to: data.users[2]._id, amount: 20})
     );
 
     //user 3 uses 20
     data.transactions.push(
-      ExpenseMock.build({ from: data.users[2].keycloakID, amount: 20 })
+      ExpenseMock.build({from: data.users[2]._id, amount: 20})
     );
 
     // user 1 gives 10 to user 2
     data.transactions.push(
       TransferMock.build({
-        from: data.users[0].keycloakID,
-        to: data.users[1].keycloakID,
+        from: data.users[0]._id,
+        to: data.users[1]._id,
         amount: 10,
       })
     );
 
     // user 1 use 10
     data.transactions.push(
-      ExpenseMock.build({ from: data.users[0].keycloakID, amount: 10 })
+      ExpenseMock.build({from: data.users[0]._id, amount: 10})
     );
 
     // user 2 gives 20 to user 3
     data.transactions.push(
       TransferMock.build({
-        from: data.users[1].keycloakID,
-        to: data.users[2].keycloakID,
+        from: data.users[1]._id,
+        to: data.users[2]._id,
         amount: 10,
       })
     );
@@ -152,7 +145,7 @@ describe("transaction", () => {
       });
       it("/user/:id returns all user's transactions", async () => {
         const res = await supertest(app).get(
-          `/api/transaction/user/${data.users[2].keycloakID}`
+          `/api/transaction/user/${data.users[2]._id}`
         );
         expect(res.status).toBe(200);
         ExpectRouteToBeProtected();
@@ -168,16 +161,16 @@ describe("transaction", () => {
         // data to push
         const transactions = [
           TransferMock.build({
-            from: data.users[1].keycloakID,
-            to: data.users[2].keycloakID,
+            from: data.users[1]._id,
+            to: data.users[2]._id,
             amount: 20,
           }),
           DepositMock.build({
-            to: data.users[3].keycloakID,
+            to: data.users[3]._id,
             amount: 20,
           }),
           ExpenseMock.build({
-            from: data.users[2].keycloakID,
+            from: data.users[2]._id,
             amount: 10,
           }),
         ];
