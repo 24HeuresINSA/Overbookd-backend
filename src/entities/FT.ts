@@ -1,9 +1,12 @@
-import { model, Schema } from "mongoose";
+import {model, Schema} from "mongoose";
 
 export interface IFT {
+  count?: number;
   schedules?: ISchedule[];
   _id?: string;
-  name: string;
+  general?: {
+    name: string;
+  }
 }
 
 interface ISchedule {
@@ -26,16 +29,15 @@ interface IAssign {
 }
 
 const FTSchema = new Schema<IFT>(
-  {
-    name: { type: String, required: true },
-  },
-  { strict: false }
+  {},
+  {strict: false}
 );
 
 const FTModel = model<FT>("FT", FTSchema);
 
 class FT implements IFT {
-  constructor(public name: string) {}
+  constructor() {
+  }
 }
 
 export default FTModel;
