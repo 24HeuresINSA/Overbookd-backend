@@ -9,9 +9,6 @@ import BaseRouter from "./routes";
 import logger from "@shared/Logger";
 import mCors from "./cors";
 
-import session from "express-session";
-import keycloak, { memoryStore } from "./keycloak";
-
 const app = express();
 const { BAD_REQUEST } = StatusCodes;
 
@@ -24,22 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // CORS
 app.use(mCors);
-
-app.use(
-  session({
-    secret: "abcdefageguhdok654sd65_djzuéOdnjzKIJDjneé0I",
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
-
-app.use(
-  keycloak.middleware({
-    logout: "/logout",
-    admin: "/",
-  })
-);
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === "development") {
