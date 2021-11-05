@@ -3,8 +3,23 @@ import {RequestHandler} from "express";
 import jwt from "jsonwebtoken";
 import UserModel from "@entities/User";
 import logger from "@shared/Logger";
+import ConfigModel from "@entities/Config";
 
 export const signup: RequestHandler = async function (req, res) {
+  // checking if signup is possible beffore all
+  try {
+    const value = await ConfigModel.findOne({key: 'isSignupOpen'});
+    if(!value || !value.value){
+      logger.info(`Signup is closed, ${req.ip} tried to signup`);
+      return res.status(400).json({
+        msg: "Signup closed !!!"
+      })
+    }
+  } catch(e){
+    logger.err(e);
+    return res.status(500).json({"msg": "Error fetching conf"})
+  }
+
   const userInput = req.body;
   try {
     let user = await UserModel.findOne({ email: userInput.email });
