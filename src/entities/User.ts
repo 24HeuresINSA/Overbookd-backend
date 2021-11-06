@@ -52,6 +52,40 @@ const UserSchema = new Schema<IUser>(
   { strict: false }
 );
 
+export class SafeUser {
+  _id?: string;
+  firstname: string;
+  lastname: string;
+  nickname?: string;
+  balance?: number;
+  charisma?: number;
+  phone?: number;
+  picture?: number;
+  email: string;
+  team?: string[];
+  hasDriverLicense?: boolean;
+  birthday?: Date;
+  friends?: string[];
+  pp?: string;
+
+  constructor(data: IUser){
+    this._id = data._id;
+    this.firstname = data.firstname;
+    this.lastname = data.lastname;
+    this.nickname = data.nickname;
+    this.balance = data.balance;
+    this.charisma = data.charisma;
+    this.phone = data.phone;
+    this.picture = data.picture;
+    this.email = data.email;
+    this.team = data.team;
+    this.hasDriverLicense = data.hasDriverLicense;
+    this.birthday = data.birthday;
+    this.friends = data.friends;
+    this.pp = data.pp;
+  }
+}
+
 const UserModel = model<IUser>("User", UserSchema);
 
 export default UserModel;
