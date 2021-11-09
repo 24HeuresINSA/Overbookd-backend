@@ -9,6 +9,28 @@ class timeframe implements ITimeframe {
   constructor(public start: string, public end: string) {}
 }
 
+export interface ITimeslot {
+  _id?: string;
+  groupTitle: string;
+  groupDescription?: string;
+  timeFrame: {
+    start: Date,
+    end: Date
+  };
+  charisma: number;
+}
+
+
+const TimeSlotSchema = new Schema<ITimeslot>(
+  {
+    groupTile: { type: String, required: true},
+    groupDescription: { type: String, required: false},
+    timeFrame: { type: Object, required: true
+    }
+  }
+);
+
+
 export interface IAvailabilities {
   _id?: string;
   name: string;

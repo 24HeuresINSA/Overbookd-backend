@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AvailabilitiesModel, { IAvailabilities } from "@entities/avalibilities";
+import AvailabilitiesModel, { IAvailabilities } from "@entities/Timeslot";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
