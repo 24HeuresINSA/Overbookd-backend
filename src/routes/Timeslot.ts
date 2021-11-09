@@ -1,15 +1,15 @@
-/*import { Request, Response } from "express";
-import AvailabilitiesModel, { IAvailabilities } from "@entities/Timeslot";
+import { Request, Response } from "express";
+import TimeslotModel, { ITimeslot } from "@entities/Timeslot";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
 export async function getAvailabilities(req: Request, res: Response) {
-  const availabilities = await AvailabilitiesModel.find({});
+  const availabilities = await TimeslotModel.find({});
   res.json(availabilities);
 }
 
 export async function updateAvailabilities(req: Request, res: Response) {
-  const mAvailabilities = <IAvailabilities>req.body;
+  const mAvailabilities = <ITimeslot>req.body;
   if (mAvailabilities._id === undefined) {
     res
       .status(StatusCodes.BAD_REQUEST)
@@ -25,9 +25,9 @@ export async function updateAvailabilities(req: Request, res: Response) {
 }
 
 export async function setAvailabilities(req: Request, res: Response) {
-  const mAvailabilities = <IAvailabilities>req.body;
+  const mTimeslot = <ITimeslot>req.body;
   // creating Equipment
-  logger.info(`creating Availabilities ${mAvailabilities.name}`);
-  await AvailabilitiesModel.create(mAvailabilities);
+  logger.info(`creating Availabilities ${mTimeslot.groupTitle}`);
+  await TimeslotModel.create(mTimeslot);
   res.sendStatus(StatusCodes.CREATED);
-}*/
+}

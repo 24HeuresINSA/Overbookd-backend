@@ -15,7 +15,7 @@ import {
 } from "./Users";
 import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
-import {getAvailabilities, setAvailabilities, updateAvailabilities,} from "./Avalabilities";
+import * as TimeslotMiddleware from './Timeslot'
 import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
 import * as TransactionHandlers from "./transactions";
 import * as AuthHandlers from "./Auth";
@@ -80,10 +80,10 @@ equipmentRouter.get("/", authMiddleware.protect(), getEquipment);
 equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
 
 // Availabilities routes
-const availabilitiesRouter = Router();
-availabilitiesRouter.get("/", authMiddleware.protect(), getAvailabilities);
-availabilitiesRouter.post("/", authMiddleware.protect(), setAvailabilities);
-availabilitiesRouter.put("/", authMiddleware.protect(), updateAvailabilities);
+const timeslotRouter = Router();
+timeslotRouter.get("/", authMiddleware.protect(), TimeslotMiddleware.getAvailabilities);
+timeslotRouter.post("/", authMiddleware.protect(), TimeslotMiddleware.setAvailabilities);
+timeslotRouter.put("/", authMiddleware.protect(), TimeslotMiddleware.updateAvailabilities);
 
 // Transactions routes
 
@@ -131,7 +131,7 @@ baseRouter.use("/config", configRouter);
 baseRouter.use("/FA", FArouter);
 baseRouter.use("/FT", FTrouter);
 baseRouter.use("/equipment", equipmentRouter);
-baseRouter.use("/availabilities", availabilitiesRouter);
+baseRouter.use("/availabilities", timeslotRouter);
 baseRouter.use("/transaction", transactionRouter);
 
 baseRouter.post("/issue", issueHandler);
