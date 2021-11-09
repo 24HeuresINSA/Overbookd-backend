@@ -15,12 +15,13 @@ import {
 } from "./Users";
 import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
-import * as TimeslotMiddleware from './Timeslot'
+import * as TimeslotHandler from './Timeslot'
 import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
 import * as TransactionHandlers from "./transactions";
 import * as AuthHandlers from "./Auth";
 import issueHandler from "./Issue";
 import * as authMiddleware from "@src/middleware/auth";
+import * as AssignmentHandlers from "./Assignment";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const multer = require("multer");
@@ -81,11 +82,18 @@ equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
 
 // Availabilities routes
 const timeslotRouter = Router();
-timeslotRouter.get("/", authMiddleware.protect(), TimeslotMiddleware.getTimeslot);
-timeslotRouter.post("/", authMiddleware.protect(), TimeslotMiddleware.createTimeslot);
-timeslotRouter.put("/", authMiddleware.protect(), TimeslotMiddleware.updateTimeslot);
-timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotMiddleware.getTimeslotById);
+timeslotRouter.get("/", authMiddleware.protect(), TimeslotHandler.getTimeslot);
+timeslotRouter.post("/", authMiddleware.protect(), TimeslotHandler.createTimeslot);
+timeslotRouter.put("/", authMiddleware.protect(), TimeslotHandler.updateTimeslot);
+timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotHandler.getTimeslotById);
 // Transactions routes
+
+const assignmentRouter = Router();
+assignmentRouter.get("/", authMiddleware.protect(), AssignmentHandlers.getAssignments);
+assignmentRouter.post("/", authMiddleware.protect(), AssignmentHandlers.createAssignment);
+assignmentRouter.put("/", authMiddleware.protect(), AssignmentHandlers.updateAssignment);
+assignmentRouter.get("/user/:id", authMiddleware.protect(), AssignmentHandlers.getAssignmentsByUserId);
+assignmentRouter.get("/ft/:id", authMiddleware.protect(), AssignmentHandlers.getAssignmentsByFTId);
 
 const transactionRouter = Router();
 transactionRouter.get(
@@ -133,6 +141,7 @@ baseRouter.use("/FT", FTrouter);
 baseRouter.use("/equipment", equipmentRouter);
 baseRouter.use("/timeslot", timeslotRouter);
 baseRouter.use("/transaction", transactionRouter);
+baseRouter.use("/assignment", assignmentRouter);
 
 baseRouter.post("/issue", issueHandler);
 
