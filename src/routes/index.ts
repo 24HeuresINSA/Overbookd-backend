@@ -81,9 +81,9 @@ equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
 
 // Availabilities routes
 const timeslotRouter = Router();
-timeslotRouter.get("/", authMiddleware.protect(), TimeslotMiddleware.getAvailabilities);
-timeslotRouter.post("/", authMiddleware.protect(), TimeslotMiddleware.setAvailabilities);
-timeslotRouter.put("/", authMiddleware.protect(), TimeslotMiddleware.updateAvailabilities);
+timeslotRouter.get("/", authMiddleware.protect(), TimeslotMiddleware.getTimeslot);
+timeslotRouter.post("/", authMiddleware.protect(), TimeslotMiddleware.createTimeslot);
+timeslotRouter.put("/", authMiddleware.protect(), TimeslotMiddleware.updateTimeslot);
 
 // Transactions routes
 
@@ -131,7 +131,7 @@ baseRouter.use("/config", configRouter);
 baseRouter.use("/FA", FArouter);
 baseRouter.use("/FT", FTrouter);
 baseRouter.use("/equipment", equipmentRouter);
-baseRouter.use("/availabilities", timeslotRouter);
+baseRouter.use("/timeslot", timeslotRouter);
 baseRouter.use("/transaction", transactionRouter);
 
 baseRouter.post("/issue", issueHandler);

@@ -3,12 +3,12 @@ import TimeslotModel, { ITimeslot } from "@entities/Timeslot";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
-export async function getAvailabilities(req: Request, res: Response) {
+export async function getTimeslot(req: Request, res: Response) {
   const availabilities = await TimeslotModel.find({});
   res.json(availabilities);
 }
 
-export async function updateAvailabilities(req: Request, res: Response) {
+export async function updateTimeslot(req: Request, res: Response) {
   const mAvailabilities = <ITimeslot>req.body;
   if (mAvailabilities._id === undefined) {
     res
@@ -24,10 +24,11 @@ export async function updateAvailabilities(req: Request, res: Response) {
   res.sendStatus(StatusCodes.OK);
 }
 
-export async function setAvailabilities(req: Request, res: Response) {
+export async function createTimeslot(req: Request, res: Response) {
+  //Add validation on time
   const mTimeslot = <ITimeslot>req.body;
   // creating Equipment
-  logger.info(`creating Availabilities ${mTimeslot.groupTitle}`);
+  logger.info(`creating Timeslot ${mTimeslot.groupTitle}`);
   await TimeslotModel.create(mTimeslot);
-  res.sendStatus(StatusCodes.CREATED);
+  res.sendStatus(StatusCodes.CREATED)
 }

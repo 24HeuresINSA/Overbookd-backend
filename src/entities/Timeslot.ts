@@ -15,7 +15,7 @@ export interface ITimeslot {
 
 const TimeslotSchema = new Schema<ITimeslot>(
   {
-    groupTile: { type: String, required: true},
+    groupTitle: { type: String, required: true},
     groupDescription: { type: String, required: false},
     timeFrame: {
       start: { type: Date, required: true },
