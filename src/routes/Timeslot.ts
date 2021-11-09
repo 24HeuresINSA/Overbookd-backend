@@ -8,6 +8,19 @@ export async function getTimeslot(req: Request, res: Response) {
   res.json(availabilities);
 }
 
+export async function getTimeslotById(req: Request, res: Response) {
+  const { id } = req.params;
+  logger.info(id)
+  const timeslot = await TimeslotModel.findById(id);
+  if (!timeslot) {
+    logger.info(`Timeslot with id ${id} not found`);
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: `Timeslot with id ${id} not found`
+    });
+  }
+  res.json(timeslot);
+}
+
 export async function updateTimeslot(req: Request, res: Response) {
   const mAvailabilities = <ITimeslot>req.body;
   if (mAvailabilities._id === undefined) {

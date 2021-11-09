@@ -84,7 +84,7 @@ const timeslotRouter = Router();
 timeslotRouter.get("/", authMiddleware.protect(), TimeslotMiddleware.getTimeslot);
 timeslotRouter.post("/", authMiddleware.protect(), TimeslotMiddleware.createTimeslot);
 timeslotRouter.put("/", authMiddleware.protect(), TimeslotMiddleware.updateTimeslot);
-
+timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotMiddleware.getTimeslotById);
 // Transactions routes
 
 const transactionRouter = Router();
