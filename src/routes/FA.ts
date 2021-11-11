@@ -39,9 +39,20 @@ export async function setFA(req: Request, res: Response) {
 export async function createFA(req: Request, res: Response) {
   const mFA = <IFA>req.body;
   mFA.count = (await FAModel.countDocuments()) + 1;
+  mFA.general = {};
+  mFA.security = {};
+  mFA.details = {};
+  mFA.validated = [];
+  mFA.refused = [];
+  mFA.comments = [];
+  mFA.timeframes = [];
+  mFA.FTs = [];
+  mFA.equipments = [];
+  mFA.status = "draft";
+
   // creating FA
-  // @ts-ignore
-  logger.info(`creating FA ${mFA.general.name} id: ${mFA.count}`);
+  logger.info(`creating FA id: ${mFA.count}`);
   await FAModel.create(mFA);
-  res.sendStatus(StatusCodes.CREATED);
+  console.log(mFA)
+  res.status(StatusCodes.CREATED).json(mFA);
 }
