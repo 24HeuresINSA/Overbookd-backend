@@ -2,6 +2,7 @@ import {model, Schema} from "mongoose";
 import {ITimeframe} from "@entities/avalibilities";
 
 export interface IFA {
+  isValid: boolean;
   equipments: any[];
   status: string;
   timeframes: ITimeframe[];
@@ -40,6 +41,7 @@ class FA implements IFA {
   security = {};
   status = "draft";
   timeframes = [];
+  isValid = true;
 
 }
 

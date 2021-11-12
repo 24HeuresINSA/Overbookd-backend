@@ -13,7 +13,7 @@ import {
   updateUserByID,
   uploadPP,
 } from "./Users";
-import {createFA, getFAByCount, getFAs, setFA} from "./FA";
+import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
 import {getAvailabilities, setAvailabilities, updateAvailabilities,} from "./Avalabilities";
 import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
@@ -63,6 +63,7 @@ FArouter.get("/", authMiddleware.protect(), getFAs);
 FArouter.get("/:id", authMiddleware.protect(), getFAByCount);
 FArouter.post("/", authMiddleware.protect(), createFA);
 FArouter.put("/", authMiddleware.protect(), setFA);
+FArouter.delete("/", authMiddleware.protect(), deleteFA);
 
 // FT-routes
 const FTrouter = Router();

@@ -28,11 +28,22 @@ export async function getFAByCount(req: Request, res: Response) {
 
 export async function setFA(req: Request, res: Response) {
   const mFA = <IFA>req.body;
-  if (await FAModel.exists({ count: mFA.count })) {
+  if (await FAModel.exists({count: mFA.count})) {
     // this FA already exists so update it
     logger.info(`updating FA ${mFA.count}`);
     await FAModel.replaceOne({count: mFA.count}, mFA);
     res.sendStatus(StatusCodes.OK);
+  }
+}
+
+export async function deleteFA(req: Request, res: Response) {
+  const mFA = <IFA>req.body;
+  if (await FAModel.exists({count: mFA.count})) {
+    // this FA already exists so update it
+    mFA.isValid = false;
+    logger.info(`deleting FA ${mFA.count}`);
+    await FAModel.replaceOne({count: mFA.count}, mFA);
+    res.status(StatusCodes.OK).json(mFA);
   }
 }
 
