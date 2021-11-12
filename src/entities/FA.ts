@@ -1,25 +1,31 @@
 import {model, Schema} from "mongoose";
 import {ITimeframe} from "@entities/avalibilities";
+import {IFT} from "@entities/FT";
 
-export interface IFA {
-  isValid: boolean;
-  equipments: any[];
-  status: string;
-  timeframes: ITimeframe[];
-  details: {};
-  security: {};
+export interface IForm {
+  _id: string;
   comments: any[];
   refused: string[];
   validated: string[];
   general: {};
   count: number;
+  isValid: boolean;
+  equipments: any[];
+  status: string;
+}
+
+export interface IFA extends IForm {
+  timeframes: ITimeframe[];
+  details: {};
+  security: {};
   name: string;
-  FTs: Record<string, unknown>[];
+  FTs: Partial<IFT>[];
 }
 
 const FASchema = new Schema<IFA>(
   {
     name: {type: String, required: false},
+    FTs: {type: Array, required: false},
   },
   { strict: false }
 );
@@ -42,6 +48,7 @@ class FA implements IFA {
   status = "draft";
   timeframes = [];
   isValid = true;
+  _id = "";
 
 }
 
