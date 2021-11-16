@@ -25,6 +25,8 @@ const TimeslotSchema = new Schema<ITimeslot>(
   }
 );
 
+TimeslotSchema.index({ groupTitle: 1, 'timeFrame.start':1, 'timeFrame.end':1 }, { unique: true });
+
 const TimeslotModel = model<ITimeslot>('Timeslot', TimeslotSchema)
 
 

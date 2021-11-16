@@ -44,8 +44,9 @@ export async function createManyTimeslots(req: Request, res: Response) {
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: "Timeslots must contain at least one timeslot" });
   }
-  await TimeslotModel.insertMany(timeslots);
-  res.sendStatus(StatusCodes.OK);
+  const newTimeslots = await TimeslotModel.insertMany(timeslots);
+  logger.info(newTimeslots);
+  res.status(StatusCodes.OK).json(newTimeslots);
 } 
 
 export async function createTimeslot(req: Request, res: Response) {
