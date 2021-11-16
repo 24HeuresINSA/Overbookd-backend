@@ -12,6 +12,7 @@ import {
   getUsers,
   updateUserByID,
   uploadPP,
+  addAvailabilities
 } from "./Users";
 import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
 import {getEquipment, setEquipment} from "./Equipment";
@@ -44,7 +45,7 @@ userRouter.put(
 );
 userRouter.post("/broadcast", authMiddleware.protect(), broadcastNotification);
 userRouter.post("/friends", authMiddleware.protect(), createFriendship);
-
+userRouter.post("/availabilities/:id", authMiddleware.protect(), addAvailabilities)
 const imageUpload = multer({
   dest: "images",
 });
@@ -86,6 +87,7 @@ timeslotRouter.get("/", authMiddleware.protect(), TimeslotHandler.getTimeslot);
 timeslotRouter.post("/", authMiddleware.protect(), TimeslotHandler.createTimeslot);
 timeslotRouter.put("/", authMiddleware.protect(), TimeslotHandler.updateTimeslot);
 timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotHandler.getTimeslotById);
+timeslotRouter.post("/many", authMiddleware.protect(), TimeslotHandler.createManyTimeslots);
 // Transactions routes
 
 const assignmentRouter = Router();

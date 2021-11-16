@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import * as Factory from "factory.ts";
 import faker from "faker";
 
@@ -22,6 +22,7 @@ export interface IUser {
   friends?: string[];
   transactionHistory?: any;
   pp?: string;
+  availabilities?: Types.ObjectId[];
 }
 
 // Mock interface for data generation
@@ -48,6 +49,7 @@ const UserSchema = new Schema<IUser>(
     birthday: { type: Date, required: false },
     friends: { type: Array, required: false },
     pp: { type: String, required: false },
+    availabilities: { type: Array, required: false}
   },
   { strict: false }
 );
@@ -67,6 +69,7 @@ export class SafeUser {
   birthday?: Date;
   friends?: string[];
   pp?: string;
+  availabilities?: Types.ObjectId[];
 
   constructor(data: IUser){
     this._id = data._id;
@@ -83,6 +86,8 @@ export class SafeUser {
     this.birthday = data.birthday;
     this.friends = data.friends;
     this.pp = data.pp;
+    this.availabilities = data.availabilities;
+    
   }
 }
 

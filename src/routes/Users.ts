@@ -59,6 +59,27 @@ export const getAllUsersName: RequestHandler = async function (req, res) {
   );
 };
 
+export const addAvailabilities: RequestHandler = async function (req, res){
+  const { id } = req.params;
+  const { timeslotIds } = req.body;
+  try{
+    const users = await UserModel.findById(id);
+    if(users){
+      users.availabilities = timeslotIds;
+      users.save()
+    }else{
+      res.sendStatus(StatusCodes.NOT_FOUND).json({
+        'msg': 'User not found'
+      });
+    }
+  }catch(e){
+    logger.err(e);
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      'msg': 'Error, contact your admin'
+    });
+  }
+}
+
 export const addNotificationByFullName: RequestHandler = async function (
   req,
   res

@@ -37,6 +37,17 @@ export async function updateTimeslot(req: Request, res: Response) {
   res.sendStatus(StatusCodes.OK);
 }
 
+export async function createManyTimeslots(req: Request, res: Response) {
+  const timeslots = req.body;
+  if (timeslots.length === 0) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: "Timeslots must contain at least one timeslot" });
+  }
+  await TimeslotModel.insertMany(timeslots);
+  res.sendStatus(StatusCodes.OK);
+} 
+
 export async function createTimeslot(req: Request, res: Response) {
   //Add validation on time
   const mTimeslot = <ITimeslot>req.body;
