@@ -57,3 +57,19 @@ export async function createTimeslot(req: Request, res: Response) {
   await TimeslotModel.create(mTimeslot);
   res.sendStatus(StatusCodes.CREATED)
 }
+
+export async function updateTimeslotCharisma(req: Request, res: Response) {
+  const { id, charisma } = req.params;
+  const charismaN = parseInt(charisma);
+  logger.info(`updating Timeslot ${id}`);
+  const timeslot = await TimeslotModel.findById(id);
+  if (timeslot && !isNaN(charismaN)) {
+    timeslot.charisma = charismaN;
+    timeslot.save();
+  }else{
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: `Timeslot with id ${id} not found or charisma NaN`
+    });
+  }
+  res.status(StatusCodes.OK).json(timeslot);
+}
