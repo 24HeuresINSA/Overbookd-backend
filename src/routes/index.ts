@@ -45,7 +45,7 @@ userRouter.put(
 );
 userRouter.post("/broadcast", authMiddleware.protect(), broadcastNotification);
 userRouter.post("/friends", authMiddleware.protect(), createFriendship);
-userRouter.post("/availabilities/:id", authMiddleware.protect(), addAvailabilities)
+userRouter.post("/availabilities", authMiddleware.protect(), addAvailabilities)
 const imageUpload = multer({
   dest: "images",
 });

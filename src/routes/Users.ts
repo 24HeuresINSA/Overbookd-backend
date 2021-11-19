@@ -4,6 +4,7 @@ import logger from "@shared/Logger";
 import UserModel, { IUser, SafeUser } from "@entities/User";
 import path from "path";
 import * as fs from "fs";
+import { Types } from "mongoose";
 
 export const getUsers: RequestHandler = async function (req, res) {
   const users = await UserModel.find({});
@@ -60,13 +61,17 @@ export const getAllUsersName: RequestHandler = async function (req, res) {
 };
 
 export const addAvailabilities: RequestHandler = async function (req, res){
-  const { id } = req.params;
-  const { timeslotIds } = req.body;
+  const id = res.locals.auth_user._id;
+  const timeslotIds = req.body;
   try{
-    const users = await UserModel.findById(id);
-    if(users){
-      users.availabilities = timeslotIds;
-      users.save()
+    const user = await UserModel.findById(id);
+    if(user){
+      if(user.availabilities){
+        user.availabilities.push(...timeslotIds);
+      } else {
+        user.availabilities = timeslotIds;
+      }
+      user.save()
     }else{
       res.sendStatus(StatusCodes.NOT_FOUND).json({
         'msg': 'User not found'
