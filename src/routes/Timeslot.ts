@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import TimeslotModel, { ITimeslot } from "@entities/Timeslot";
+import UserModel from "@entities/User";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
+import { Types } from "mongoose";
 
 export async function getTimeslot(req: Request, res: Response) {
   const availabilities = await TimeslotModel.find({});
@@ -72,4 +74,25 @@ export async function updateTimeslotCharisma(req: Request, res: Response) {
     });
   }
   res.status(StatusCodes.OK).json(timeslot);
+}
+
+export async function deleteTimeslot(req: Request, res: Response) {
+  const { id } = req.params;
+  logger.info(`deleting Timeslot ${id}`);
+  const timeslot = await TimeslotModel.findById(id);
+  if (!timeslot) {
+    logger.info(`Timeslot with id ${id} not found`);
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: `Timeslot with id ${id} not found`
+    });
+  }
+  const users = await UserModel.find({availabilities: {$in: [Types.ObjectId(id)]}}).exec();
+  if (users) {
+    logger.info(`Timeslot with id ${id} has users`);
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: `Timeslot with id ${id} has users`
+    });
+  }
+  timeslot!.remove();
+  res.sendStatus(StatusCodes.OK);
 }

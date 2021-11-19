@@ -89,6 +89,7 @@ timeslotRouter.put("/", authMiddleware.protect(), TimeslotHandler.updateTimeslot
 timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotHandler.getTimeslotById);
 timeslotRouter.post("/many", authMiddleware.protect(), TimeslotHandler.createManyTimeslots);
 timeslotRouter.put("/:id/:charisma", authMiddleware.protect(), TimeslotHandler.updateTimeslotCharisma);
+timeslotRouter.delete("/:id", authMiddleware.protect(), TimeslotHandler.deleteTimeslot);
 // Transactions routes
 
 const assignmentRouter = Router();

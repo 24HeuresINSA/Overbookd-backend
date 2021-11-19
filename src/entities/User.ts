@@ -49,7 +49,7 @@ const UserSchema = new Schema<IUser>(
     birthday: { type: Date, required: false },
     friends: { type: Array, required: false },
     pp: { type: String, required: false },
-    availabilities: { type: Array, required: false}
+    availabilities: { type: [Schema.Types.ObjectId], required: false}
   },
   { strict: false }
 );
