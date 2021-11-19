@@ -87,7 +87,7 @@ export async function deleteTimeslot(req: Request, res: Response) {
     });
   }
   const users = await UserModel.find({availabilities: {$in: [Types.ObjectId(id)]}}).exec();
-  if (users) {
+  if (users.length>0) {
     logger.info(`Timeslot with id ${id} has users`);
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: `Timeslot with id ${id} has users`
