@@ -62,12 +62,15 @@ export const getAllUsersName: RequestHandler = async function (req, res) {
 
 export const addAvailabilities: RequestHandler = async function (req, res){
   const id = res.locals.auth_user._id;
-  const timeslotIds = req.body;
+  const timeslotIds: Types.ObjectId[] = req.body;
   try{
     const user = await UserModel.findById(id);
     if(user){
       if(user.availabilities){
-        user.availabilities.push(...timeslotIds);
+        const toAdd = timeslotIds.filter((e) => {
+          return !(user.availabilities!.includes(e))
+        })
+        user.availabilities.push(...toAdd);
       } else {
         user.availabilities = timeslotIds;
       }
