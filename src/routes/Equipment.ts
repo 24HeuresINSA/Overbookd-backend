@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import EquipmentModel, { IEquipment } from "@entities/Equipment";
+import {Request, Response} from "express";
+import EquipmentModel, {IEquipment} from "@entities/Equipment";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
@@ -10,20 +10,15 @@ export async function getEquipment(req: Request, res: Response) {
 
 export async function setEquipment(req: Request, res: Response) {
   const mEquipment = <IEquipment>req.body;
-  if (mEquipment.name === undefined) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: "equipment must contain a name" });
-  }
   if (await EquipmentModel.exists({ name: mEquipment.name })) {
     // this Equipment already exists so update it
     logger.info(`updating equipment ${mEquipment.name}`);
-    await EquipmentModel.replaceOne({ name: mEquipment.name }, mEquipment);
-    res.sendStatus(StatusCodes.OK);
+    await EquipmentModel.replaceOne({name: mEquipment.name}, mEquipment);
+    res.status(StatusCodes.OK).json(mEquipment);
   } else {
     // creating Equipment
     logger.info(`creating equipment ${mEquipment.name}`);
     await EquipmentModel.create(mEquipment);
-    res.sendStatus(StatusCodes.CREATED);
+    res.status(StatusCodes.CREATED).json(mEquipment);
   }
 }
