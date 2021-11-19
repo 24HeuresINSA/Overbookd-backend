@@ -1,6 +1,15 @@
 import {model, Schema} from "mongoose";
-import {ITimeframe} from "@entities/avalibilities";
 import {IFT} from "@entities/FT";
+
+export interface ITimeframe {
+  start: string;
+  end: string;
+}
+
+class timeframe implements ITimeframe {
+  constructor(public start: string, public end: string) {}
+}
+
 
 export interface IForm {
   _id: string;
