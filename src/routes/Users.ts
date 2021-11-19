@@ -72,6 +72,7 @@ export const addAvailabilities: RequestHandler = async function (req, res){
         user.availabilities = timeslotIds;
       }
       user.save()
+      res.status(StatusCodes.OK).json(new SafeUser(user));
     }else{
       res.sendStatus(StatusCodes.NOT_FOUND).json({
         'msg': 'User not found'
