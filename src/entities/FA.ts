@@ -23,10 +23,18 @@ export interface IForm {
   status: string;
 }
 
+export interface ISecurityPass {
+  fullname: string,
+  licensePlate: string,
+  timeframe: string[],
+  phone: number,
+}
+
 export interface IFA extends IForm {
   timeframes: ITimeframe[];
   details: {};
   security: {};
+  securityPasses: ISecurityPass[],
   name: string;
   FTs: Partial<IFT>[];
 }
@@ -58,6 +66,7 @@ class FA implements IFA {
   timeframes = [];
   isValid = true;
   _id = "";
+  securityPasses = [];
 
 }
 

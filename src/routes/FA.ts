@@ -50,20 +50,22 @@ export async function deleteFA(req: Request, res: Response) {
 export async function createFA(req: Request, res: Response) {
   const mFA = <IFA>req.body;
   mFA.count = (await FAModel.countDocuments()) + 1;
-  mFA.general = {};
-  mFA.security = {};
-  mFA.details = {};
-  mFA.validated = [];
-  mFA.refused = [];
-  mFA.comments = [];
-  mFA.timeframes = [];
-  mFA.FTs = [];
-  mFA.equipments = [];
-  mFA.status = "draft";
-
+  if (!mFA.general) {
+    mFA.general = {};
+  }
+  Object.assign(mFA, {
+    details: {},
+    validated: [],
+    refused: [],
+    comments: [],
+    timeframes: [],
+    FTs: [],
+    equipments: [],
+    status: "draft",
+    securityPasses: [],
+  })
   // creating FA
   logger.info(`creating FA id: ${mFA.count}`);
   await FAModel.create(mFA);
-  console.log(mFA)
   res.status(StatusCodes.CREATED).json(mFA);
 }
