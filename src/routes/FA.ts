@@ -63,6 +63,7 @@ export async function createFA(req: Request, res: Response) {
     equipments: [],
     status: "draft",
     securityPasses: [],
+    signalisation: [],
   })
   // creating FA
   logger.info(`creating FA id: ${mFA.count}`);
