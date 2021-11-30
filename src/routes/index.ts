@@ -155,6 +155,7 @@ baseRouter.use("/equipment", equipmentRouter);
 baseRouter.use("/timeslot", timeslotRouter);
 baseRouter.use("/transaction", transactionRouter);
 baseRouter.use("/assignment", assignmentRouter);
+baseRouter.use("/location", locationRouter);
 
 baseRouter.post("/issue", issueHandler);
 
