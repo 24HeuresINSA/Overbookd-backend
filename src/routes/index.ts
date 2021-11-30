@@ -23,6 +23,7 @@ import * as AuthHandlers from "./Auth";
 import issueHandler from "./Issue";
 import * as authMiddleware from "@src/middleware/auth";
 import * as AssignmentHandlers from "./Assignment";
+import * as LocationHandlers from "./Location";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const multer = require("multer");
@@ -135,6 +136,14 @@ transactionRouter.delete(
   authMiddleware.protect(),
   TransactionHandlers.deleteTransaction
 );
+
+const locationRouter = Router();
+locationRouter.get("/", authMiddleware.protect(), LocationHandlers.getLocations);
+locationRouter.post("/", authMiddleware.protect(), LocationHandlers.createLocation);
+locationRouter.put("/", authMiddleware.protect(), LocationHandlers.setLocation);
+locationRouter.delete("/:id", authMiddleware.protect(), LocationHandlers.deleteLocation);
+locationRouter.get("/:id", authMiddleware.protect(), LocationHandlers.getLocationById);
+locationRouter.post("/many", authMiddleware.protect(), LocationHandlers.createManyLocations);
 
 // Export the base-router
 const baseRouter = Router();
