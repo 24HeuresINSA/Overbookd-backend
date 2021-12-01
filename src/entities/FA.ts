@@ -30,11 +30,25 @@ export interface ISecurityPass {
   phone: number,
 }
 
+export interface ISignalisation {
+  type: string,
+  text: string,
+  number: number,
+
+}
+
+export interface ElectricityNeed {
+  type: string,
+  power: number,
+}
+
 export interface IFA extends IForm {
   timeframes: ITimeframe[];
   details: {};
   security: {};
   securityPasses: ISecurityPass[],
+  signalisation: ISignalisation[],
+  electricityNeeds: ElectricityNeed[],
   name: string;
   FTs: Partial<IFT>[];
 }
@@ -67,6 +81,8 @@ class FA implements IFA {
   isValid = true;
   _id = "";
   securityPasses = [];
+  electricityNeeds = [];
+  signalisation = [];
 
 }
 

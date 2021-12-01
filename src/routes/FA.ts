@@ -55,15 +55,24 @@ export async function createFA(req: Request, res: Response) {
   }
   Object.assign(mFA, {
     details: {},
+
+    timeframes: [],
+
+    signalisation: [],
+
+    // security
+    security: {},
+    securityPasses: [],
+    // log
+    equipments: [],
+    electricityNeeds: [],
+    // status
+    status: "draft",
     validated: [],
     refused: [],
     comments: [],
-    timeframes: [],
+    // FT
     FTs: [],
-    equipments: [],
-    status: "draft",
-    securityPasses: [],
-    signalisation: [],
   })
   // creating FA
   logger.info(`creating FA id: ${mFA.count}`);
