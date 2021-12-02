@@ -10,15 +10,15 @@ export async function getEquipment(req: Request, res: Response) {
 
 export async function setEquipment(req: Request, res: Response) {
   const mEquipment = <IEquipment>req.body;
-  if (await EquipmentModel.exists({ name: mEquipment.name })) {
+  if (await EquipmentModel.exists({ _id: mEquipment._id })) {
     // this Equipment already exists so update it
-    logger.info(`updating equipment ${mEquipment.name}`);
-    await EquipmentModel.replaceOne({name: mEquipment.name}, mEquipment);
+    logger.info(`updating equipment ${mEquipment._id}`);
+    await EquipmentModel.replaceOne({_id: mEquipment._id}, mEquipment);
     res.status(StatusCodes.OK).json(mEquipment);
   } else {
     // creating Equipment
     logger.info(`creating equipment ${mEquipment.name}`);
-    await EquipmentModel.create(mEquipment);
-    res.status(StatusCodes.CREATED).json(mEquipment);
+    const neweq = await EquipmentModel.create(mEquipment);
+    res.status(StatusCodes.CREATED).json(neweq);
   }
 }
