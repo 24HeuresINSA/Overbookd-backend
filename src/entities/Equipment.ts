@@ -9,7 +9,7 @@ export interface IEquipment {
   image?: string;
 }
 
-const EquipmentSchema = new Schema<IEquipment>(
+export const EquipmentSchema = new Schema<IEquipment>(
   {
     name: { type: String, required: true },
   },

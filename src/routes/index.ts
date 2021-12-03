@@ -14,17 +14,10 @@ import {
   uploadPP,
   addAvailabilities,
 } from "./Users";
-import { createFA, deleteFA, getFAByCount, getFAs, setFA } from "./FA";
-import { getEquipment, setEquipment } from "./Equipment";
-import * as TimeslotHandler from "./Timeslot";
-import {
-  createFT,
-  deleteFT,
-  getAllFTs,
-  getFTByID,
-  unassign,
-  updateFT,
-} from "./FT";
+import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
+import * as EquipmentHandler from "./Equipment";
+import * as TimeslotHandler from './Timeslot'
+import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
 import * as TransactionHandlers from "./transactions";
 import * as AuthHandlers from "./Auth";
 import issueHandler from "./Issue";
@@ -86,8 +79,14 @@ FTrouter.delete("/", authMiddleware.protect(), deleteFT);
 
 // Equipment-routes
 const equipmentRouter = Router();
-equipmentRouter.get("/", authMiddleware.protect(), getEquipment);
-equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
+equipmentRouter.get("/", authMiddleware.protect(), EquipmentHandler.getEquipment);
+equipmentRouter.put("/", authMiddleware.protect(), EquipmentHandler.setEquipment);
+equipmentRouter.post("/", authMiddleware.protect(), EquipmentHandler.createEquipment);
+
+const equipmentProposalRouter = Router();
+equipmentProposalRouter.get("/", authMiddleware.protect(), EquipmentHandler.getEquipmentProposals);
+equipmentProposalRouter.post("/", authMiddleware.protect(), EquipmentHandler.createEquipmentProposal);
+equipmentProposalRouter.delete("/", authMiddleware.protect(), EquipmentHandler.deleteEquipmentProposal);
 
 // Availabilities routes
 const timeslotRouter = Router();
