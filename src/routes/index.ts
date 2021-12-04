@@ -1,5 +1,5 @@
-import {Request, Response, Router} from "express";
-import {getConfig, setConfig} from "./Config";
+import { Request, Response, Router } from "express";
+import { getConfig, setConfig } from "./Config";
 import mCors from "../cors";
 import {
   addNotificationByFullName,
@@ -12,12 +12,19 @@ import {
   getUsers,
   updateUserByID,
   uploadPP,
-  addAvailabilities
+  addAvailabilities,
 } from "./Users";
-import {createFA, deleteFA, getFAByCount, getFAs, setFA} from "./FA";
-import {getEquipment, setEquipment} from "./Equipment";
-import * as TimeslotHandler from './Timeslot'
-import {createFT, deleteFT, getAllFTs, getFTByID, unassign, updateFT,} from "./FT";
+import { createFA, deleteFA, getFAByCount, getFAs, setFA } from "./FA";
+import { getEquipment, setEquipment } from "./Equipment";
+import * as TimeslotHandler from "./Timeslot";
+import {
+  createFT,
+  deleteFT,
+  getAllFTs,
+  getFTByID,
+  unassign,
+  updateFT,
+} from "./FT";
 import * as TransactionHandlers from "./transactions";
 import * as AuthHandlers from "./Auth";
 import issueHandler from "./Issue";
@@ -46,7 +53,7 @@ userRouter.put(
 );
 userRouter.post("/broadcast", authMiddleware.protect(), broadcastNotification);
 userRouter.post("/friends", authMiddleware.protect(), createFriendship);
-userRouter.post("/availabilities", authMiddleware.protect(), addAvailabilities)
+userRouter.post("/availabilities", authMiddleware.protect(), addAvailabilities);
 const imageUpload = multer({
   dest: "images",
 });
@@ -85,20 +92,64 @@ equipmentRouter.put("/", authMiddleware.protect(), setEquipment);
 // Availabilities routes
 const timeslotRouter = Router();
 timeslotRouter.get("/", authMiddleware.protect(), TimeslotHandler.getTimeslot);
-timeslotRouter.post("/", authMiddleware.protect(), TimeslotHandler.createTimeslot);
-timeslotRouter.put("/", authMiddleware.protect(), TimeslotHandler.updateTimeslot);
-timeslotRouter.get("/:id", authMiddleware.protect(), TimeslotHandler.getTimeslotById);
-timeslotRouter.post("/many", authMiddleware.protect(), TimeslotHandler.createManyTimeslots);
-timeslotRouter.put("/:id/:charisma", authMiddleware.protect(), TimeslotHandler.updateTimeslotCharisma);
-timeslotRouter.delete("/:id", authMiddleware.protect(), TimeslotHandler.deleteTimeslot);
+timeslotRouter.post(
+  "/",
+  authMiddleware.protect(),
+  TimeslotHandler.createTimeslot
+);
+timeslotRouter.put(
+  "/",
+  authMiddleware.protect(),
+  TimeslotHandler.updateTimeslot
+);
+timeslotRouter.get(
+  "/:id",
+  authMiddleware.protect(),
+  TimeslotHandler.getTimeslotById
+);
+timeslotRouter.post(
+  "/many",
+  authMiddleware.protect(),
+  TimeslotHandler.createManyTimeslots
+);
+timeslotRouter.put(
+  "/:id/:charisma",
+  authMiddleware.protect(),
+  TimeslotHandler.updateTimeslotCharisma
+);
+timeslotRouter.delete(
+  "/:id",
+  authMiddleware.protect(),
+  TimeslotHandler.deleteTimeslot
+);
 // Transactions routes
 
 const assignmentRouter = Router();
-assignmentRouter.get("/", authMiddleware.protect(), AssignmentHandlers.getAssignments);
-assignmentRouter.post("/", authMiddleware.protect(), AssignmentHandlers.createAssignment);
-assignmentRouter.put("/", authMiddleware.protect(), AssignmentHandlers.updateAssignment);
-assignmentRouter.get("/user/:id", authMiddleware.protect(), AssignmentHandlers.getAssignmentsByUserId);
-assignmentRouter.get("/ft/:id", authMiddleware.protect(), AssignmentHandlers.getAssignmentsByFTId);
+assignmentRouter.get(
+  "/",
+  authMiddleware.protect(),
+  AssignmentHandlers.getAssignments
+);
+assignmentRouter.post(
+  "/",
+  authMiddleware.protect(),
+  AssignmentHandlers.createAssignment
+);
+assignmentRouter.put(
+  "/",
+  authMiddleware.protect(),
+  AssignmentHandlers.updateAssignment
+);
+assignmentRouter.get(
+  "/user/:id",
+  authMiddleware.protect(),
+  AssignmentHandlers.getAssignmentsByUserId
+);
+assignmentRouter.get(
+  "/ft/:id",
+  authMiddleware.protect(),
+  AssignmentHandlers.getAssignmentsByFTId
+);
 
 const transactionRouter = Router();
 transactionRouter.get(
@@ -163,6 +214,8 @@ baseRouter.post("/issue", issueHandler);
 baseRouter.post("/signup", AuthHandlers.signup);
 baseRouter.post("/login", AuthHandlers.login);
 baseRouter.post("/migrate", AuthHandlers.migrate);
+baseRouter.post("/forgot", AuthHandlers.forgot);
+baseRouter.post("/reset", AuthHandlers.recoverPassword);
 
 baseRouter.get("/test", authMiddleware.protect(), (req, res) => {
   res.status(200).json({ msg: "it wooooorks !" });

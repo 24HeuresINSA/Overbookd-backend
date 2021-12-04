@@ -23,6 +23,8 @@ export interface IUser {
   transactionHistory?: any;
   pp?: string;
   availabilities?: Types.ObjectId[];
+  resetPasswordToken?: string;
+  resetTokenExpires?: Date;
 }
 
 // Mock interface for data generation
@@ -49,7 +51,9 @@ const UserSchema = new Schema<IUser>(
     birthday: { type: Date, required: false },
     friends: { type: Array, required: false },
     pp: { type: String, required: false },
-    availabilities: { type: [Schema.Types.ObjectId], required: false}
+    availabilities: { type: [Schema.Types.ObjectId], required: false },
+    resetPasswordToken: { type: String, required: false },
+    resetTokenExpires: { type: Date, required: false },
   },
   { strict: false }
 );
@@ -70,8 +74,10 @@ export class SafeUser {
   friends?: string[];
   pp?: string;
   availabilities?: Types.ObjectId[];
+  resetPasswordToken?: string;
+  resetTokenExpires?: Date;
 
-  constructor(data: IUser){
+  constructor(data: IUser) {
     this._id = data._id;
     this.firstname = data.firstname;
     this.lastname = data.lastname;
@@ -87,7 +93,6 @@ export class SafeUser {
     this.friends = data.friends;
     this.pp = data.pp;
     this.availabilities = data.availabilities;
-    
   }
 }
 
