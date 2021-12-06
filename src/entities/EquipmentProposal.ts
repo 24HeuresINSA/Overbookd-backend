@@ -8,8 +8,8 @@ export interface IEquipmentProposal extends IEquipment {
 
 const EquipmentProposalSchema = new Schema({
     isNewEquipment: { type: Boolean, required: true },
-    oldEquipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },
-});
+    oldEquipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },   
+}, { strict: false });
 
 const EquipmentProposalModel = EquipmentModel.discriminator('EquipmentProposal', EquipmentProposalSchema);
 

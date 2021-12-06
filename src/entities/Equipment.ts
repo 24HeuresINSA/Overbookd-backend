@@ -3,25 +3,20 @@ import { model, Schema } from "mongoose";
 export interface IEquipment {
   _id?: string;
   name: string;
+  isValid: boolean;
   amount: number;
-  height?: number;
-  width?: number;
-  image?: string;
 }
 
+const options = { discriminatorKey: "kind", strict: false };
 export const EquipmentSchema = new Schema<IEquipment>(
   {
     name: { type: String, required: true },
+    isValid : { type: Boolean, default: true },
   },
-  { strict: false }
+  options
 );
 
-const EquipmentModel = model<Equipment>("Equipment", EquipmentSchema);
+const EquipmentModel = model<IEquipment>("Equipment", EquipmentSchema);
 
-class Equipment implements IEquipment {
-  amount = 1;
-
-  constructor(public name: string) {}
-}
 
 export default EquipmentModel;
