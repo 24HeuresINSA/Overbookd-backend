@@ -28,7 +28,7 @@ export async function getFAByCount(req: Request, res: Response) {
 
 export async function setFA(req: Request, res: Response) {
   const mFA = <IFA>req.body;
-  if (await FAModel.exists({ count: mFA.count })) {
+  if (await FAModel.exists({count: mFA.count})) {
     // this FA already exists so update it
     logger.info(`updating FA ${mFA.count}`);
     await FAModel.replaceOne({count: mFA.count}, mFA);
@@ -36,12 +36,46 @@ export async function setFA(req: Request, res: Response) {
   }
 }
 
+export async function deleteFA(req: Request, res: Response) {
+  const mFA = <IFA>req.body;
+  if (await FAModel.exists({count: mFA.count})) {
+    // this FA already exists so update it
+    mFA.isValid = false;
+    logger.info(`deleting FA ${mFA.count}`);
+    await FAModel.replaceOne({count: mFA.count}, mFA);
+    res.status(StatusCodes.OK).json(mFA);
+  }
+}
+
 export async function createFA(req: Request, res: Response) {
   const mFA = <IFA>req.body;
   mFA.count = (await FAModel.countDocuments()) + 1;
+  if (!mFA.general) {
+    mFA.general = {};
+  }
+  Object.assign(mFA, {
+    details: {},
+
+    timeframes: [],
+
+    signalisation: [],
+
+    // security
+    security: {},
+    securityPasses: [],
+    // log
+    equipments: [],
+    electricityNeeds: [],
+    // status
+    status: "draft",
+    validated: [],
+    refused: [],
+    comments: [],
+    // FT
+    FTs: [],
+  })
   // creating FA
-  // @ts-ignore
-  logger.info(`creating FA ${mFA.general.name} id: ${mFA.count}`);
+  logger.info(`creating FA id: ${mFA.count}`);
   await FAModel.create(mFA);
-  res.sendStatus(StatusCodes.CREATED);
+  res.status(StatusCodes.CREATED).json(mFA);
 }

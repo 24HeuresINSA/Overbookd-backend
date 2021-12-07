@@ -20,14 +20,16 @@ export async function getConfig(req: Request, res: Response) {
 }
 
 export async function setConfig(req: Request, res: Response) {
-  const { key, value } = <IConfig>req.body;
-  logger.info(`setting new config ${key}`);
-  const isExisting = await ConfigModel.exists({ key });
-  if (isExisting) {
-    await ConfigModel.replaceOne({ key }, { key, value });
-  } else {
-    const mConfig = new ConfigModel({ key, value });
-    await mConfig.save();
+  const confArr = <IConfig[]>req.body;
+  for (const { key, value } of confArr){
+    logger.info(`setting new config ${key}`);
+    const isExisting = await ConfigModel.exists({ key });
+    if (isExisting) {
+      await ConfigModel.replaceOne({ key }, { key, value });
+    } else {
+      const mConfig = new ConfigModel({ key, value });
+      await mConfig.save();
+    }
   }
   return res.sendStatus(OK);
 }

@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 
 export interface IEquipment {
+  _id?: string;
   name: string;
   amount: number;
   height?: number;

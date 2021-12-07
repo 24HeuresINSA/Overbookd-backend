@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import AvailabilitiesModel, { IAvailabilities } from "@entities/avalibilities";
+/*import { Request, Response } from "express";
+import AvailabilitiesModel, { IAvailabilities } from "@entities/Timeslot";
 import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
@@ -30,4 +30,4 @@ export async function setAvailabilities(req: Request, res: Response) {
   logger.info(`creating Availabilities ${mAvailabilities.name}`);
   await AvailabilitiesModel.create(mAvailabilities);
   res.sendStatus(StatusCodes.CREATED);
-}
+}*/

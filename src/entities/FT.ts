@@ -1,12 +1,8 @@
 import {model, Schema} from "mongoose";
+import {IForm} from "@entities/FA";
 
-export interface IFT {
-  count?: number;
-  schedules?: ISchedule[];
-  _id?: string;
-  general?: {
-    name: string;
-  }
+export interface IFT extends IForm {
+  FA: number;
 }
 
 interface ISchedule {
@@ -38,6 +34,17 @@ const FTModel = model<FT>("FT", FTSchema);
 class FT implements IFT {
   constructor() {
   }
+
+  FA = 0;
+  comments = [];
+  count = 0;
+  equipments = [];
+  general = {};
+  isValid = true;
+  refused = [];
+  status = "draft";
+  validated = [];
+  _id = "";
 }
 
 export default FTModel;

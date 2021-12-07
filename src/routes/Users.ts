@@ -1,23 +1,31 @@
 import StatusCodes from "http-status-codes";
 import { RequestHandler } from "express";
 import logger from "@shared/Logger";
-import UserModel, { IUser } from "@entities/User";
+import UserModel, { IUser, SafeUser } from "@entities/User";
 import path from "path";
 import * as fs from "fs";
+import { Types } from "mongoose";
 
 export const getUsers: RequestHandler = async function (req, res) {
   const users = await UserModel.find({});
-  res.json(users);
+  const safeUsers = users.map((user) => new SafeUser(user));
+  return res.json(safeUsers);
 };
 
 export const getUser: RequestHandler = async function (req, res) {
-  res.json(res.locals.auth_user);
+  return res.json(new SafeUser(res.locals.auth_user));
 };
 
 export const getUserByID: RequestHandler = async function (req, res) {
   const _id = req.params.userID;
   const user = await UserModel.findOne({ _id });
-  res.json(user);
+  if(user){
+    res.json(new SafeUser(user));
+  } else {
+    res.status(StatusCodes.NOT_FOUND).json({
+      error: "User not found"
+    });
+  }
 };
 
 export const updateUserByID: RequestHandler = async function (req, res) {
@@ -25,7 +33,13 @@ export const updateUserByID: RequestHandler = async function (req, res) {
     { _id: req.params.userID },
     req.body
   );
-  res.json(user);
+  if(user){
+    res.json(new SafeUser(user));
+  } else {
+    res.status(StatusCodes.NOT_FOUND).json({
+      error: "User not found"
+    });
+  }
 };
 
 function capitalizeFirstLetter(s: string) {
@@ -45,6 +59,35 @@ export const getAllUsersName: RequestHandler = async function (req, res) {
     })
   );
 };
+
+export const addAvailabilities: RequestHandler = async function (req, res){
+  const id = res.locals.auth_user._id;
+  const timeslotIds: Types.ObjectId[] = req.body;
+  try{
+    const user = await UserModel.findById(id);
+    if(user){
+      if(user.availabilities){
+        const toAdd = timeslotIds.filter((e) => {
+          return !(user.availabilities!.includes(e))
+        })
+        user.availabilities.push(...toAdd);
+      } else {
+        user.availabilities = timeslotIds;
+      }
+      user.save()
+      res.status(StatusCodes.OK).json(new SafeUser(user));
+    }else{
+      res.sendStatus(StatusCodes.NOT_FOUND).json({
+        'msg': 'User not found'
+      });
+    }
+  }catch(e){
+    logger.err(e);
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      'msg': 'Error, contact your admin'
+    });
+  }
+}
 
 export const addNotificationByFullName: RequestHandler = async function (
   req,
