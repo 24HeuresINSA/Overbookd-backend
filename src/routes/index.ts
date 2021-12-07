@@ -201,6 +201,7 @@ baseRouter.use("/user", userRouter);
 baseRouter.use("/config", configRouter);
 baseRouter.use("/FA", FArouter);
 baseRouter.use("/FT", FTrouter);
+baseRouter.use('/equipment/proposal', equipmentProposalRouter);
 baseRouter.use("/equipment", equipmentRouter);
 baseRouter.use("/timeslot", timeslotRouter);
 baseRouter.use("/transaction", transactionRouter);
