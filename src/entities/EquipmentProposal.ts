@@ -1,5 +1,5 @@
 import { model, Schema, Types } from 'mongoose';
-import EquipmentModel, { IEquipment, EquipmentSchema } from './Equipment';
+import { IEquipment } from './Equipment';
 
 export interface IEquipmentProposal extends IEquipment {
     isNewEquipment: boolean;
@@ -11,6 +11,6 @@ const EquipmentProposalSchema = new Schema({
     oldEquipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },   
 }, { strict: false });
 
-const EquipmentProposalModel = EquipmentModel.discriminator('EquipmentProposal', EquipmentProposalSchema);
+const EquipmentProposalModel = model<IEquipmentProposal>('EquipmentProposal', EquipmentProposalSchema);
 
 export default EquipmentProposalModel;
