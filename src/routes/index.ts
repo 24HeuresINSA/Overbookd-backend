@@ -87,6 +87,7 @@ const equipmentProposalRouter = Router();
 equipmentProposalRouter.get("/", authMiddleware.protect(), EquipmentHandler.getEquipmentProposals);
 equipmentProposalRouter.post("/", authMiddleware.protect(), EquipmentHandler.createEquipmentProposal);
 equipmentProposalRouter.delete("/", authMiddleware.protect(), EquipmentHandler.deleteEquipmentProposal);
+equipmentProposalRouter.put("/:id/validate", authMiddleware.protect(), EquipmentHandler.validateEquipmentProposal);
 
 // Availabilities routes
 const timeslotRouter = Router();
