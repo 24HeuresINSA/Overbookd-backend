@@ -12,7 +12,7 @@ const EquipmentProposalSchema = new Schema({
     oldEquipment: { type: Schema.Types.ObjectId, ref: 'Equipment' },   
     byUser: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
-    isValid: { type: Boolean, required: true },
+    isValid: { type: Boolean, default: true },
     amount: { type: Number, required: true },
     comment: { type: String },
     location: { type: String, required: true },
@@ -21,7 +21,7 @@ const EquipmentProposalSchema = new Schema({
     referencePicture: { type: String },
     referenceInvoice: { type: String },
     type: { type: String, required: true },
-    fromPool: { type: Boolean, required: true }
+    fromPool: { type: Boolean, default: false },
 }, { strict: false });
 
 const EquipmentProposalModel = model<IEquipmentProposal>('EquipmentProposal', EquipmentProposalSchema);

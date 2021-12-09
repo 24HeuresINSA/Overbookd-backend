@@ -47,10 +47,16 @@ export async function createEquipmentProposal(req: Request, res: Response) {
 }
 
 export async function deleteEquipmentProposal(req: Request, res: Response) {
-  const equipmentProposal: IEquipmentProposal = req.body;
+  const { id } = req.params;
+  const equipmentProposal = await EquipmentProposalModel.findById(id);
+  if(!equipmentProposal) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      message: `Equipment proposal ${id} not found`,
+    });
+  }
   try {
-    const newEquipmentProposal = await EquipmentProposalModel.deleteOne(equipmentProposal);
-    res.status(StatusCodes.CREATED).json(newEquipmentProposal);
+    await EquipmentProposalModel.deleteOne({_id: equipmentProposal._id });
+    res.sendStatus(StatusCodes.OK)
   } catch (e) {
     logger.err(e);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(e);
@@ -62,6 +68,8 @@ export async function getEquipmentProposals(req: Request, res: Response) {
   res.json(equipmentProposals);
 }
 
+
+// when someone from log (or admin) approve a change, create or update the equipment while deleting the proposal
 export async function validateEquipmentProposal(req: Request, res: Response) {
   const { id } = req.params;
   const equipmentProposal = await EquipmentProposalModel.findById(id);
@@ -82,8 +90,8 @@ export async function validateEquipmentProposal(req: Request, res: Response) {
         logger.err("no old equipment (should not be happening)");
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "Equipment proposal is not valid" });
       }
-      const updatedEquipment = await EquipmentModel.replaceOne({_id: equipmentProposal.oldEquipment.toString()}, proposalToEquipment(equipmentProposal));
-      res.status(StatusCodes.OK).json(updatedEquipment);
+      await EquipmentModel.replaceOne({_id: equipmentProposal.oldEquipment.toString()}, proposalToEquipment(equipmentProposal));
+      res.status(StatusCodes.OK).json(proposalToEquipment(equipmentProposal));
     }
     logger.info(`equipment proposal ${equipmentProposal._id} validated, deleting it`);
     await EquipmentProposalModel.deleteOne({_id: equipmentProposal._id});
@@ -97,7 +105,7 @@ export async function validateEquipmentProposal(req: Request, res: Response) {
 function proposalToEquipment(equipmentProposal: IEquipmentProposal): IEquipment {
   // probably not the best way to do this
   return {
-    _id: equipmentProposal._id,
+    _id: equipmentProposal.oldEquipment ? equipmentProposal.oldEquipment.toString() : equipmentProposal._id,
     name: equipmentProposal.name,
     comment: equipmentProposal.comment,
     location: equipmentProposal.location,

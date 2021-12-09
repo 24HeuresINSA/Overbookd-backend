@@ -86,7 +86,7 @@ equipmentRouter.post("/", authMiddleware.protect(), EquipmentHandler.createEquip
 const equipmentProposalRouter = Router();
 equipmentProposalRouter.get("/", authMiddleware.protect(), EquipmentHandler.getEquipmentProposals);
 equipmentProposalRouter.post("/", authMiddleware.protect(), EquipmentHandler.createEquipmentProposal);
-equipmentProposalRouter.delete("/", authMiddleware.protect(), EquipmentHandler.deleteEquipmentProposal);
+equipmentProposalRouter.delete("/:id", authMiddleware.protect(), EquipmentHandler.deleteEquipmentProposal);
 equipmentProposalRouter.put("/:id/validate", authMiddleware.protect(), EquipmentHandler.validateEquipmentProposal);
 
 // Availabilities routes

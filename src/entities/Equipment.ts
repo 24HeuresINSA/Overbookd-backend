@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 export interface IEquipment {
   _id?: string;
   name: string;
-  isValid: boolean;
+  isValid?: boolean;
   amount: number;
   comment?: string;
   location: string;
