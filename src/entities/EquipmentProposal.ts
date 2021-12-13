@@ -22,7 +22,7 @@ const EquipmentProposalSchema = new Schema({
     referenceInvoice: { type: String },
     type: { type: String, required: true },
     fromPool: { type: Boolean, default: false },
-}, { strict: false });
+});
 
 const EquipmentProposalModel = model<IEquipmentProposal>('EquipmentProposal', EquipmentProposalSchema);
 

@@ -16,7 +16,6 @@ export interface IEquipment {
 
 }
 
-const options = { discriminatorKey: "kind", strict: false };
 export const EquipmentSchema = new Schema<IEquipment>(
   {
     name: { type: String, required: true },
@@ -30,8 +29,7 @@ export const EquipmentSchema = new Schema<IEquipment>(
     referenceInvoice: { type: String, default: "" },
     type: { type: String, required: true },
     fromPool: { type: Boolean, default: false },
-  },
-  options
+  }
 );
 
 const EquipmentModel = model<IEquipment>("Equipment", EquipmentSchema);
