@@ -105,7 +105,7 @@ export async function validateEquipmentProposal(req: Request, res: Response) {
 function proposalToEquipment(equipmentProposal: IEquipmentProposal): IEquipment {
   // probably not the best way to do this
   return {
-    _id: equipmentProposal.oldEquipment ? equipmentProposal.oldEquipment.toString() : equipmentProposal._id,
+    _id: equipmentProposal.oldEquipment ? equipmentProposal.oldEquipment.toString() : undefined,
     name: equipmentProposal.name,
     comment: equipmentProposal.comment,
     location: equipmentProposal.location,
