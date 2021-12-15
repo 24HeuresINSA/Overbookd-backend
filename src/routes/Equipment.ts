@@ -5,7 +5,7 @@ import StatusCodes from "http-status-codes";
 import logger from "@shared/Logger";
 
 export async function getEquipment(req: Request, res: Response) {
-  const equipment = await EquipmentModel.find({isValid: true});
+  const equipment = await EquipmentModel.find({});
   res.json(equipment);
 }
 
